@@ -1,5 +1,9 @@
 // script.js
 
+alert("script.js wurde geladen!");
+// oder:
+console.log("script.js wurde geladen");
+
 const keySelect = document.getElementById("key");
 const difficultySelect = document.getElementById("difficulty");
 const tempoSelect = document.getElementById("tempo");
