@@ -121,7 +121,16 @@ function displayTab(lick, bars) {
 async function playLick(lick) {
   const tempo = parseInt(tempoSelect.value);
   const synth = new Tone.Synth().toDestination();
-  const clickSynth = new Tone.MembraneSynth({ volume: -12 }).toDestination();
+  const clickSynth = new Tone.NoiseSynth({
+  noise: { type: "white" },
+  envelope: {
+    attack: 0.001,
+    decay: 0.05,
+    sustain: 0
+  },
+  volume: -10
+  }).toDestination();
+
 
   Tone.Transport.stop();
   Tone.Transport.cancel();
@@ -157,8 +166,8 @@ async function playLick(lick) {
     const clickTime = beat * 0.5;
     const isQuarter = beat % 2 === 0;
     Tone.Transport.schedule(time => {
-      const pitch = isQuarter ? "C4" : "C3";
-      clickSynth.triggerAttackRelease(pitch, "32n", time);
+      //const pitch = isQuarter ? "C4" : "C3";
+      clickSynth.triggerAttackRelease("8n", time);
     }, clickTime);
   }
 
