@@ -10,7 +10,7 @@ const likeButton = document.getElementById("like-button");
 const dislikeButton = document.getElementById("dislike-button");
 const tabDisplay = document.getElementById("tab-display");
 
-const strings = ["E", "A", "D", "G", "B", "e"];
+const strings = ["e", "B", "G", "D", "A", "E"];
 let lick = []; // globale Variable für den aktuellen Lick
 
 const majorScales = {
@@ -25,12 +25,12 @@ const majorScales = {
 };
 
 const fretboard = {
-  e:  ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"],
-  B:  ["B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#"],
-  G:  ["G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#"],
-  D:  ["D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"],
-  A:  ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"],
-  E:  ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"]  
+  e:  ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A"],
+  B:  ["B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E"],
+  G:  ["G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "C"],
+  D:  ["D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G"],
+  A:  ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D"],
+  E:  ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A"]
 };
 
 function randomNormal(mean, stdDev) {
@@ -74,11 +74,11 @@ function generateLick() {
   const stdDevFret = 2.0;   // Standardabweichung für Bund
   
   let lastStringIndex = Math.floor(Math.random() * strings.length);
-  let lastFret = 5;
+  let lastFret = Math.floor(Math.random() * strings.length);
 
   for (let i = 0; i < totalSteps;) {
     const isRest = Math.random() < pRest;
-    let duration = durations[Math.floor(Math.random() * durations.length)];
+    let duration = durations[Math.floor(Math.random() * 18)];
 
     // Verhindere Überschreiten des totalSteps
     if (i + duration > totalSteps) {
