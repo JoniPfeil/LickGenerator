@@ -91,6 +91,7 @@ function displayTab(lick, bars) {
   strings.forEach(s => lines[s] = Array(bars * 16).fill("--"));
 
   for (const note of lick) {
+    if (note.string === null) continue; //not a note
     const fretStr = note.fret < 10 ? "0" + note.fret : note.fret.toString();
     lines[note.string][note.step] = fretStr;
   }
