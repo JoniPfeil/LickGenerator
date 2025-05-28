@@ -115,7 +115,7 @@ function generateLick() {
         !scale.includes(fretboard[string][fret])
       );
 
-      if (fret === lastFret && stringIndex === lastStringIndex) {continue;}
+      //if (fret === lastFret && stringIndex === lastStringIndex) {continue;}
   
       lick.push({ string, fret, step: i, duration: duration });
   
