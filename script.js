@@ -94,7 +94,7 @@ function generateLick() {
       // Saite nach Normalverteilung wählen
       let stringIndex;
       do {
-        stringIndex = Math.round(randomNormal(lastStringIndex, stringStdDev));
+        stringIndex = Math.round(randomNormal(lastStringIndex, stdDevString));
       } while (stringIndex < 0 || stringIndex >= strings.length);
       const string = strings[stringIndex];
   
@@ -108,7 +108,7 @@ function generateLick() {
       // Bund nach Normalverteilung wählen
       let fret;
       do {
-        fret = Math.round(randomNormal(lastFret, fretStdDev));
+        fret = Math.round(randomNormal(lastFret, stdDevFret));
       } while (
         fret < 0 ||
         fret >= fretboard[string].length ||
