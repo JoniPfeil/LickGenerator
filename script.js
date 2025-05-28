@@ -158,7 +158,7 @@ async function playLick(lick) {
     const isQuarter = beat % 2 === 0;
     Tone.Transport.schedule(time => {
       const pitch = isQuarter ? "C4" : "C3";
-      clickSynth.triggerAttackRelease(pitch, "16n", time);
+      clickSynth.triggerAttackRelease(pitch, "32n", time);
     }, clickTime);
   }
 
