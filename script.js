@@ -86,7 +86,7 @@ function generateLick() {
 
 generateButton.addEventListener("click", generateLick);
 
-function displayTab(lick, bars) {
+async function displayTab(lick, bars) {
   const lines = {};
   strings.forEach(s => lines[s] = Array(bars * 16).fill("--"));
 
