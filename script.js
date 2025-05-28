@@ -35,11 +35,11 @@ const fretboard = {
 function getNoteDurationOptions(difficulty) {
   switch (difficulty) {
     case "easy":
-      return [4];
+      return [2, 4];
     case "medium":
-      return [4, 8];
+      return [2, 4, 8];
     case "hard":
-      return [4, 8, 16];
+      return [2, 4, 8, 16];
   }
 }
 
@@ -53,7 +53,11 @@ function generateLick() {
 
   const stepsPerBar = 16;
   const totalSteps = length * stepsPerBar;
-  const lick = [];
+  let lick = [];
+
+  playButton.disabled = false;
+  likeButton.disabled = false;
+  dislikeButton.disabled = false;
 
   for (let i = 0; i < totalSteps; ) {
     const duration = durations[Math.floor(Math.random() * durations.length)];
@@ -69,9 +73,6 @@ function generateLick() {
   }
 
   displayTab(lick, length);
-  playButton.disabled = false;
-  likeButton.disabled = false;
-  dislikeButton.disabled = false;
   playButton.onclick = () => playLick(lick);
 }
 
