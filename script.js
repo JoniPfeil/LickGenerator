@@ -118,8 +118,9 @@ async function playLick(lick) {
   
   const tempo = parseInt(tempoSelect.value);
   const synth = new Tone.Synth().toDestination();
+  const clickSynth = new Tone.MembraneSynth().toDestination(); // Für den Click
+  
   Tone.Transport.bpm.value = tempo;
-
   Tone.Transport.cancel();
   let currentStep = 0;
   const schedule = [];
@@ -142,7 +143,19 @@ async function playLick(lick) {
       synth.triggerAttackRelease(n.pitch, (n.duration / 4) + "n", time); 
     }, n.time); 
     if (n.step > lastStep) lastStep = n.step;
-  }); //synth.triggerAttackRelease(n.pitch, "8n", time);
+  }); 
+
+  // Click-Sound auf jeder Achtel (alle 0.5 Beats), höherer Ton auf Vierteln
+  const totalBeats = (lastStep + 4) / 4;
+  for (let beat = 0; beat <= totalBeats * 2; beat++) {
+    const clickTime = beat * 0.5;
+    const isQuarter = beat % 2 === 0; // jede 2. Achtel = 1 Viertel
+  
+    Tone.Transport.schedule(time => {
+      const pitch = isQuarter ? "C3" : "C2";
+      clickSynth.triggerAttackRelease(pitch, "16n", time);
+    }, clickTime);
+  }
 
   Tone.Transport.schedule(() => {
     clearHighlights();
