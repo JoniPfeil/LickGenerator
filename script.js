@@ -45,6 +45,8 @@ function getNoteDurationOptions(difficulty) {
 
 function generateLick() {
 
+  alert('Sound wird bald unterstützt 🎸');
+
   playButton.disabled = false;
   likeButton.disabled = false;
   dislikeButton.disabled = false;
