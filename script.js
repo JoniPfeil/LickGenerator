@@ -78,7 +78,7 @@ function generateLick() {
 
   for (let i = 0; i < totalSteps;) {
     const isRest = Math.random() < pRest;
-    const duration = durations[Math.floor(Math.random() * durations.length)];
+    let duration = durations[Math.floor(Math.random() * durations.length)];
 
     // Verhindere Überschreiten des totalSteps
     if (i + duration > totalSteps) {
