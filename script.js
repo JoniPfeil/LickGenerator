@@ -119,9 +119,13 @@ async function playLick(lick) {
   const tempo = parseInt(tempoSelect.value);
   const synth = new Tone.Synth().toDestination();
   const clickSynth = new Tone.MembraneSynth().toDestination(); // Für den Click
+
+  Tone.Transport.stop();          // stoppt evtl. laufende Wiedergabe
+  Tone.Transport.cancel();        // löscht alte Events
+  Tone.Transport.stop();          // stoppt evtl. laufende Wiedergabe
+  Tone.Transport.position = 0;    // setzt zurück zum Anfang
   
   Tone.Transport.bpm.value = tempo;
-  Tone.Transport.cancel();
   let currentStep = 0;
   const schedule = [];
 
