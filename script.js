@@ -75,11 +75,11 @@ function generateLick() {
   const stdDevFret = 2.0;   // Standardabweichung für Bund
   
   let lastStringIndex = Math.floor(Math.random() * strings.length);
-  let lastFret = Math.floor(Math.random() * strings.length);
+  let lastFret = Math.floor(Math.random() * 18);
 
   for (let i = 0; i < totalSteps;) {
     const isRest = Math.random() < pRest;
-    let duration = durations[Math.floor(Math.random() * 18)];
+    let duration = durations[Math.floor(Math.random() * durations.length)];
 
     // Verhindere Überschreiten des totalSteps
     if (i + duration > totalSteps) {
