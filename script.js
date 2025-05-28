@@ -121,6 +121,7 @@ function displayTab(lick, bars) {
 }
 
 async function playLick(lick) {
+  /*
   const tempo = parseInt(tempoSelect.value);
   const synth = new Tone.Synth().toDestination();
   Tone.Transport.bpm.value = tempo;
@@ -151,6 +152,7 @@ async function playLick(lick) {
 
   await Tone.start();
   Tone.Transport.start();
+  */
 }
 
 function highlightStep(step) {
