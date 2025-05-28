@@ -79,6 +79,11 @@ function generateLick() {
   for (let i = 0; i < totalSteps;) {
     const isRest = Math.random() < pRest;
     const duration = durations[Math.floor(Math.random() * durations.length)];
+
+    // Verhindere Überschreiten des totalSteps
+    if (i + duration > totalSteps) {
+      duration = totalSteps - i;
+    }
   
     if (isRest) 
     {
@@ -87,8 +92,10 @@ function generateLick() {
     else 
     {
       // Saite nach Normalverteilung wählen
-      let stringIndex = randomNormal(lastStringIndex, stdDevString);
-      stringIndex = Math.max(0, Math.min(strings.length - 1, stringIndex));
+      let stringIndex;
+      do {
+        stringIndex = Math.round(randomNormal(lastStringIndex, stringStdDev));
+      } while (stringIndex < 0 || stringIndex >= strings.length);
       const string = strings[stringIndex];
   
       // Gültige Bünde für diese Saite
@@ -99,10 +106,14 @@ function generateLick() {
       if (validFrets.length === 0) continue;
   
       // Bund nach Normalverteilung wählen
-      let fret = randomNormal(lastFret, stdDevFret);
-      fret = validFrets.includes(fret)
-        ? fret
-        : validFrets[Math.floor(Math.random() * validFrets.length)];
+      let fret;
+      do {
+        fret = Math.round(randomNormal(lastFret, fretStdDev));
+      } while (
+        fret < 0 ||
+        fret >= fretboard[string].length ||
+        !scale.includes(fretboard[string][fret])
+      );
   
       lick.push({ string, fret, step: i, duration: duration });
   
