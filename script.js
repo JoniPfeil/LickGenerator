@@ -35,15 +35,20 @@ const fretboard = {
 function getNoteDurationOptions(difficulty) {
   switch (difficulty) {
     case "easy":
-      return [2, 4];
+      return [4, 2];
     case "medium":
-      return [2, 4, 8];
+      return [8, 4, 2];
     case "hard":
-      return [2, 4, 8, 16];
+      return [16, 8, 4, 2];
   }
 }
 
 function generateLick() {
+
+  playButton.disabled = false;
+  likeButton.disabled = false;
+  dislikeButton.disabled = false;
+
   const key = keySelect.value;
   const difficulty = difficultySelect.value;
   const length = parseInt(lengthSelect.value);
@@ -53,26 +58,30 @@ function generateLick() {
 
   const stepsPerBar = 16;
   const totalSteps = length * stepsPerBar;
-  let lick = [];
-
-  playButton.disabled = false;
-  likeButton.disabled = false;
-  dislikeButton.disabled = false;
+  const lick = [];
 
   for (let i = 0; i < totalSteps; ) {
+    const isRest = Math.random() < 0.2; // 20% Wahrscheinlichkeit für Pause
     const duration = durations[Math.floor(Math.random() * durations.length)];
-    const steps = 16 / duration;
-    if (i + steps > totalSteps) break;
 
-    const string = strings[Math.floor(Math.random() * strings.length)];
-    const fretOptions = fretboard[string].map((note, fret) => scale.includes(note) ? fret : null).filter(f => f !== null);
-    const fret = fretOptions[Math.floor(Math.random() * fretOptions.length)];
+    if (isRest) 
+    {
+      lick.push({string: null, fret: null, step: i, duration: duration});
+    } 
+    else 
+    {
+      const string = strings[Math.floor(Math.random() * strings.length)];
+      const fretOptions = fretboard[string].map((note, fret) => scale.includes(note) ? fret : null).filter(f => f !== null);
+      const fret = fretOptions[Math.floor(Math.random() * fretOptions.length)];
 
-    lick.push({ string, fret, step: i });
-    i += steps;
+      lick.push({ string, fret, step: i, duration: duration });
+    }
+
+    i += duration;
   }
 
   displayTab(lick, length);
+  
   playButton.onclick = () => playLick(lick);
 }
 
