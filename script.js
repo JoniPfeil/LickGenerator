@@ -11,6 +11,7 @@ const dislikeButton = document.getElementById("dislike-button");
 const tabDisplay = document.getElementById("tab-display");
 
 const strings = ["E", "A", "D", "G", "B", "e"];
+let lick = []; // globale Variable für den aktuellen Lick
 
 const majorScales = {
   C: ["C", "D", "Eb", "E", "F", "G", "A", "B"],
@@ -57,20 +58,19 @@ function generateLick() {
 
   const stepsPerBar = 16;
   const totalSteps = length * stepsPerBar;
-  const lick = [];
+  lick = []; // globale Variable überschreiben
 
   for (let i = 0; i < totalSteps; ) {
-    const isRest = Math.random() < 0.2; // 20% Wahrscheinlichkeit für Pause
+    const isRest = Math.random() < 0.2;
     const duration = durations[Math.floor(Math.random() * durations.length)];
 
-    if (isRest) 
-    {
-      lick.push({string: null, fret: null, step: i, duration: duration});
-    } 
-    else 
-    {
+    if (isRest) {
+      lick.push({ string: null, fret: null, step: i, duration: duration });
+    } else {
       const string = strings[Math.floor(Math.random() * strings.length)];
-      const fretOptions = fretboard[string].map((note, fret) => scale.includes(note) ? fret : null).filter(f => f !== null);
+      const fretOptions = fretboard[string].map((note, fret) =>
+        scale.includes(note) ? fret : null
+      ).filter(f => f !== null);
       const fret = fretOptions[Math.floor(Math.random() * fretOptions.length)];
 
       lick.push({ string, fret, step: i, duration: duration });
@@ -80,18 +80,22 @@ function generateLick() {
   }
 
   displayTab(lick, length);
-  
-  playButton.onclick = () => playLick(lick);
 }
 
 generateButton.addEventListener("click", generateLick);
 
-async function displayTab(lick, bars) {
+playButton.addEventListener("click", () => {
+  if (lick.length > 0) {
+    playLick(lick);
+  }
+});
+
+function displayTab(lick, bars) {
   const lines = {};
   strings.forEach(s => lines[s] = Array(bars * 16).fill("--"));
 
   for (const note of lick) {
-    if (note.string === null) continue; //not a note
+    if (note.string === null) continue;
     const fretStr = note.fret < 10 ? "0" + note.fret : note.fret.toString();
     lines[note.string][note.step] = fretStr;
   }
@@ -114,48 +118,44 @@ async function displayTab(lick, bars) {
   tabDisplay.innerHTML = `<pre>${output}</pre>`;
 }
 
-
-function playLick(lick) {
-  
+async function playLick(lick) {
   const tempo = parseInt(tempoSelect.value);
   const synth = new Tone.Synth().toDestination();
-  const clickSynth = new Tone.MembraneSynth({volume: -12}).toDestination(); // Für den Click
+  const clickSynth = new Tone.MembraneSynth({ volume: -12 }).toDestination();
 
-  Tone.Transport.stop();          // stoppt evtl. laufende Wiedergabe
-  Tone.Transport.cancel();        // löscht alte Events
-  Tone.Transport.stop();          // stoppt evtl. laufende Wiedergabe
-  Tone.Transport.position = 0;    // setzt zurück zum Anfang
-  
+  Tone.Transport.stop();
+  Tone.Transport.cancel();
+  Tone.Transport.position = 0;
   Tone.Transport.bpm.value = tempo;
+
   let currentStep = 0;
   const schedule = [];
 
   for (const note of lick) {
-    const time = (note.step / 4) + "n";
+    const time = (note.step / 4);
     if (note.string === null) {
-      schedule.push({ time: note.step / 4, pitch: null, step: note.step, duration: note.duration });
-    } 
-    else {
+      schedule.push({ time, pitch: null, step: note.step, duration: note.duration });
+    } else {
       const pitch = fretboard[note.string][note.fret] + "4";
-      schedule.push({ time: note.step / 4, pitch, step: note.step, duration: note.duration });
+      schedule.push({ time, pitch, step: note.step, duration: note.duration });
     }
   }
 
   let lastStep = 0;
-  schedule.forEach((n, i) => {
+  schedule.forEach(n => {
     Tone.Transport.schedule(time => {
       highlightStep(n.step);
-      synth.triggerAttackRelease(n.pitch, (n.duration / 4) + "n", time); 
-    }, n.time); 
+      if (n.pitch) {
+        synth.triggerAttackRelease(n.pitch, (n.duration / 4) + "n", time);
+      }
+    }, n.time);
     if (n.step > lastStep) lastStep = n.step;
-  }); 
+  });
 
-  // Click-Sound auf jeder Achtel (alle 0.5 Beats), höherer Ton auf Vierteln
   const totalBeats = (lastStep + 4) / 4;
   for (let beat = 0; beat <= totalBeats * 2; beat++) {
     const clickTime = beat * 0.5;
-    const isQuarter = beat % 2 === 0; // jede 2. Achtel = 1 Viertel
-  
+    const isQuarter = beat % 2 === 0;
     Tone.Transport.schedule(time => {
       const pitch = isQuarter ? "C4" : "C3";
       clickSynth.triggerAttackRelease(pitch, "16n", time);
@@ -164,7 +164,7 @@ function playLick(lick) {
 
   Tone.Transport.schedule(() => {
     clearHighlights();
-  }, (lastStep + 4) / 4);
+  }, totalBeats);
 
   await Tone.start();
   Tone.Transport.start();
