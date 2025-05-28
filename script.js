@@ -114,7 +114,8 @@ function displayTab(lick, bars) {
   tabDisplay.innerHTML = `<pre>${output}</pre>`;
 }
 
-async function playLick(lick) {
+
+function playLick(lick) {
   
   const tempo = parseInt(tempoSelect.value);
   const synth = new Tone.Synth().toDestination();
