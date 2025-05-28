@@ -42,13 +42,14 @@ function randomNormal(mean, stdDev) {
 }
 
 function getNoteDurationOptions(difficulty) {
+  //Notenlänge in 16teln: 1=16tel; 2=8tel usw.
   switch (difficulty) {
     case "easy":
-      return [4, 2];
+      return [4, 6, 8];
     case "medium":
-      return [8, 4, 2];
+      return [2, 3, 4, 6, 8];
     case "hard":
-      return [16, 8, 4, 2];
+      return [1, 2, 3, 4, 6];
   }
 }
 
@@ -68,6 +69,7 @@ function generateLick() {
   const totalSteps = length * stepsPerBar;
   lick = []; // globale Variable überschreiben
 
+  const pRest = 0.2;
   const stdDevString = 1.5; // Standardabweichung für Saite
   const stdDevFret = 2.0;   // Standardabweichung für Bund
   
