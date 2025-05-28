@@ -126,14 +126,12 @@ async function playLick(lick) {
 
   for (const note of lick) {
     const time = (note.step / 4) + "n";
-    if (note.string === null)
-    {
-      schedule.push({ time: note.step / 4, pitch: null, step: note.step });
-    }
-    else
-    {
-      const pitch = fretboard[note.string][note.fret] + "4"; // MIDI approximation
-      schedule.push({ time: note.step / 4, pitch, step: note.step });
+    if (note.string === null) {
+      schedule.push({ time: note.step / 4, pitch: null, step: note.step, duration: note.duration });
+    } 
+    else {
+      const pitch = fretboard[note.string][note.fret] + "4";
+      schedule.push({ time: note.step / 4, pitch, step: note.step, duration: note.duration });
     }
   }
 
@@ -141,7 +139,7 @@ async function playLick(lick) {
   schedule.forEach((n, i) => {
     Tone.Transport.schedule(time => {
       highlightStep(n.step);
-      synth.triggerAttackRelease(note.pitch, note.duration + "n", time); 
+      synth.triggerAttackRelease(n.pitch, (n.duration / 4) + "n", time); 
     }, n.time); 
     if (n.step > lastStep) lastStep = n.step;
   }); //synth.triggerAttackRelease(n.pitch, "8n", time);
