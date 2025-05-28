@@ -1,97 +1,153 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const generateButton = document.getElementById('generate-btn');
-  const playButton = document.getElementById('play-btn');
-  const likeButton = document.getElementById('like-btn');
-  const dislikeButton = document.getElementById('dislike-btn');
-  const lickDisplay = document.getElementById('lick-display');
+let currentTab = [];
+const playButton = document.getElementById("play-button");
+const tempoSelect = document.getElementById("tempo");
+const generateButton = document.getElementById("generate-button");
+const difficultySelect = document.getElementById("difficulty");
+const lengthSelect = document.getElementById("length");
+const tabDiv = document.getElementById("tab");
 
-  generateButton.addEventListener('click', () => {
-    const difficulty = document.getElementById('difficulty').value;
-    const takte = parseInt(document.getElementById('takte').value);
-    const lick = generateLickContent(difficulty, takte);
-    lickDisplay.textContent = lick;
+const synth = new Tone.PluckSynth().toDestination();
 
-    playButton.disabled = false;
-    likeButton.disabled = false;
-    dislikeButton.disabled = false;
-  });
+const stringToNote = {
+  'e': 'E4',
+  'B': 'B3',
+  'G': 'G3',
+  'D': 'D3',
+  'A': 'A2',
+  'E': 'E2'
+};
 
-  playButton.addEventListener('click', () => {
-    // Sound-Wiedergabe kommt später
-    alert('Sound wird bald unterstützt 🎸');
-  });
+// Bestimmt die Mindestnotendauer je nach Schwierigkeit
+function getMinStepSize(difficulty) {
+  switch (difficulty) {
+    case 'easy': return 4;   // Viertelnoten → 4 Schritte pro Takt
+    case 'medium': return 2; // Achtel → 8 Schritte pro Takt
+    case 'hard': return 1;   // Sechzehntel → 16 Schritte pro Takt
+    default: return 1;
+  }
+}
 
-  likeButton.addEventListener('click', () => {
-    alert('👍 Danke für dein Feedback!');
-  });
+function generateLick(difficulty, measures) {
+  const tab = [[], [], [], [], [], []]; // e B G D A E
+  const minStep = getMinStepSize(difficulty);
+  const stepsPerMeasure = 16;
 
-  dislikeButton.addEventListener('click', () => {
-    alert('👎 Danke für dein Feedback!');
-  });
-});
+  for (let m = 0; m < measures; m++) {
+    let step = 0;
+    while (step < stepsPerMeasure) {
+      const remaining = stepsPerMeasure - step;
+      const noteLength = Math.max(minStep, Math.pow(2, Math.floor(Math.random() * 4)));
+      const duration = Math.min(noteLength, remaining);
 
-function generateLickContent(schwierigkeit, takte) {
+      const isRest = Math.random() < 0.2;
+      const stringIndex = Math.floor(Math.random() * 6);
+      const fret = Math.floor(Math.random() * 12);
+
+      for (let s = 0; s < 6; s++) {
+        for (let i = 0; i < duration; i++) {
+          if (s === stringIndex && !isRest && i === 0) {
+            tab[s].push(fret < 10 ? "0" + fret : "" + fret);
+          } else {
+            tab[s].push("--");
+          }
+        }
+      }
+      step += duration;
+    }
+  }
+
+  return tab;
+}
+
+function generateLickContent(tab) {
   const saiten = ['e', 'B', 'G', 'D', 'A', 'E'];
-  const bundMax = 12;
-  const notenoptionen = [];
+  const steps = tab[0].length;
+  const contentLines = [];
 
-  // Rhythmusoptionen abhängig von Schwierigkeit
-  if (schwierigkeit === 'easy') {
-    notenoptionen.push(4, 2, 'pause');
-  } else if (schwierigkeit === 'medium') {
-    notenoptionen.push(8, 4, 2, 'pause');
-  } else if (schwierigkeit === 'hard') {
-    notenoptionen.push(16, 8, 4, 2, 'pause');
-  }
-
-  const stepsPerBeat = 4;
-  const beatsPerTakt = 4;
-  const stepsPerTakt = stepsPerBeat * beatsPerTakt;
-  const totalSteps = takte * stepsPerTakt;
-
-  // Tab-Vorlage
-  const tab = saiten.map(() => Array(totalSteps).fill('--'));
-
-  let i = 0;
-  while (i < totalSteps) {
-    const rhythm = notenoptionen[Math.floor(Math.random() * notenoptionen.length)];
-    const duration = (rhythm === 'pause') ? 1 : Math.max(1, stepsPerTakt / rhythm);
-
-    if (i + duration > totalSteps) break;
-
-    if (rhythm === 'pause') {
-      i += duration;
-      continue;
-    }
-
-    const saiteIndex = Math.floor(Math.random() * saiten.length);
-    const bund = Math.floor(Math.random() * bundMax) + 1;
-    const bundText = bund < 10 ? `0${bund}` : `${bund}`;
-
-    tab[saiteIndex][i] = bundText;
-    i += duration;
-  }
-
-  // Kopfzeile mit Zählzeiten
-  let header = '   ';
-  for (let t = 0; t < takte; t++) {
-    for (let b = 1; b <= 4; b++) {
-      header += b.toString().padEnd(stepsPerBeat * 3, ' ');
+  // Taktzähler über dem Tab
+  let countLine = "    ";
+  for (let i = 0; i < steps; i++) {
+    if (i % 4 === 0) {
+      countLine += String((i / 4) % 4 + 1).padStart(2, ' ') + " ";
+    } else {
+      countLine += "   ";
     }
   }
+  contentLines.push(countLine);
 
-  // Tabzeilen mit Taktstrichen
-  const tabLines = tab.map((line, idx) => {
-    let result = saiten[idx] + ' |';
-    for (let j = 0; j < totalSteps; j++) {
-      result += ' ' + line[j];
-      if ((j + 1) % stepsPerTakt === 0 && j !== totalSteps - 1) {
-        result += ' |';
+  // Tab-Zeilen mit Taktstrichen
+  for (let s = 0; s < 6; s++) {
+    let line = saiten[s] + " |";
+    for (let i = 0; i < steps; i++) {
+      const val = tab[s][i];
+      const span = `<span class="tab-note" data-step="${i}" data-string="${s}">${val}</span>`;
+      line += span + (i % 4 === 3 ? "|" : " ");
+    }
+    contentLines.push(line);
+  }
+
+  tabDiv.innerHTML = "<pre>" + contentLines.join("\n") + "</pre>";
+}
+
+function fretToNote(string, fret) {
+  const baseNote = stringToNote[string];
+  const midi = Tone.Frequency(baseNote).toMidi() + fret;
+  return Tone.Frequency(midi, 'midi').toNote();
+}
+
+function playLick(tab, bpm) {
+  const intervalMs = (60 / bpm / 4) * 1000; // Sechzehntel-Noten
+  const saiten = ['e', 'B', 'G', 'D', 'A', 'E'];
+  const maxSteps = tab[0].length;
+
+  // Alle Tab-Note-Elemente erfassen
+  const noteElements = document.querySelectorAll(".tab-note");
+
+  // Start mit visuellem Reset
+  noteElements.forEach(el => el.classList.remove("active"));
+
+  let step = 0;
+
+  function playStep() {
+    if (step >= maxSteps) return;
+
+    for (let s = 0; s < saiten.length; s++) {
+      const val = tab[s][step];
+      if (val !== "--") {
+        const fret = parseInt(val);
+        if (!isNaN(fret)) {
+          const note = fretToNote(saiten[s], fret);
+          synth.triggerAttackRelease(note, "16n");
+        }
       }
     }
-    result += ' |';
-    return result;
-  });
 
-  return header + '\n' + tabLines.join('\n');
+    // Highlight
+    noteElements.forEach(el => {
+      const elStep = parseInt(el.dataset.step);
+      el.classList.toggle("active", elStep === step);
+    });
+
+    step++;
+    setTimeout(playStep, intervalMs);
+  }
+
+  playStep();
 }
+
+// --- Event Handling ---
+generateButton.addEventListener("click", () => {
+  const difficulty = difficultySelect.value;
+  const measures = parseInt(lengthSelect.value);
+  currentTab = generateLick(difficulty, measures);
+  generateLickContent(currentTab);
+
+  playButton.disabled = false;
+  document.getElementById("like-button").disabled = false;
+  document.getElementById("dislike-button").disabled = false;
+});
+
+playButton.addEventListener("click", () => {
+  const tempo = parseInt(tempoSelect.value);
+  playLick(currentTab, tempo);
+});
