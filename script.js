@@ -1,153 +1,160 @@
-let currentTab = [];
-const playButton = document.getElementById("play-button");
-const tempoSelect = document.getElementById("tempo");
-const generateButton = document.getElementById("generate-button");
+// script.js
+
+const keySelect = document.getElementById("key");
 const difficultySelect = document.getElementById("difficulty");
+const tempoSelect = document.getElementById("tempo");
 const lengthSelect = document.getElementById("length");
-const tabDiv = document.getElementById("tab");
+const generateButton = document.getElementById("generate-button");
+const playButton = document.getElementById("play-button");
+const likeButton = document.getElementById("like-button");
+const dislikeButton = document.getElementById("dislike-button");
+const tabDisplay = document.getElementById("tab-display");
 
-const synth = new Tone.PluckSynth().toDestination();
+const strings = ["E", "A", "D", "G", "B", "e"];
 
-const stringToNote = {
-  'e': 'E4',
-  'B': 'B3',
-  'G': 'G3',
-  'D': 'D3',
-  'A': 'A2',
-  'E': 'E2'
+const majorScales = {
+  C: ["C", "D", "Eb", "E", "F", "G", "A", "B"],
+  G: ["G", "A", "Bb", "B", "C", "D", "E", "F#"],
+  D: ["D", "E", "F", "F#", "G", "A", "B", "C#"],
+  A: ["A", "B", "C", "C#", "D", "E", "F#", "G#"],
+  E: ["E", "F#", "G", "G#", "A", "B", "C#", "D#"],
+  B: ["B", "C#", "D", "D#", "E", "F#", "G#", "A#"],
+  F#: ["F#", "G#", "A", "A#", "B", "C#", "D#", "E#"],
+  F: ["F", "G", "Ab", "A", "Bb", "C", "D", "E"]
 };
 
-// Bestimmt die Mindestnotendauer je nach Schwierigkeit
-function getMinStepSize(difficulty) {
+const fretboard = {
+  E:  ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"],
+  A:  ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"],
+  D:  ["D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"],
+  G:  ["G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#"],
+  B:  ["B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#"],
+  e:  ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"]
+};
+
+function getNoteDurationOptions(difficulty) {
   switch (difficulty) {
-    case 'easy': return 4;   // Viertelnoten → 4 Schritte pro Takt
-    case 'medium': return 2; // Achtel → 8 Schritte pro Takt
-    case 'hard': return 1;   // Sechzehntel → 16 Schritte pro Takt
-    default: return 1;
+    case "easy":
+      return [4];
+    case "medium":
+      return [4, 8];
+    case "hard":
+      return [4, 8, 16];
   }
 }
 
-function generateLick(difficulty, measures) {
-  const tab = [[], [], [], [], [], []]; // e B G D A E
-  const minStep = getMinStepSize(difficulty);
-  const stepsPerMeasure = 16;
-
-  for (let m = 0; m < measures; m++) {
-    let step = 0;
-    while (step < stepsPerMeasure) {
-      const remaining = stepsPerMeasure - step;
-      const noteLength = Math.max(minStep, Math.pow(2, Math.floor(Math.random() * 4)));
-      const duration = Math.min(noteLength, remaining);
-
-      const isRest = Math.random() < 0.2;
-      const stringIndex = Math.floor(Math.random() * 6);
-      const fret = Math.floor(Math.random() * 12);
-
-      for (let s = 0; s < 6; s++) {
-        for (let i = 0; i < duration; i++) {
-          if (s === stringIndex && !isRest && i === 0) {
-            tab[s].push(fret < 10 ? "0" + fret : "" + fret);
-          } else {
-            tab[s].push("--");
-          }
-        }
-      }
-      step += duration;
-    }
-  }
-
-  return tab;
-}
-
-function generateLickContent(tab) {
-  const saiten = ['e', 'B', 'G', 'D', 'A', 'E'];
-  const steps = tab[0].length;
-  const contentLines = [];
-
-  // Taktzähler über dem Tab
-  let countLine = "    ";
-  for (let i = 0; i < steps; i++) {
-    if (i % 4 === 0) {
-      countLine += String((i / 4) % 4 + 1).padStart(2, ' ') + " ";
-    } else {
-      countLine += "   ";
-    }
-  }
-  contentLines.push(countLine);
-
-  // Tab-Zeilen mit Taktstrichen
-  for (let s = 0; s < 6; s++) {
-    let line = saiten[s] + " |";
-    for (let i = 0; i < steps; i++) {
-      const val = tab[s][i];
-      const span = `<span class="tab-note" data-step="${i}" data-string="${s}">${val}</span>`;
-      line += span + (i % 4 === 3 ? "|" : " ");
-    }
-    contentLines.push(line);
-  }
-
-  tabDiv.innerHTML = "<pre>" + contentLines.join("\n") + "</pre>";
-}
-
-function fretToNote(string, fret) {
-  const baseNote = stringToNote[string];
-  const midi = Tone.Frequency(baseNote).toMidi() + fret;
-  return Tone.Frequency(midi, 'midi').toNote();
-}
-
-function playLick(tab, bpm) {
-  const intervalMs = (60 / bpm / 4) * 1000; // Sechzehntel-Noten
-  const saiten = ['e', 'B', 'G', 'D', 'A', 'E'];
-  const maxSteps = tab[0].length;
-
-  // Alle Tab-Note-Elemente erfassen
-  const noteElements = document.querySelectorAll(".tab-note");
-
-  // Start mit visuellem Reset
-  noteElements.forEach(el => el.classList.remove("active"));
-
-  let step = 0;
-
-  function playStep() {
-    if (step >= maxSteps) return;
-
-    for (let s = 0; s < saiten.length; s++) {
-      const val = tab[s][step];
-      if (val !== "--") {
-        const fret = parseInt(val);
-        if (!isNaN(fret)) {
-          const note = fretToNote(saiten[s], fret);
-          synth.triggerAttackRelease(note, "16n");
-        }
-      }
-    }
-
-    // Highlight
-    noteElements.forEach(el => {
-      const elStep = parseInt(el.dataset.step);
-      el.classList.toggle("active", elStep === step);
-    });
-
-    step++;
-    setTimeout(playStep, intervalMs);
-  }
-
-  playStep();
-}
-
-// --- Event Handling ---
-generateButton.addEventListener("click", () => {
+function generateLick() {
+  const key = keySelect.value;
   const difficulty = difficultySelect.value;
-  const measures = parseInt(lengthSelect.value);
-  currentTab = generateLick(difficulty, measures);
-  generateLickContent(currentTab);
+  const length = parseInt(lengthSelect.value);
 
+  const scale = majorScales[key];
+  const durations = getNoteDurationOptions(difficulty);
+
+  const stepsPerBar = 16;
+  const totalSteps = length * stepsPerBar;
+  const lick = [];
+
+  for (let i = 0; i < totalSteps; ) {
+    const duration = durations[Math.floor(Math.random() * durations.length)];
+    const steps = 16 / duration;
+    if (i + steps > totalSteps) break;
+
+    const string = strings[Math.floor(Math.random() * strings.length)];
+    const fretOptions = fretboard[string].map((note, fret) => scale.includes(note) ? fret : null).filter(f => f !== null);
+    const fret = fretOptions[Math.floor(Math.random() * fretOptions.length)];
+
+    lick.push({ string, fret, step: i });
+    i += steps;
+  }
+
+  displayTab(lick, length);
   playButton.disabled = false;
-  document.getElementById("like-button").disabled = false;
-  document.getElementById("dislike-button").disabled = false;
-});
+  likeButton.disabled = false;
+  dislikeButton.disabled = false;
+  playButton.onclick = () => playLick(lick);
+}
 
-playButton.addEventListener("click", () => {
+generateButton.addEventListener("click", generateLick);
+
+function displayTab(lick, bars) {
+  const lines = {};
+  strings.forEach(s => lines[s] = Array(bars * 16).fill("--"));
+
+  for (const note of lick) {
+    const fretStr = note.fret < 10 ? "0" + note.fret : note.fret.toString();
+    lines[note.string][note.step] = fretStr;
+  }
+
+  let header = "   ";
+  for (let b = 0; b < bars; b++) {
+    for (let i = 0; i < 4; i++) header += (i + 1) + "           ";
+  }
+
+  let output = header + "\n";
+  strings.forEach(s => {
+    const barLines = [];
+    for (let b = 0; b < bars; b++) {
+      const chunk = lines[s].slice(b * 16, (b + 1) * 16).join(" ");
+      barLines.push("|" + chunk + "|");
+    }
+    output += s + " " + barLines.join("") + "\n";
+  });
+
+  tabDisplay.innerHTML = `<pre>${output}</pre>`;
+}
+
+async function playLick(lick) {
   const tempo = parseInt(tempoSelect.value);
-  playLick(currentTab, tempo);
-});
+  const synth = new Tone.Synth().toDestination();
+  Tone.Transport.bpm.value = tempo;
+
+  Tone.Transport.cancel();
+  let currentStep = 0;
+  const schedule = [];
+
+  for (const note of lick) {
+    const time = (note.step / 4) + "n";
+    const pitch = fretboard[note.string][note.fret] + "4"; // MIDI approximation
+
+    schedule.push({ time: note.step / 4, pitch, step: note.step });
+  }
+
+  let lastStep = 0;
+  schedule.forEach((n, i) => {
+    Tone.Transport.schedule(time => {
+      highlightStep(n.step);
+      synth.triggerAttackRelease(n.pitch, "8n", time);
+    }, n.time);
+    if (n.step > lastStep) lastStep = n.step;
+  });
+
+  Tone.Transport.schedule(() => {
+    clearHighlights();
+  }, (lastStep + 4) / 4);
+
+  await Tone.start();
+  Tone.Transport.start();
+}
+
+function highlightStep(step) {
+  const pre = tabDisplay.querySelector("pre");
+  if (!pre) return;
+  const lines = pre.innerText.split("\n");
+  const newLines = lines.map(line => {
+    const parts = line.split("");
+    const index = 3 + (step * 3);
+    if (index < parts.length - 1 && parts[index + 1] !== " ") {
+      parts[index] = "[";
+      parts[index + 2] = "]";
+    }
+    return parts.join("");
+  });
+  tabDisplay.innerHTML = `<pre>${newLines.join("\n")}</pre>`;
+}
+
+function clearHighlights() {
+  const pre = tabDisplay.querySelector("pre");
+  if (!pre) return;
+  tabDisplay.innerHTML = `<pre>${pre.innerText.replace(/\[|\]/g, "")}</pre>`;
+}
