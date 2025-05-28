@@ -1,0 +1,19 @@
+body {
+  font-family: sans-serif;
+  padding: 20px;
+  background-color: #f4f4f4;
+}
+
+select, button {
+  margin: 5px;
+  padding: 5px 10px;
+}
+
+#lickDisplay {
+  margin-top: 20px;
+  white-space: pre;
+  font-family: monospace;
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
