@@ -33,6 +33,14 @@ const fretboard = {
   e:  ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"]
 };
 
+function randomNormal(mean, stdDev) {
+  let u = 0, v = 0;
+  while (u === 0) u = Math.random(); // Vermeide 0
+  while (v === 0) v = Math.random();
+  const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  return Math.round(mean + z * stdDev);
+}
+
 function getNoteDurationOptions(difficulty) {
   switch (difficulty) {
     case "easy":
@@ -60,25 +68,48 @@ function generateLick() {
   const totalSteps = length * stepsPerBar;
   lick = []; // globale Variable überschreiben
 
-  for (let i = 0; i < totalSteps; ) {
-    const isRest = Math.random() < 0.2;
+  const stdDevString = 1.5; // Standardabweichung für Saite
+  const stdDevFret = 2.0;   // Standardabweichung für Bund
+  
+  let lastStringIndex = Math.floor(Math.random() * strings.length);
+  let lastFret = 5;
+
+  for (let i = 0; i < totalSteps;) {
+    const isRest = Math.random() < pRest;
     const duration = durations[Math.floor(Math.random() * durations.length)];
-
-    if (isRest) {
+  
+    if (isRest) 
+    {
       lick.push({ string: null, fret: null, step: i, duration: duration });
-    } else {
-      const string = strings[Math.floor(Math.random() * strings.length)];
-      const fretOptions = fretboard[string].map((note, fret) =>
-        scale.includes(note) ? fret : null
-      ).filter(f => f !== null);
-      const fret = fretOptions[Math.floor(Math.random() * fretOptions.length)];
-
+    } 
+    else 
+    {
+      // Saite nach Normalverteilung wählen
+      let stringIndex = randomNormal(lastStringIndex, stdDevString);
+      stringIndex = Math.max(0, Math.min(strings.length - 1, stringIndex));
+      const string = strings[stringIndex];
+  
+      // Gültige Bünde für diese Saite
+      const validFrets = fretboard[string]
+        .map((note, fret) => scale.includes(note) ? fret : null)
+        .filter(f => f !== null);
+  
+      if (validFrets.length === 0) continue;
+  
+      // Bund nach Normalverteilung wählen
+      let fret = randomNormal(lastFret, stdDevFret);
+      fret = validFrets.includes(fret)
+        ? fret
+        : validFrets[Math.floor(Math.random() * validFrets.length)];
+  
       lick.push({ string, fret, step: i, duration: duration });
+  
+      // Letzte Werte aktualisieren
+      lastStringIndex = stringIndex;
+      lastFret = fret;
     }
-
     i += duration;
   }
-
   displayTab(lick, length);
 }
 
