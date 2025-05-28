@@ -44,9 +44,6 @@ function getNoteDurationOptions(difficulty) {
 }
 
 function generateLick() {
-
-  alert("script.js wurde geladen!");
-
   playButton.disabled = false;
   likeButton.disabled = false;
   dislikeButton.disabled = false;
@@ -116,7 +113,6 @@ function displayTab(lick, bars) {
   tabDisplay.innerHTML = `<pre>${output}</pre>`;
 }
 
-/*
 async function playLick(lick) {
   
   const tempo = parseInt(tempoSelect.value);
@@ -172,4 +168,3 @@ function clearHighlights() {
   if (!pre) return;
   tabDisplay.innerHTML = `<pre>${pre.innerText.replace(/\[|\]/g, "")}</pre>`;
 }
-*/
