@@ -118,7 +118,7 @@ async function playLick(lick) {
   
   const tempo = parseInt(tempoSelect.value);
   const synth = new Tone.Synth().toDestination();
-  const clickSynth = new Tone.MembraneSynth().toDestination(); // Für den Click
+  const clickSynth = new Tone.MembraneSynth({volume: -12}).toDestination(); // Für den Click
 
   Tone.Transport.stop();          // stoppt evtl. laufende Wiedergabe
   Tone.Transport.cancel();        // löscht alte Events
@@ -156,7 +156,7 @@ async function playLick(lick) {
     const isQuarter = beat % 2 === 0; // jede 2. Achtel = 1 Viertel
   
     Tone.Transport.schedule(time => {
-      const pitch = isQuarter ? "C3" : "C2";
+      const pitch = isQuarter ? "C4" : "C3";
       clickSynth.triggerAttackRelease(pitch, "16n", time);
     }, clickTime);
   }
