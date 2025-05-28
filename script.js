@@ -1,9 +1,41 @@
+document.addEventListener('DOMContentLoaded', () => {
+  const generateButton = document.getElementById('generate-btn');
+  const playButton = document.getElementById('play-btn');
+  const likeButton = document.getElementById('like-btn');
+  const dislikeButton = document.getElementById('dislike-btn');
+  const lickDisplay = document.getElementById('lick-display');
+
+  generateButton.addEventListener('click', () => {
+    const difficulty = document.getElementById('difficulty').value;
+    const takte = parseInt(document.getElementById('takte').value);
+    const lick = generateLickContent(difficulty, takte);
+    lickDisplay.textContent = lick;
+
+    playButton.disabled = false;
+    likeButton.disabled = false;
+    dislikeButton.disabled = false;
+  });
+
+  playButton.addEventListener('click', () => {
+    // Sound-Wiedergabe kommt später
+    alert('Sound wird bald unterstützt 🎸');
+  });
+
+  likeButton.addEventListener('click', () => {
+    alert('👍 Danke für dein Feedback!');
+  });
+
+  dislikeButton.addEventListener('click', () => {
+    alert('👎 Danke für dein Feedback!');
+  });
+});
+
 function generateLickContent(schwierigkeit, takte) {
   const saiten = ['e', 'B', 'G', 'D', 'A', 'E'];
   const bundMax = 12;
   const notenoptionen = [];
 
-  // Rhythmusauswahl nach Schwierigkeit
+  // Rhythmusoptionen abhängig von Schwierigkeit
   if (schwierigkeit === 'easy') {
     notenoptionen.push(4, 2, 'pause');
   } else if (schwierigkeit === 'medium') {
@@ -12,12 +44,12 @@ function generateLickContent(schwierigkeit, takte) {
     notenoptionen.push(16, 8, 4, 2, 'pause');
   }
 
-  const stepsPerBeat = 4;      // Wir wollen 16 Steps pro Takt (also 4 pro Schlag bei 4/4)
+  const stepsPerBeat = 4;
   const beatsPerTakt = 4;
   const stepsPerTakt = stepsPerBeat * beatsPerTakt;
   const totalSteps = takte * stepsPerTakt;
 
-  // Initialisiere Tab (6 Saiten × Steps)
+  // Tab-Vorlage
   const tab = saiten.map(() => Array(totalSteps).fill('--'));
 
   let i = 0;
@@ -40,7 +72,7 @@ function generateLickContent(schwierigkeit, takte) {
     i += duration;
   }
 
-  // Zeilen für Zählzeiten (Kopfzeile)
+  // Kopfzeile mit Zählzeiten
   let header = '   ';
   for (let t = 0; t < takte; t++) {
     for (let b = 1; b <= 4; b++) {
@@ -48,13 +80,13 @@ function generateLickContent(schwierigkeit, takte) {
     }
   }
 
-  // Tab-Zeilen mit Taktstrich nach jedem Takt
+  // Tabzeilen mit Taktstrichen
   const tabLines = tab.map((line, idx) => {
     let result = saiten[idx] + ' |';
     for (let j = 0; j < totalSteps; j++) {
       result += ' ' + line[j];
       if ((j + 1) % stepsPerTakt === 0 && j !== totalSteps - 1) {
-        result += ' |'; // Taktstrich
+        result += ' |';
       }
     }
     result += ' |';
