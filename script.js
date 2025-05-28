@@ -25,12 +25,12 @@ const majorScales = {
 };
 
 const fretboard = {
-  E:  ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"],
-  A:  ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"],
-  D:  ["D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"],
-  G:  ["G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#"],
+  e:  ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"],
   B:  ["B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#"],
-  e:  ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"]
+  G:  ["G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#"],
+  D:  ["D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"],
+  A:  ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"],
+  E:  ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"]  
 };
 
 function randomNormal(mean, stdDev) {
@@ -69,7 +69,7 @@ function generateLick() {
   const totalSteps = length * stepsPerBar;
   lick = []; // globale Variable überschreiben
 
-  const pRest = 0.2;
+  const pRest = 0.1;
   const stdDevString = 1.5; // Standardabweichung für Saite
   const stdDevFret = 2.0;   // Standardabweichung für Bund
   
