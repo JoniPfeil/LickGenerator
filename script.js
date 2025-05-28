@@ -166,6 +166,7 @@ function displayTab(lick, bars) {
 }
 
 async function playLick(lick) {
+  playButton.disabled = true;
   const tempo = parseInt(tempoSelect.value);
   const synth = new Tone.Synth().toDestination();
   const clickSynth = new Tone.NoiseSynth({
@@ -224,6 +225,7 @@ async function playLick(lick) {
 
   await Tone.start();
   Tone.Transport.start();
+  playButton.disabled = false;
 }
 
 function highlightStep(step) {
