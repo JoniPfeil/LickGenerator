@@ -1,9 +1,5 @@
 // script.js
 
-alert("script.js wurde geladen!");
-// oder:
-console.log("script.js wurde geladen");
-
 const keySelect = document.getElementById("key");
 const difficultySelect = document.getElementById("difficulty");
 const tempoSelect = document.getElementById("tempo");
@@ -49,7 +45,7 @@ function getNoteDurationOptions(difficulty) {
 
 function generateLick() {
 
-  alert('Sound wird bald unterstützt 🎸');
+  alert("script.js wurde geladen!");
 
   playButton.disabled = false;
   likeButton.disabled = false;
@@ -120,8 +116,9 @@ function displayTab(lick, bars) {
   tabDisplay.innerHTML = `<pre>${output}</pre>`;
 }
 
+/*
 async function playLick(lick) {
-  /*
+  
   const tempo = parseInt(tempoSelect.value);
   const synth = new Tone.Synth().toDestination();
   Tone.Transport.bpm.value = tempo;
@@ -152,7 +149,6 @@ async function playLick(lick) {
 
   await Tone.start();
   Tone.Transport.start();
-  */
 }
 
 function highlightStep(step) {
@@ -176,3 +172,4 @@ function clearHighlights() {
   if (!pre) return;
   tabDisplay.innerHTML = `<pre>${pre.innerText.replace(/\[|\]/g, "")}</pre>`;
 }
+*/
