@@ -10,8 +10,8 @@ const likeButton = document.getElementById("like-button");
 const dislikeButton = document.getElementById("dislike-button");
 const tabDisplay = document.getElementById("tab-display");
 
-const strings = ["E", "A", "D", "G", "B", "e"];
-//const strings = ["e", "B", "G", "D", "A", "E"];
+//const strings = ["E", "A", "D", "G", "B", "e"];
+const strings = ["e", "B", "G", "D", "A", "E"];
 let lick = []; // globale Variable für den aktuellen Lick
 
 const majorScales = {
