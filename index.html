@@ -1,51 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>Guitar Lick Generator</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gitarrenlick Generator</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>🎸 Lick Generator</h1>
+  <div class="container">
+    <h1>🎸 Gitarrenlick Generator</h1>
 
-  <label>Tonart:
-    <select id="tonart">
-      <option value="A">A</option>
-      <option value="B">B</option>
-      <option value="C">C</option>
-    </select>
-  </label>
+    <div class="controls">
+      <label>Tonart:
+        <select id="tonart">
+          <option value="C">C</option>
+          <option value="D">D</option>
+          <option value="E">E</option>
+          <option value="F">F</option>
+          <option value="G">G</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+        </select>
+      </label>
 
-  <label>Tempo:
-    <select id="tempo">
-      <option value="80">80</option>
-      <option value="100">100</option>
-      <option value="120">120</option>
-    </select>
-  </label>
+      <label>Tempo:
+        <select id="tempo">
+          <option value="60">60 bpm</option>
+          <option value="80">80 bpm</option>
+          <option value="100" selected>100 bpm</option>
+          <option value="120">120 bpm</option>
+          <option value="140">140 bpm</option>
+        </select>
+      </label>
 
-  <label>Stil:
-    <select id="stil">
-      <option value="rock">Rock</option>
-      <option value="blues">Blues</option>
-      <option value="metal">Metal</option>
-    </select>
-  </label>
+      <label>Schwierigkeit:
+        <select id="schwierigkeit">
+          <option value="easy">Easy</option>
+          <option value="medium" selected>Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </label>
 
-  <label>Schwierigkeit:
-    <select id="schwierigkeit">
-      <option value="easy">Easy</option>
-      <option value="medium">Medium</option>
-      <option value="hard">Hard</option>
-    </select>
-  </label>
+      <label>Länge:
+        <select id="takte">
+          <option value="1">1 Takt</option>
+          <option value="2" selected>2 Takte</option>
+          <option value="3">3 Takte</option>
+          <option value="4">4 Takte</option>
+        </select>
+      </label>
 
-  <br />
-  <button onclick="generateLick()">🎶 Generate New Lick</button>
+      <button id="generate">Generate new Lick</button>
+    </div>
 
-  <div id="lick"></div>
+    <div id="lick-container">
+      <pre id="lick-display">Dein Lick erscheint hier...</pre>
+    </div>
 
-  <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+    <div class="actions">
+      <button id="play" disabled>▶️ Play</button>
+      <button id="like" disabled>👍</button>
+      <button id="dislike" disabled>👎</button>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
