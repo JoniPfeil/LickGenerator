@@ -171,7 +171,7 @@ async function playLick(lick) {
 }
 
 function highlightStep(step) {
-  const pre = tabDisplay.querySelector("pre");
+ /* const pre = tabDisplay.querySelector("pre");
   if (!pre) return;
   const lines = pre.innerText.split("\n");
   const newLines = lines.map(line => {
@@ -183,11 +183,11 @@ function highlightStep(step) {
     }
     return parts.join("");
   });
-  tabDisplay.innerHTML = `<pre>${newLines.join("\n")}</pre>`;
+  tabDisplay.innerHTML = `<pre>${newLines.join("\n")}</pre>`;*/
 }
 
 function clearHighlights() {
-  const pre = tabDisplay.querySelector("pre");
+ /* const pre = tabDisplay.querySelector("pre");
   if (!pre) return;
-  tabDisplay.innerHTML = `<pre>${pre.innerText.replace(/\[|\]/g, "")}</pre>`;
+  tabDisplay.innerHTML = `<pre>${pre.innerText.replace(/\[|\]/g, "")}</pre>`;*/
 }
