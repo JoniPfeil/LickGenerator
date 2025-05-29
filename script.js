@@ -270,42 +270,54 @@ async function playLick(lick) {
 
   let lastStep = 0;
 
-  lick.forEach(note => {
-    const time = Tone.Time(`${note.step * 0.25}n`); // Zeit als musikalischer Wert
-    const duration = Tone.Time(`${note.duration * 0.25}n`);
-
+  // Ereignisliste für das Lick
+  const events = lick.map(note => {
     if (note.step > lastStep) lastStep = note.step;
 
-    Tone.Transport.schedule(t => {
-      highlightStep(note.step);
-      if (note.string !== null) {
-        const pitch = fretboard[note.string][note.fret];
-        synth.triggerAttackRelease(pitch, duration, t);
-      }
-    }, time);
+    const time = Tone.Time(`${note.step * 0.25}n`).toBarsBeatsSixteenths();
+    const duration = Tone.Time(`${note.duration * 0.25}n`).toNotation();
+
+    if (note.string === null) {
+      return [time, null]; // Pause
+    } else {
+      const pitch = fretboard[note.string][note.fret];
+      return [time, { pitch, duration, step: note.step }];
+    }
   });
 
-  // Metronom: jede 8tel (also 0.5 * Viertel) → entspricht 2 16tel
-  const totalSteps = lastStep + 4; // etwas Puffer
-  const totalBeats = totalSteps / 4;
+  // Tone.Part für das Lick
+  const lickPart = new Tone.Part((time, value) => {
+    if (value) {
+      highlightStep(value.step);
+      synth.triggerAttackRelease(value.pitch, value.duration, time);
+    }
+  }, events);
 
-  for (let i = 0; i <= totalBeats * 2; i++) {
-    const time = Tone.Time(`${i * 0.5}n`);
-    Tone.Transport.schedule(t => {
-      clickSynth.triggerAttackRelease("8n", t);
-    }, time);
-  }
+  lickPart.start(0);
+  lickPart.loop = false;
 
-  // Nach dem letzten Ton aufräumen
+  // Metronom mit Loop
+  const clickLoop = new Tone.Loop((time) => {
+    clickSynth.triggerAttackRelease("8n", time);
+  }, "8n");
+
+  clickLoop.start(0);
+
+  // Ende des Licks + Aufräumen
+  const totalSteps = lastStep + 4;
+  const totalTime = Tone.Time(`${totalSteps * 0.25}n`);
+
   Tone.Transport.schedule(() => {
+    lickPart.stop();
+    clickLoop.stop();
     clearHighlights();
-    
-  }, Tone.Time(`${totalSteps * 0.25}n`));
+    playButton.disabled = false;
+  }, totalTime);
 
   await Tone.start();
   Tone.Transport.start();
-  playButton.disabled = false;
 }
+
 
 
 function highlightStep(step) {
