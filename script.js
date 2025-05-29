@@ -296,12 +296,11 @@ async function playLick(lick) {
 
   const totalBeats = (lastStep + 4) / 4;
   for (let beat = 0; beat <= totalBeats * 2; beat++) {
-    const clickTime = beat * 0.5;
-    const isQuarter = beat % 2 === 0;
-    Tone.Transport.schedule(time => {
-      //const pitch = isQuarter ? "C4" : "C3";
+    const beatTime = Tone.Time(`${beat} * 8n`).toBarsBeatsSixteenths(); // → "0:0:2" usw.
+  
+    Tone.Transport.schedule((time) => {
       clickSynth.triggerAttackRelease("8n", time);
-    }, clickTime);
+    }, beatTime);
   }
 
   Tone.Transport.schedule(() => {
