@@ -184,7 +184,7 @@ async function playLick(lick) {
 
   let synth;
 
-   switch (soundSelect) {
+   switch (soundSelect.value) {
     default:
        alert("default");
       synth = new Tone.Synth().toDestination();
