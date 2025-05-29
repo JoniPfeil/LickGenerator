@@ -269,46 +269,39 @@ async function playLick(lick) {
   Tone.Transport.position = 0;
   Tone.Transport.bpm.value = tempo;
 
-  let currentStep = 0;
-  const schedule = [];
+let lastStep = 0;
 
-  for (const note of lick) {
-    const time = note.step * Tone.Time("16n").toSeconds();
+  lick.forEach(note => {
+    const time = Tone.Time(`${note.step * 0.25}n`); // Zeit als musikalischer Wert
+    const duration = Tone.Time(`${note.duration * 0.25}n`);
 
-    if (note.string === null) {
-      schedule.push({ time, pitch: null, step: note.step, duration: note.duration });
-    } else {
-      const pitch = fretboard[note.string][note.fret];
-      schedule.push({ time, pitch, step: note.step, duration: note.duration });
-    }
-  }
+    if (note.step > lastStep) lastStep = note.step;
 
-  let lastStep = 0;
-  schedule.forEach(n => {
-    Tone.Transport.schedule(time => {
-      highlightStep(n.step);
-      if (n.pitch) {
-        synth.triggerAttackRelease(n.pitch, durationMap[n.duration], time);
+    Tone.Transport.schedule(t => {
+      highlightStep(note.step);
+      if (note.string !== null) {
+        const pitch = fretboard[note.string][note.fret];
+        synth.triggerAttackRelease(pitch, duration, t);
       }
-    }, n.time);
-    if (n.step > lastStep) lastStep = n.step;
+    }, time);
   });
 
-  const stepDuration = Tone.Time("16n").toSeconds();
-  const clickInterval = Tone.Time("8n").toSeconds();
-  const totalClicks = Math.ceil((lastStep + 4) * stepDuration / clickInterval);
-  
-  const now = Tone.now();
-  for (let i = 0; i <= totalClicks; i++) {
-    const time = now + i * clickInterval;
-    Tone.Transport.schedule((t) => {
+  // Metronom: jede 8tel (also 0.5 * Viertel) → entspricht 2 16tel
+  const totalSteps = lastStep + 4; // etwas Puffer
+  const totalBeats = totalSteps / 4;
+
+  for (let i = 0; i <= totalBeats * 2; i++) {
+    const time = Tone.Time(`${i * 0.5}n`);
+    Tone.Transport.schedule(t => {
       clickSynth.triggerAttackRelease("8n", t);
-    }, time - now);
+    }, time);
   }
 
+  // Nach dem letzten Ton aufräumen
   Tone.Transport.schedule(() => {
     clearHighlights();
-  }, totalBeats);
+    playButton.disabled = false;
+  }, Tone.Time(`${totalSteps * 0.25}n`));
 
   //alert(Tone.Transport.bpm.value);
   await Tone.start();
