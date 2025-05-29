@@ -87,7 +87,6 @@ async function setSound(selected) {
 }
 
 // Event-Listener fürs Dropdown
-const soundSelect = document.getElementById("soundSelect");
 soundSelect.addEventListener("change", (e) => {
   setSound(e.target.value);
 });
