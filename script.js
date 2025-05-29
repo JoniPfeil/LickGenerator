@@ -167,7 +167,6 @@ function generateLick() {
     console.log(i);
   }
   displayTab(lick, length);
-  await setSound("overdriven_guitar");
 }
 
 generateButton.addEventListener("click", generateLick);
