@@ -15,7 +15,7 @@
     <h1>🎸 Guitar Lick Generator 🎸</h1>
   
     <div class="controls">
-      <label for="key">Key:</label>
+      <!--  <label for="key">Key:</label> -->
       <select id="key">
         <option value="C">C major / A minor</option>
         <option value="G" selected>G major / E minor</option>
@@ -27,7 +27,7 @@
         <option value="F">F major / D minor</option>
       </select>
 
-      <label for="tempo">Tempo:</label>
+      <!-- <label for="tempo">Tempo:</label> -->
       <select id="tempo">
         <option value="60">60 BPM</option>
         <option value="80" selected>80 BPM</option>
@@ -36,15 +36,15 @@
         <option value="140">140 BPM</option>
       </select>
 
-      <label for="length">Length (bars):</label>
+      <!-- <label for="length">Length (bars):</label> -->
       <select id="length">
-        <option value="1">1</option>
-        <option value="2" selected>2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
+        <option value="1">1 bar</option>
+        <option value="2" selected>2 bars</option>
+        <option value="3">3 bars</option>
+        <option value="4">4 bars</option>
       </select>
       
-      <label for="difficulty">Difficulty:</label>
+      <!-- <label for="difficulty">Difficulty:</label> -->
       <select id="difficulty">
         <option value="easy">Easy</option>
         <option value="medium" selected>Medium</option>
@@ -59,9 +59,16 @@
     </div>
   
     <div class="button-group">
+      <select id="sound">
+        <option value="1">Sound1</option>
+        <option value="2">Sound2</option>
+        <option value="3">Sound3</option>
+      </select>
+        
       <button id="play-button" disabled>▶️</button>
       <button id="like-button" disabled>👍</button>
       <button id="dislike-button" disabled>👎</button>
+    
     </div>
   </div>
 
