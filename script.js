@@ -303,6 +303,17 @@ async function playLick(lick) {
 
   clickLoop.start(0);
 
+  // Laufende Step-Nummer für Highlight
+  let currentStep = 0;
+  
+  // 16tel-Loop für highlightStep
+  const highlightLoop = new Tone.Loop((time) => {
+    highlightStep(currentStep);
+    currentStep++;
+  }, "16n");
+
+  highlightLoop.start(0);
+
   // Ende des Licks + Aufräumen
   const totalSteps = lastStep + 4;
   const totalTime = Tone.Time(`${totalSteps * 0.25}n`);
@@ -324,14 +335,19 @@ function highlightStep(step) {
   const pre = tabDisplay.querySelector("pre");
   if (!pre) return;
 
-  const lines = pre.innerText.split("\n");
+  let lines = pre.innerText.split("\n");
 
-  // Tab-Zeilen beibehalten
+  // Prüfen, ob schon eine Pfeil-Zeile existiert (eine Zeile mit nur Leerzeichen und einem ^)
+  if (lines.length > 7 && lines[7].includes("^")) {
+    lines = lines.slice(0, 7); // alte Pfeil-Zeile entfernen
+  }
+
+  // Tab-Zeilen beibehalten (7 Zeilen: Bundnummer + 6 Saiten)
   const tabLines = lines;
 
-  // Eine Zeile mit Leerzeichen und an der richtigen Stelle ein ^
+  // Zeile mit Leerzeichen und einem ^ an der passenden Stelle
   const pointerLine = Array(tabLines[0].length).fill(" ");
-  const index = 3 + (step * 3); // wie bisher: Schritt-Position berechnen
+  const index = 3 + (step * 3); // wie bisher: Position berechnen
 
   if (index < pointerLine.length) {
     pointerLine[index] = "^";
@@ -341,6 +357,7 @@ function highlightStep(step) {
 
   tabDisplay.innerHTML = `<pre>${combinedLines.join("\n")}</pre>`;
 }
+
 
 function clearHighlights() {
  /* const pre = tabDisplay.querySelector("pre");
