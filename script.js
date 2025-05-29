@@ -101,7 +101,10 @@ function generateLick() {
   
       // Gültige Bünde für diese Saite
       const validFrets = fretboard[string]
-        .map((note, fret) => scale.includes(note) ? fret : null)
+        .map((note, fret) => {
+          const noteWithoutOctave = note.slice(0, -1); // z.B. "F#3" → "F#"
+          return scale.includes(noteWithoutOctave) ? fret : null;
+        })
         .filter(f => f !== null);
   
       if (validFrets.length === 0) continue;
