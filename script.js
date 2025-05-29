@@ -338,7 +338,7 @@ function highlightStep(step) {
   let lines = pre.innerText.split("\n");
 
   // Prüfen, ob schon eine Pfeil-Zeile existiert (eine Zeile mit nur Leerzeichen und einem ^)
-  if (lines.length > 7 && lines[7].includes("^")) {
+  if (lines.length > 7) {
     lines = lines.slice(0, 7); // alte Pfeil-Zeile entfernen
   }
 
