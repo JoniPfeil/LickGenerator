@@ -137,6 +137,7 @@ function generateLick() {
       lastFret = fret;
     }
     i += duration;
+    console.log(i);
   }
   displayTab(lick, length);
 }
@@ -185,9 +186,11 @@ async function playLick(lick) {
 
    switch (soundSelect) {
     default:
+       alert("default");
       synth = new Tone.Synth().toDestination();
       break;
     case "sound2":
+       alert("sound2");
       synth = new Tone.MonoSynth({
         oscillator: { type: "square" },
         filter: { Q: 2, type: "lowpass", rolloff: -24 },
@@ -195,6 +198,7 @@ async function playLick(lick) {
       }).toDestination();
       break;
     case "sound3":
+       alert("sound3");
       synth = new Tone.MonoSynth({
         oscillator: { type: "sine" },
         filter: { Q: 2, type: "lowpass", rolloff: -24 },
