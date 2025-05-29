@@ -73,7 +73,7 @@ async function setSound(selected) {
     synth = new Tone.Synth().toDestination();
   } else {
     if (!loadedInstruments[selected]) {
-      const instrument = await Soundfont.instrument(Tone.context.rawContext, selected);
+      const instrument = await SoundfontPlayer.instrument(Tone.context.rawContext, selected);
       loadedInstruments[selected] = instrument;
     }
 
