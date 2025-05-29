@@ -1,10 +1,18 @@
 // script.js
 
 // Script dynamisch laden
-  const script = document.createElement('script');
-  script.src = "https://unpkg.com/soundfont-player@0.15.0/dist/soundfont-player.js";
-  script.onload = () => {
-    alert('✅ SoundfontPlayer geladen:', typeof SoundfontPlayer);
+const script = document.createElement('script');
+script.src = "https://unpkg.com/soundfont-player@0.15.0/dist/soundfont-player.js";
+
+script.onload = () => {
+  console.log('✅ SoundfontPlayer geladen:', typeof SoundfontPlayer);
+};
+
+script.onerror = () => {
+  console.error("❌ Fehler beim Laden von soundfont-player.js");
+};
+
+document.head.appendChild(script);
 
 const keySelect = document.getElementById("key");
 const difficultySelect = document.getElementById("difficulty");
