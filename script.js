@@ -250,6 +250,7 @@ function displayTab(lick, bars) {
 async function playLick(lick) {
   playButton.disabled = true;
   const tempo = parseInt(tempoSelect.value);
+  alert(tempo);
 
   await setSound(soundSelect.value);
   
