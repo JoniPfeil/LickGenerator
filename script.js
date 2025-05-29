@@ -15,6 +15,9 @@ const tabDisplay = document.getElementById("tab-display");
 const strings = ["e", "B", "G", "D", "A", "E"];
 let lick = []; // globale Variable für den aktuellen Lick
 
+let synth = null;
+const loadedInstruments = {}; // Cache
+
 const majorScales = {
   C: ["C", "D", "Eb", "E", "F", "G", "A", "B"],
   G: ["G", "A", "Bb", "B", "C", "D", "E", "F#"],
@@ -63,6 +66,31 @@ function getNoteDurationOptions(difficulty) {
       return [1, 2, 3, 4, 6];
   }
 }
+
+// Globale Funktion zum Setzen des Sounds
+async function setSound(selected) {
+  if (selected === "synth") {
+    synth = new Tone.Synth().toDestination();
+  } else {
+    if (!loadedInstruments[selected]) {
+      const instrument = await Soundfont.instrument(Tone.context.rawContext, selected);
+      loadedInstruments[selected] = instrument;
+    }
+
+    const player = loadedInstruments[selected];
+    synth = {
+      triggerAttackRelease: (note, duration, time) => {
+        player.play(note, time, { duration: Tone.Time(duration).toSeconds() });
+      }
+    };
+  }
+}
+
+// Event-Listener fürs Dropdown
+const soundSelect = document.getElementById("soundSelect");
+soundSelect.addEventListener("change", (e) => {
+  setSound(e.target.value);
+});
 
 function generateLick() {
   playButton.disabled = false;
@@ -140,6 +168,7 @@ function generateLick() {
     console.log(i);
   }
   displayTab(lick, length);
+  await setSound("overdriven_guitar");
 }
 
 generateButton.addEventListener("click", generateLick);
@@ -182,32 +211,7 @@ async function playLick(lick) {
   playButton.disabled = true;
   const tempo = parseInt(tempoSelect.value);
 
-  let synth;
-
-   switch (soundSelect.value) {
-    case "sound1":
-    // Achtung: soundfont-player ist asynchron!
-    Soundfont.instrument(new AudioContext(), "electric_guitar_clean").then(player => {
-      synth = {
-        triggerAttackRelease: (note, duration, time) => {
-          player.play(note, time, { duration: Tone.Time(duration).toSeconds() });
-        }
-      };
-    });
-    break;
-    
-    case "sound2":
-      synth = new Tone.MonoSynth({
-        oscillator: { type: "square" },
-        filter: { Q: 2, type: "lowpass", rolloff: -24 },
-        envelope: { attack: 0.02, decay: 0.1, sustain: 0.3, release: 0.8 },
-      }).toDestination();
-      break;
-
-    default:
-      synth = new Tone.Synth().toDestination();
-      break;
-  }
+  await setSound(soundSelect.value);
   
   const clickSynth = new Tone.NoiseSynth({
   noise: { type: "white" },
