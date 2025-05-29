@@ -115,8 +115,7 @@ function generateLick() {
         fret = Math.round(randomNormal(lastFret, stdDevFret));
       } while (
         fret < 0 ||
-        fret >= fretboard[string].length ||
-        !scale.includes(fretboard[string][fret])
+        fret >= fretboard[string].length
       );
 
       if (fret === lastFret && stringIndex === lastStringIndex) {continue;}
