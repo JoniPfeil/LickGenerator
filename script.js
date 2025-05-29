@@ -1,5 +1,11 @@
 // script.js
 
+// Script dynamisch laden
+  const script = document.createElement('script');
+  script.src = "https://unpkg.com/soundfont-player@0.15.0/dist/soundfont-player.js";
+  script.onload = () => {
+    alert('✅ SoundfontPlayer geladen:', typeof SoundfontPlayer);
+
 const keySelect = document.getElementById("key");
 const difficultySelect = document.getElementById("difficulty");
 const tempoSelect = document.getElementById("tempo");
