@@ -175,7 +175,7 @@ async function playLick(lick) {
   let synth;
 
    switch (sound) {
-    case "sound1":
+    default:
       synth = new Tone.Synth().toDestination();
       break;
     case "sound2":
