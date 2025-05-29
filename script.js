@@ -294,20 +294,23 @@ async function playLick(lick) {
     if (n.step > lastStep) lastStep = n.step;
   });
 
-  const totalBeats = (lastStep + 4) / 4;
-  for (let beat = 0; beat <= totalBeats * 2; beat++) {
-    const beatTime = Tone.Time(`${beat} * 8n`).toBarsBeatsSixteenths(); // → "0:0:2" usw.
+  const stepDuration = Tone.Time("16n").toSeconds();
+  const clickInterval = Tone.Time("8n").toSeconds();
+  const totalClicks = Math.ceil((lastStep + 4) * stepDuration / clickInterval);
   
-    Tone.Transport.schedule((time) => {
-      clickSynth.triggerAttackRelease("8n", time);
-    }, beatTime);
+  const now = Tone.now();
+  for (let i = 0; i <= totalClicks; i++) {
+    const time = now + i * clickInterval;
+    Tone.Transport.schedule((t) => {
+      clickSynth.triggerAttackRelease("8n", t);
+    }, time - now);
   }
 
   Tone.Transport.schedule(() => {
     clearHighlights();
   }, totalBeats);
 
-  alert(Tone.Transport.bpm.value);
+  //alert(Tone.Transport.bpm.value);
   await Tone.start();
   Tone.Transport.start();
   playButton.disabled = false;
