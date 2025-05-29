@@ -1,5 +1,5 @@
 // script.js
-
+/*
 // Script dynamisch laden
 const script = document.createElement('script');
 script.src = "https://cdn.jsdelivr.net/npm/soundfont-player@0.15.0/dist/soundfont-player.js";
@@ -13,7 +13,7 @@ script.onerror = () => {
 };
 
 document.head.appendChild(script);
-
+*/
 const keySelect = document.getElementById("key");
 const difficultySelect = document.getElementById("difficulty");
 const tempoSelect = document.getElementById("tempo");
