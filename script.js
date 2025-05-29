@@ -274,7 +274,7 @@ async function playLick(lick) {
   const events = lick.map(note => {
     if (note.step > lastStep) lastStep = note.step;
 
-    const time = Tone.Time("16n").mul(note.step).toBarsBeatsSixteenths(); 
+    const time = Tone.Time(`${note.step * 0.25}n`).toBarsBeatsSixteenths();
     const duration = Tone.Time(`${note.duration * 0.25}n`).toNotation();
 
     if (note.string === null) {
