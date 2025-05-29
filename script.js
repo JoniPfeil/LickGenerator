@@ -81,6 +81,32 @@ function getNoteDurationOptions(difficulty) {
   }
 }
 
+function getNoteDurationProbabilities(difficulty) {
+  //Notenlänge in 16teln: 1=16tel; 2=8tel usw.
+  switch (difficulty) {
+    case "easy":
+      return [5, 5, 2];
+    case "medium":
+      return [5, 5, 3, 2, 1];
+    case "hard":
+      return [5, 5, 3, 2, 2];
+  }
+}
+
+function weightedRandomChoice(items, weights) {
+  const totalWeight = weights.reduce((sum, w) => sum + w, 0);
+  const r = Math.random() * totalWeight;
+
+  let cumulative = 0;
+  for (let i = 0; i < items.length; i++) {
+    cumulative += weights[i];
+    if (r < cumulative) {
+      return items[i];
+    }
+  }
+}
+
+
 // Globale Funktion zum Setzen des Sounds
 async function setSound(selected) {
   if (selected === "synth") {
@@ -116,6 +142,7 @@ function generateLick() {
 
   const scale = majorScales[key];
   const durations = getNoteDurationOptions(difficulty);
+  const durationPs = getNoteDurationProbabilities(difficulty);
 
   const stepsPerBar = 16;
   const totalSteps = length * stepsPerBar;
@@ -130,7 +157,8 @@ function generateLick() {
 
   for (let i = 0; i < totalSteps;) {
     const isRest = Math.random() < pRest;
-    let duration = durations[Math.floor(Math.random() * durations.length)];
+    
+    let duration = weightedRandomChoice(durations, durationPs);
 
     // Verhindere Überschreiten des totalSteps
     if (i + duration > totalSteps) {
