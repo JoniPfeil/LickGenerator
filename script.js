@@ -185,26 +185,28 @@ async function playLick(lick) {
   let synth;
 
    switch (soundSelect.value) {
-    default:
-       alert("default");
-      synth = new Tone.Synth().toDestination();
-      break;
+    case "sound1":
+    // Achtung: soundfont-player ist asynchron!
+    Soundfont.instrument(new AudioContext(), "electric_guitar_clean").then(player => {
+      synth = {
+        triggerAttackRelease: (note, duration, time) => {
+          player.play(note, time, { duration: Tone.Time(duration).toSeconds() });
+        }
+      };
+    });
+    break;
+    
     case "sound2":
-       alert("sound2");
       synth = new Tone.MonoSynth({
         oscillator: { type: "square" },
         filter: { Q: 2, type: "lowpass", rolloff: -24 },
         envelope: { attack: 0.02, decay: 0.1, sustain: 0.3, release: 0.8 },
       }).toDestination();
       break;
-    case "sound3":
-       alert("sound3");
-      synth = new Tone.MonoSynth({
-        oscillator: { type: "sine" },
-        filter: { Q: 2, type: "lowpass", rolloff: -24 },
-        envelope: { attack: 0.02, decay: 0.1, sustain: 0.3, release: 0.8 },
-      }).toDestination();
-    break;
+
+    default:
+      synth = new Tone.Synth().toDestination();
+      break;
   }
   
   const clickSynth = new Tone.NoiseSynth({
