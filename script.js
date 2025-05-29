@@ -43,6 +43,15 @@ function randomNormal(mean, stdDev) {
   return Math.round(mean + z * stdDev);
 }
 
+const durationMap = {
+  1: "16n",
+  2: "8n",
+  3: "6n",
+  4: "4n",
+  6: "3n",
+  8: "2n"
+};
+
 function getNoteDurationOptions(difficulty) {
   //Notenlänge in 16teln: 1=16tel; 2=8tel usw.
   switch (difficulty) {
@@ -228,7 +237,7 @@ async function playLick(lick) {
     Tone.Transport.schedule(time => {
       highlightStep(n.step);
       if (n.pitch) {
-        synth.triggerAttackRelease(n.pitch, (n.duration / 4) + "n", time);
+        synth.triggerAttackRelease(n.pitch, durationMap[n.duration], time);
       }
     }, n.time);
     if (n.step > lastStep) lastStep = n.step;
