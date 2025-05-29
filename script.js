@@ -252,24 +252,23 @@ async function playLick(lick) {
   const tempo = parseInt(tempoSelect.value);
 
   await setSound(soundSelect.value);
-  
-  const clickSynth = new Tone.NoiseSynth({
-  noise: { type: "white" },
-  envelope: {
-    attack: 0.001,
-    decay: 0.05,
-    sustain: 0
-  },
-  volume: -10
-  }).toDestination();
 
+  const clickSynth = new Tone.NoiseSynth({
+    noise: { type: "white" },
+    envelope: {
+      attack: 0.001,
+      decay: 0.05,
+      sustain: 0
+    },
+    volume: -10
+  }).toDestination();
 
   Tone.Transport.stop();
   Tone.Transport.cancel();
   Tone.Transport.position = 0;
   Tone.Transport.bpm.value = tempo;
 
-let lastStep = 0;
+  let lastStep = 0;
 
   lick.forEach(note => {
     const time = Tone.Time(`${note.step * 0.25}n`); // Zeit als musikalischer Wert
@@ -300,14 +299,14 @@ let lastStep = 0;
   // Nach dem letzten Ton aufräumen
   Tone.Transport.schedule(() => {
     clearHighlights();
-    playButton.disabled = false;
+    
   }, Tone.Time(`${totalSteps * 0.25}n`));
 
-  //alert(Tone.Transport.bpm.value);
   await Tone.start();
   Tone.Transport.start();
   playButton.disabled = false;
 }
+
 
 function highlightStep(step) {
  /* const pre = tabDisplay.querySelector("pre");
