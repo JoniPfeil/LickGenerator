@@ -2,7 +2,7 @@
 
 // Script dynamisch laden
 const script = document.createElement('script');
-script.src = "https://unpkg.com/soundfont-player@0.15.0/dist/soundfont-player.js";
+script.src = "https://cdn.jsdelivr.net/npm/soundfont-player@0.15.0/dist/soundfont-player.js";
 
 script.onload = () => {
   console.log('✅ SoundfontPlayer geladen:', typeof SoundfontPlayer);
