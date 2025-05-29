@@ -273,7 +273,8 @@ async function playLick(lick) {
   const schedule = [];
 
   for (const note of lick) {
-    const time = (note.step / 4);
+    const time = `${note.step} * 16n`;
+
     if (note.string === null) {
       schedule.push({ time, pitch: null, step: note.step, duration: note.duration });
     } else {
