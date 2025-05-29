@@ -39,7 +39,7 @@ h1 {
   cursor: pointer;
 }
 
-#lick-container {
+#tab-display {
   border: 2px dashed #ccc;
   padding: 1rem;
   margin: 1rem 0;
@@ -50,19 +50,19 @@ h1 {
   overflow-x: auto;
 }
 
-.actions {
+.button-group {
   display: flex;
   justify-content: center;
   gap: 1rem;
 }
 
-.actions button {
+.button-group button {
   padding: 0.6rem 1.2rem;
   font-size: 1.1rem;
   cursor: pointer;
 }
 
-.actions button:disabled {
+.button-group button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
