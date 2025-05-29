@@ -323,17 +323,23 @@ async function playLick(lick) {
 function highlightStep(step) {
   const pre = tabDisplay.querySelector("pre");
   if (!pre) return;
+
   const lines = pre.innerText.split("\n");
-  const newLines = lines.map(line => {
-    const parts = line.split("");
-    const index = 3 + (step * 3);
-    if (index < parts.length - 1 && parts[index + 1] !== " ") {
-      parts[index] = "[";
-      parts[index + 2] = "]";
-    }
-    return parts.join("");
-  });
-  tabDisplay.innerHTML = `<pre>${newLines.join("\n")}</pre>`;
+
+  // Tab-Zeilen beibehalten
+  const tabLines = lines;
+
+  // Eine Zeile mit Leerzeichen und an der richtigen Stelle ein ^
+  const pointerLine = Array(tabLines[0].length).fill(" ");
+  const index = 3 + (step * 3); // wie bisher: Schritt-Position berechnen
+
+  if (index < pointerLine.length) {
+    pointerLine[index] = "^";
+  }
+
+  const combinedLines = [...tabLines, pointerLine.join("")];
+
+  tabDisplay.innerHTML = `<pre>${combinedLines.join("\n")}</pre>`;
 }
 
 function clearHighlights() {
