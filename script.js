@@ -172,19 +172,21 @@ async function playLick(lick) {
   playButton.disabled = true;
   const tempo = parseInt(tempoSelect.value);
 
+  let synth;
+
    switch (sound) {
     case "sound1":
-      const synth = new Tone.Synth().toDestination();
+      synth = new Tone.Synth().toDestination();
       break;
     case "sound2":
-      const synth = new Tone.MonoSynth({
+      synth = new Tone.MonoSynth({
         oscillator: { type: "square" },
         filter: { Q: 2, type: "lowpass", rolloff: -24 },
         envelope: { attack: 0.02, decay: 0.1, sustain: 0.3, release: 0.8 },
       }).toDestination();
       break;
     case "sound3":
-      const synth = new Tone.MonoSynth({
+      synth = new Tone.MonoSynth({
         oscillator: { type: "sine" },
         filter: { Q: 2, type: "lowpass", rolloff: -24 },
         envelope: { attack: 0.02, decay: 0.1, sustain: 0.3, release: 0.8 },
