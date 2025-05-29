@@ -4,6 +4,7 @@ const keySelect = document.getElementById("key");
 const difficultySelect = document.getElementById("difficulty");
 const tempoSelect = document.getElementById("tempo");
 const lengthSelect = document.getElementById("length");
+const soundSelect = document.getElementById("sound");
 const generateButton = document.getElementById("generate-button");
 const playButton = document.getElementById("play-button");
 const likeButton = document.getElementById("like-button");
@@ -170,7 +171,27 @@ function displayTab(lick, bars) {
 async function playLick(lick) {
   playButton.disabled = true;
   const tempo = parseInt(tempoSelect.value);
-  const synth = new Tone.Synth().toDestination();
+
+   switch (sound) {
+    case "sound1":
+      const synth = new Tone.Synth().toDestination();
+      break;
+    case "sound2":
+      const synth = new Tone.MonoSynth({
+        oscillator: { type: "square" },
+        filter: { Q: 2, type: "lowpass", rolloff: -24 },
+        envelope: { attack: 0.02, decay: 0.1, sustain: 0.3, release: 0.8 },
+      }).toDestination();
+      break;
+    case "sound3":
+      const synth = new Tone.MonoSynth({
+        oscillator: { type: "sine" },
+        filter: { Q: 2, type: "lowpass", rolloff: -24 },
+        envelope: { attack: 0.02, decay: 0.1, sustain: 0.3, release: 0.8 },
+      }).toDestination();
+    break;
+  }
+  
   const clickSynth = new Tone.NoiseSynth({
   noise: { type: "white" },
   envelope: {
