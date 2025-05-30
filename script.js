@@ -1,40 +1,5 @@
 // script.js
 
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
-// Gitarre laden
-let guitar;
-
-  Soundfont.instrument(audioContext, 'electric_guitar_jazz').then(function (loadedGuitar) {
-    guitar = loadedGuitar;
-    console.log("Gitarre geladen");
-  
-    // EventListener nur aktivieren, wenn Gitarre geladen ist
-    document.getElementById("test").addEventListener("click", function () {
-      // Beispielton: E3
-      guitar.play('E3', audioContext.currentTime, { duration: 1.0 });
-    });
-  }).catch((error) => {
-    console.error("Fehler beim Laden des Instruments:", error);
-  });
-
-
-/*
-// Script dynamisch laden
-const script = document.createElement('script');
-script.src = "https://cdn.jsdelivr.net/npm/soundfont-player@0.15.0/dist/soundfont-player.js";
-
-script.onload = () => {
-  console.log('✅ SoundfontPlayer geladen:', typeof SoundfontPlayer);
-};
-
-script.onerror = () => {
-  console.error("❌ Fehler beim Laden von soundfont-player.js");
-};
-
-document.head.appendChild(script);
-*/
-
 //Lick generation options
 const pRest = 0.1;        // Wahrscheinlichkeit für Pausen. Kleinere Werte machen Pausen unwahrscheinlicher.
 const stdDevString = 2.0; // Standardabweichung für Saite. Kleinere Werte machen Saitenwechsel unwahrscheinlicher.
@@ -53,13 +18,51 @@ const likeButton = document.getElementById("like-button");
 const dislikeButton = document.getElementById("dislike-button");
 const tabDisplay = document.getElementById("tab-display");
 
+let lick = []; // globale Variable for our lick
+let synth = null;
+const loadedInstruments = {}; // Cache für geladene Instrumente
+let audioStarted = false;
+
 //const strings = ["E", "A", "D", "G", "B", "e"];
 const strings = ["e", "B", "G", "D", "A", "E"];
-let lick = []; // globale Variable for our lick
 
-let synth = null;
-const loadedInstruments = {}; // Instrument cache
-let audioStarted = false;
+//Erlaubte Notenlängen in 16teln: 1=16tel; 2=8tel usw.
+function getNoteDurationOptions(difficulty) {
+  switch (difficulty) {
+    case "easy":
+      return [4, 6, 8];
+    case "medium":
+      return [2, 4, 6, 8];
+    case "hard":
+      return [1, 2, 3, 4, 6];
+  }
+}
+
+//Wahrscheinlichkeiten für die Notenlängen
+function getNoteDurationProbabilities(difficulty) {
+  //Notenlänge in 16teln: 1=16tel; 2=8tel usw.
+  switch (difficulty) {
+    case "easy":
+      return [5, 5, 2];
+    case "medium":
+      return [5, 5, 3, 2, 1];
+    case "hard":
+      return [5, 5, 3, 2, 2];
+  }
+}
+
+function getScale(key)
+{
+  switch (scaleSelect.value) {
+    default:
+    case "pentatonic":
+      return majorPentatonics[key];
+    case "bluesScale":
+      return majorBluesScales[key];
+    case "majorScale":
+      return majorScales[key];  
+  }
+}
 
 const majorPentatonics = {
   C: ["C", "D", "E", "G", "A"],
@@ -94,19 +97,6 @@ const majorScales = {
   F: ["F", "G", "Ab", "A", "Bb", "C", "D", "E"]
 };
 
-function getScale(key)
-{
-  switch (scaleSelect.value) {
-    default:
-    case "pentatonic":
-      return majorPentatonics[key];
-    case "bluesScale":
-      return majorBluesScales[key];
-    case "majorScale":
-      return majorScales[key];  
-  }
-}
-
 const fretboard = {
   e:  ["E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5", "C#5", "D5", "D#5", "E5", "F5", "F#5", "G5", "G#5", "A5"],
   B:  ["B3", "C4", "C#4", "D4", "D#4", "E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5", "C#5", "D5", "D#5", "E5"],
@@ -115,14 +105,6 @@ const fretboard = {
   A:  ["A2", "A#2", "B2", "C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3", "C4", "C#4", "D4"],
   E:  ["E2", "F2", "F#2", "G2", "G#2", "A2", "A#2", "B2", "C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3"]
 };
-
-function randomNormal(mean, stdDev) {
-  let u = 0, v = 0;
-  while (u === 0) u = Math.random(); // Vermeide 0
-  while (v === 0) v = Math.random();
-  const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-  return Math.round(mean + z * stdDev);
-}
 
 //Maps value in 16th to string
 const durationMap = {
@@ -144,31 +126,6 @@ function sixteenthsToBBS(sixteenthsTotal) {
   return `${bars}:${beats}:${sixteenths}`;
 }
 
-//Erlaubte Notenlängen in 16teln: 1=16tel; 2=8tel usw.
-function getNoteDurationOptions(difficulty) {
-  switch (difficulty) {
-    case "easy":
-      return [4, 6, 8];
-    case "medium":
-      return [2, 4, 6, 8];
-    case "hard":
-      return [1, 2, 3, 4, 6];
-  }
-}
-
-//Wahrscheinlichkeiten für die Notenlängen
-function getNoteDurationProbabilities(difficulty) {
-  //Notenlänge in 16teln: 1=16tel; 2=8tel usw.
-  switch (difficulty) {
-    case "easy":
-      return [5, 5, 2];
-    case "medium":
-      return [5, 5, 3, 2, 1];
-    case "hard":
-      return [5, 5, 3, 2, 2];
-  }
-}
-
 function weightedRandomChoice(items, weights) {
   const totalWeight = weights.reduce((sum, w) => sum + w, 0);
   const r = Math.random() * totalWeight;
@@ -181,15 +138,26 @@ function weightedRandomChoice(items, weights) {
   }
 }
 
+function randomNormal(mean, stdDev) {
+  let u = 0, v = 0;
+  while (u === 0) u = Math.random(); // Vermeide 0
+  while (v === 0) v = Math.random();
+  const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  return Math.round(mean + z * stdDev);
+}
+
 // Globale Funktion zum Setzen des Sounds
 async function setSound(selected) {
   if (selected === "synth") {
     synth = new Tone.Synth().toDestination();
   } else {
+    // Check: Ist das Instrument schon im Cache?
     if (!loadedInstruments[selected]) {
+      // Lade und speichere im Cache
       const instrument = await SoundfontPlayer.instrument(Tone.context.rawContext, selected);
       loadedInstruments[selected] = instrument;
     }
+    // Erstelle Synth-Wrapper
     const player = loadedInstruments[selected];
     synth = {
       triggerAttackRelease: (note, duration, time) => {
