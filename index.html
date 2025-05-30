@@ -74,18 +74,26 @@
         <option value="synth">Synth</option>
       </select>
 
+      <!-- 
       <div>
       <label>Click <input type="checkbox" id="click" checked></label> \n
 
       <label>Loop <input type="checkbox" id="loop" disabled></label>
       </div>
+      -->
 
-      <!-- 
+      <select id="clickVol">
+        <option value="0" > 0dB click </option>
+        <option value="-10" selected>-10dB click</option>
+        <option value="-20" >-20dB click</option>
+        <option value="-100"> no click </option>
+      </select>
+      
       <select id="loop">
         <option value="false">no loop</option>
-        <option value="true" disabled>loop</option>
+        <option value="true" disabled> loop </option>
       </select>
-      -->
+      
 
       <button id="play-button" disabled>▶️</button>
       
