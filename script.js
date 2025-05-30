@@ -40,7 +40,7 @@ let synth = null;
 const loadedInstruments = {}; // Instrument cache
 let audioStarted = false;
 
-//Used scales (major with one blues note)
+/*//Used scales (major with one blues note)
 const majorScales = {
   C: ["C", "D", "Eb", "E", "F", "G", "A", "B"],
   G: ["G", "A", "Bb", "B", "C", "D", "E", "F#"],
@@ -50,6 +50,17 @@ const majorScales = {
   B: ["B", "C#", "D", "D#", "E", "F#", "G#", "A#"],
   Fs: ["F#", "G#", "A", "A#", "B", "C#", "D#", "E#"],
   F: ["F", "G", "Ab", "A", "Bb", "C", "D", "E"]
+};*/
+
+const majorPentatonics = {
+  C: ["C", "D", "E", "G", "A"],
+  G: ["G", "A", "B", "D", "E"],
+  D: ["D", "E", "F#", "A", "B"],
+  A: ["A", "B", "C#", "E", "F#"],
+  E: ["E", "F#", "G#", "B", "C#"],
+  B: ["B", "C#", "D#", "F#", "G#"],
+  Fs: ["F#", "G#", "A#", "C#", "D#"],
+  F: ["F", "G", "A", "C", "D"]
 };
 
 const fretboard = {
