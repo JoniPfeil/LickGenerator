@@ -180,6 +180,13 @@ playButton.addEventListener("click", async () => {
     console.error("Fehler beim Abspielen des Licks:", error);
   }
 });
+clickVol.addEventListener("click", (e) => {
+    try {
+      clickSynth.volume.value = clickVolSelect.value; // Optional: parseInt
+      console.log(clickVolSelect.value);
+    } 
+  }
+});
 
 //Generiere neuen Lick
 function generateLick() {
@@ -321,6 +328,9 @@ async function planLickPlayback(lick) {
     },
   }).toDestination();  
 
+  clickSynth.volume.value = clickVolSelect.value; // Optional: parseInt
+  console.log(clickVolSelect.value);
+
  // Ereignisliste für das Lick
   const events = lick.map(note => {
     
@@ -377,8 +387,6 @@ async function planLickPlayback(lick) {
 
 async function playLick() {
   playButton.disabled = true;  
-  clickSynth.volume.value = clickVolSelect.value; // Optional: parseInt
-  console.log(clickVolSelect.value);
   //await planLickPlayback(lick);
   Tone.Transport.stop();
   Tone.Transport.position = 0;
