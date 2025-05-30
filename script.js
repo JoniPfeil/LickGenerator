@@ -1,4 +1,24 @@
 // script.js
+
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+// Gitarre laden
+let guitar;
+
+  Soundfont.instrument(audioContext, 'electric_guitar_jazz').then(function (loadedGuitar) {
+    guitar = loadedGuitar;
+    console.log("Gitarre geladen");
+  
+    // EventListener nur aktivieren, wenn Gitarre geladen ist
+    document.getElementById("test").addEventListener("click", function () {
+      // Beispielton: E3
+      guitar.play('E3', audioContext.currentTime, { duration: 1.0 });
+    });
+  }).catch((error) => {
+    console.error("Fehler beim Laden des Instruments:", error);
+  });
+
+
 /*
 // Script dynamisch laden
 const script = document.createElement('script');
