@@ -341,6 +341,8 @@ async function planLickPlayback(lick) {
     lickPart.stop();
     clickLoop.stop();
     highlightLoop.stop();
+    planLickPlayback(lick);
+    playButton.disabled = false;
   }, totalTime);
  
   playButton.disabled = false;
@@ -352,9 +354,6 @@ async function playLick() {
   Tone.Transport.stop();
   Tone.Transport.position = 0;
   Tone.Transport.bpm.value = parseInt(tempoSelect.value);  
-  Tone.Transport.start();
-  planLickPlayback(lick);
-  playButton.disabled = false;
 }
 
 function highlightStep(step) {
