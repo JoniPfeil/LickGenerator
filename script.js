@@ -22,6 +22,7 @@ const stdDevFret = 2.0;   // Standardabweichung für Bund. Kleinere Werte machen
 
 // html elements
 const keySelect = document.getElementById("key");
+const scaleSelect = document.getElementById("scale");
 const difficultySelect = document.getElementById("difficulty");
 const tempoSelect = document.getElementById("tempo");
 const lengthSelect = document.getElementById("length");
@@ -40,18 +41,6 @@ let synth = null;
 const loadedInstruments = {}; // Instrument cache
 let audioStarted = false;
 
-/*//Used scales (major with one blues note)
-const majorScales = {
-  C: ["C", "D", "Eb", "E", "F", "G", "A", "B"],
-  G: ["G", "A", "Bb", "B", "C", "D", "E", "F#"],
-  D: ["D", "E", "F", "F#", "G", "A", "B", "C#"],
-  A: ["A", "B", "C", "C#", "D", "E", "F#", "G#"],
-  E: ["E", "F#", "G", "G#", "A", "B", "C#", "D#"],
-  B: ["B", "C#", "D", "D#", "E", "F#", "G#", "A#"],
-  Fs: ["F#", "G#", "A", "A#", "B", "C#", "D#", "E#"],
-  F: ["F", "G", "Ab", "A", "Bb", "C", "D", "E"]
-};*/
-
 const majorPentatonics = {
   C: ["C", "D", "E", "G", "A"],
   G: ["G", "A", "B", "D", "E"],
@@ -62,6 +51,40 @@ const majorPentatonics = {
   Fs: ["F#", "G#", "A#", "C#", "D#"],
   F: ["F", "G", "A", "C", "D"]
 };
+
+const majorBluesScales = {
+  C:  ["C", "D", "Eb", "E", "G", "A"],
+  G:  ["G", "A", "Bb", "B", "D", "E"],
+  D:  ["D", "E", "F", "F#", "A", "B"],
+  A:  ["A", "B", "C", "C#", "E", "F#"],
+  E:  ["E", "F#", "G", "G#", "B", "C#"],
+  B:  ["B", "C#", "D", "D#", "F#", "G#"],
+  Fs: ["F#", "G#", "A", "A#", "C#", "D#"],
+  F:  ["F", "G", "Ab", "A", "C", "D"]
+};
+
+const majorScales = {
+  C: ["C", "D", "Eb", "E", "F", "G", "A", "B"],
+  G: ["G", "A", "Bb", "B", "C", "D", "E", "F#"],
+  D: ["D", "E", "F", "F#", "G", "A", "B", "C#"],
+  A: ["A", "B", "C", "C#", "D", "E", "F#", "G#"],
+  E: ["E", "F#", "G", "G#", "A", "B", "C#", "D#"],
+  B: ["B", "C#", "D", "D#", "E", "F#", "G#", "A#"],
+  Fs: ["F#", "G#", "A", "A#", "B", "C#", "D#", "E#"],
+  F: ["F", "G", "Ab", "A", "Bb", "C", "D", "E"]
+};
+
+function getScale(key)
+{
+  switch (scaleSelect.value) {
+    case "pentatonic":
+      return majorPentatonics[key];
+    case "bluesScale":
+      return majorBluesScales[key];
+    case "majorScale":
+      return majorScales[key];  
+  }
+}
 
 const fretboard = {
   e:  ["E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5", "C#5", "D5", "D#5", "E5", "F5", "F#5", "G5", "G#5", "A5"],
@@ -171,7 +194,7 @@ function generateLick() {
   const key = keySelect.value;
   const difficulty = difficultySelect.value;
   const length = parseInt(lengthSelect.value);
-  const scale = majorScales[key];
+  const scale = getScale[key];
   const durations = getNoteDurationOptions(difficulty);
   const durationPs = getNoteDurationProbabilities(difficulty);
   const stepsPerBar = 16;
