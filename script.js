@@ -47,7 +47,7 @@ function getNoteDurationProbabilities(difficulty) {
     case "easy":
       return [5, 5, 2];
     case "medium":
-      return [5, 5, 3, 1];
+      return [5, 5, 3, 2];
     case "hard":
       return [5, 5, 3, 2, 2];
   }
@@ -138,6 +138,7 @@ function weightedRandomChoice(items, weights) {
       return items[i];
     }
   }
+  return items[0];
 }
 
 function randomNormal(mean, stdDev) {
