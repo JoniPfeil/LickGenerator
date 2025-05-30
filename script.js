@@ -247,6 +247,7 @@ function generateLick() {
   likeButton.disabled = false;
   dislikeButton.disabled = false;
   displayTab(lick, length);  
+  planLickPlayback(lick);
 }
 
 function displayTab(lick, bars) {
