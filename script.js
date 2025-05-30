@@ -81,6 +81,14 @@ const durationMap = {
   16: "1n"
 };
 
+function sixteenthsToBBS(sixteenthsTotal) {
+  const bars = Math.floor(sixteenthsTotal / 16);
+  const afterBars = sixteenthsTotal % 16;
+  const beats = Math.floor(afterBars / 4);
+  const sixteenths = afterBars % 4;
+  return `${bars}:${beats}:${sixteenths}`;
+}
+
 //Erlaubte Notenlängen in 16teln: 1=16tel; 2=8tel usw.
 function getNoteDurationOptions(difficulty) {
   switch (difficulty) {
@@ -171,14 +179,14 @@ function generateLick() {
   }
 
   lick = [
-  { string: "e", fret: 1, step: 0,  duration: 1 },
-  { string: "e", fret: 2, step: 1,  duration: 1 },
-  { string: "e", fret: 3, step: 2,  duration: 1 },
-  { string: "e", fret: 4, step: 3,  duration: 1 },
-  { string: "e", fret: 5, step: 4,  duration: 1 },
-  { string: "e", fret: 6, step: 5,  duration: 1 },
-  { string: "e", fret: 7, step: 6,  duration: 1 },
-  { string: "e", fret: 8, step: 7,  duration: 1 }
+  { string: "e", fret: 1, step: 0,  duration: 4 },
+  { string: "e", fret: 2, step: 4,  duration: 4 },
+  { string: "e", fret: 3, step: 8,  duration: 4 },
+  { string: "e", fret: 4, step: 12,  duration: 4 },
+  { string: "e", fret: 5, step: 16,  duration: 4 },
+  { string: "e", fret: 6, step: 20,  duration: 4 },
+  { string: "e", fret: 7, step: 24,  duration: 4 },
+  { string: "e", fret: 8, step: 28,  duration: 4 }
 ];
 
 /*
@@ -236,7 +244,7 @@ function generateLick() {
   }
 
   */
-  
+  likeButton.disabled = false;
   dislikeButton.disabled = false;
   displayTab(lick, length);  
   planLickPlayback(lick);
@@ -289,8 +297,9 @@ async function planLickPlayback(lick) {
 
  // Ereignisliste für das Lick
   const events = lick.map(note => {
-    const time = Tone.Time(`${note.step * 0.25}n`).toBarsBeatsSixteenths();
-    const duration = Tone.Time(`${note.duration * 0.25}n`).toNotation();
+    
+    const time = Tone.Time(sixteenthsToBBS(note.step));   
+    const duration = Tone.Time(durationMap(note.duration));
 
     if (note.string === null) {
       return [time, null]; // Pause
