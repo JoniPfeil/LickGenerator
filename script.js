@@ -77,6 +77,7 @@ const majorScales = {
 function getScale(key)
 {
   switch (scaleSelect.value) {
+    default:
     case "pentatonic":
       return majorPentatonics[key];
     case "bluesScale":
@@ -194,7 +195,7 @@ function generateLick() {
   const key = keySelect.value;
   const difficulty = difficultySelect.value;
   const length = parseInt(lengthSelect.value);
-  const scale = getScale[key];
+  const scale = getScale(key);
   const durations = getNoteDurationOptions(difficulty);
   const durationPs = getNoteDurationProbabilities(difficulty);
   const stepsPerBar = 16;
