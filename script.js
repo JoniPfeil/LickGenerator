@@ -266,7 +266,7 @@ function generateLick() {
       lastFret = fret;
     }
     i += duration;
-    console.log(i);
+    //console.log(i);
   }
   
   likeButton.disabled = false;
@@ -319,7 +319,9 @@ async function planLickPlayback(lick) {
     },
   }).toDestination();
 
-  clickSynth.volume.value = Number(clickVolSelect.value); // Optional: parseInt
+  clickSynth.volume.value = parseInt(clickVolSelect.value); // Optional: parseInt
+  console.log(parseInt(clickVolSelect.value));
+  
 
  // Ereignisliste für das Lick
   const events = lick.map(note => {
