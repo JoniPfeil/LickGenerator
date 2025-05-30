@@ -38,6 +38,7 @@ let lick = []; // globale Variable for our lick
 
 let synth = null;
 const loadedInstruments = {}; // Instrument cache
+let audioStarted = false;
 
 //Used scales (major with one blues note)
 const majorScales = {
@@ -133,9 +134,15 @@ async function setSound(selected) {
   }
 }
 
-// Event-Listener fürs Dropdown
-soundSelect.addEventListener("change", (e) => {
-  setSound(e.target.value);
+// Event-Listener definieren
+soundSelect.addEventListener("change", (e) => setSound(e.target.value));
+generateButton.addEventListener("click", () => generateLick());
+playButton.addEventListener("click", async () => {
+  try {
+    await playLick(lick);
+  } catch (error) {
+    console.error("Fehler beim Abspielen des Licks:", error);
+  }
 });
 
 //Generiere neuen Lick
@@ -152,6 +159,14 @@ function generateLick() {
   lick = []; // globale Variable überschreiben 
   let lastStringIndex = Math.floor(Math.random() * strings.length);
   let lastFret = Math.floor(Math.random() * 18);
+
+  playButton.disabled = true;
+
+  // Audioausgabe aktivieren, damit Lick später abgespielt werden kann
+  if (!audioStarted) {
+    Tone.start();    //ohne await
+    audioStarted = true;
+  }
 
   for (let i = 0; i < totalSteps;) {
     const isRest = Math.random() < pRest;
@@ -206,14 +221,10 @@ function generateLick() {
     console.log(i);
   }
   
-  playButton.disabled = false;
   likeButton.disabled = false;
   dislikeButton.disabled = false;
   displayTab(lick, length);  
 }
-
-generateButton.addEventListener("click", generateLick);
-playButton.addEventListener("click", playLick(lick));
 
 function displayTab(lick, bars) {
   const lines = {};
@@ -243,9 +254,11 @@ function displayTab(lick, bars) {
   tabDisplay.innerHTML = `<pre>${output}</pre>`;
 }
 
-async function playLick(lick) {
-  playButton.disabled = true;
-  const tempo = parseInt(tempoSelect.value);
+async function planLickPlayback(lick) {
+
+  Tone.Transport.stop();
+  Tone.Transport.cancel();
+  Tone.Transport.position = 0;
 
   await setSound(soundSelect.value);
 
@@ -259,17 +272,8 @@ async function playLick(lick) {
     volume: -10
   }).toDestination();
 
-  Tone.Transport.stop();
-  Tone.Transport.cancel();
-  Tone.Transport.position = 0;
-  Tone.Transport.bpm.value = tempo;
-
-  let lastStep = 0;
-
-  // Ereignisliste für das Lick
+ // Ereignisliste für das Lick
   const events = lick.map(note => {
-    if (note.step > lastStep) lastStep = note.step;
-
     const time = Tone.Time(`${note.step * 0.25}n`).toBarsBeatsSixteenths();
     const duration = Tone.Time(`${note.duration * 0.25}n`).toNotation();
 
@@ -288,7 +292,6 @@ async function playLick(lick) {
       synth.triggerAttackRelease(value.pitch, value.duration, time);
     }
   }, events);
-
   lickPart.start(0);
   lickPart.loop = false;
 
@@ -296,36 +299,37 @@ async function playLick(lick) {
   const clickLoop = new Tone.Loop((time) => {
     clickSynth.triggerAttackRelease("8n", time);
   }, "8n");
-
   clickLoop.start(0);
 
-  // Laufende Step-Nummer für Highlight
-  let currentStep = 0;
-  
   // 16tel-Loop für highlightStep
+  let currentStep = 0;  // Laufende Step-Nummer für Highlight
   const highlightLoop = new Tone.Loop((time) => {
     highlightStep(currentStep);
     currentStep++;
   }, "16n");
-
   highlightLoop.start(0);
 
-  // Ende des Licks + Aufräumen
-  const totalSteps = lastStep + 4;
-  const totalTime = Tone.Time(`${totalSteps * 0.25}n`);
+  // Ende des Licks
+  const totalTime = Tone.Time(`${parseInt(lengthSelect.value)}m`);
 
+  // Events am Ende des Licks
   Tone.Transport.schedule(() => {
     lickPart.stop();
     clickLoop.stop();
-    clearHighlights();
-    playButton.disabled = false;
+    highlightLoop.stop();
   }, totalTime);
+ 
+  playButton.disabled = false;
+}
+  
 
-  await Tone.start();
+async function playLick() {
+  playButton.disabled = true;
+  
+  Tone.Transport.bpm.value = parseInt(tempoSelect.value);  
+
   Tone.Transport.start();
 }
-
-
 
 function highlightStep(step) {
   const pre = tabDisplay.querySelector("pre");
@@ -352,11 +356,4 @@ function highlightStep(step) {
   const combinedLines = [...tabLines, pointerLine.join("")];
 
   tabDisplay.innerHTML = `<pre>${combinedLines.join("\n")}</pre>`;
-}
-
-
-function clearHighlights() {
- /* const pre = tabDisplay.querySelector("pre");
-  if (!pre) return;
-  tabDisplay.innerHTML = `<pre>${pre.innerText.replace(/\[|\]/g, "")}</pre>`;*/
 }
