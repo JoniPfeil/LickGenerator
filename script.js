@@ -221,9 +221,9 @@ function generateLick() {
     console.log(i);
   }
   
-  likeButton.disabled = false;
   dislikeButton.disabled = false;
   displayTab(lick, length);  
+  planLickPlayback(lick);
 }
 
 function displayTab(lick, bars) {
@@ -255,7 +255,6 @@ function displayTab(lick, bars) {
 }
 
 async function planLickPlayback(lick) {
-
   Tone.Transport.stop();
   Tone.Transport.cancel();
   Tone.Transport.position = 0;
@@ -324,11 +323,10 @@ async function planLickPlayback(lick) {
   
 
 async function playLick() {
-  playButton.disabled = true;
-  
+  playButton.disabled = true;  
   Tone.Transport.bpm.value = parseInt(tempoSelect.value);  
-
   Tone.Transport.start();
+  playButton.disabled = false;
 }
 
 function highlightStep(step) {
