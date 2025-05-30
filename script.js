@@ -14,6 +14,13 @@ script.onerror = () => {
 
 document.head.appendChild(script);
 */
+
+//Lick generation options
+const pRest = 0.1;        // Wahrscheinlichkeit für Pausen. Kleinere Werte machen Pausen unwahrscheinlicher.
+const stdDevString = 2.0; // Standardabweichung für Saite. Kleinere Werte machen Saitenwechsel unwahrscheinlicher.
+const stdDevFret = 2.0;   // Standardabweichung für Bund. Kleinere Werte machen Bundwechsel unwahrscheinlicher.
+
+// html elements
 const keySelect = document.getElementById("key");
 const difficultySelect = document.getElementById("difficulty");
 const tempoSelect = document.getElementById("tempo");
@@ -27,11 +34,12 @@ const tabDisplay = document.getElementById("tab-display");
 
 //const strings = ["E", "A", "D", "G", "B", "e"];
 const strings = ["e", "B", "G", "D", "A", "E"];
-let lick = []; // globale Variable für den aktuellen Lick
+let lick = []; // globale Variable for our lick
 
 let synth = null;
-const loadedInstruments = {}; // Cache
+const loadedInstruments = {}; // Instrument cache
 
+//Used scales (major with one blues note)
 const majorScales = {
   C: ["C", "D", "Eb", "E", "F", "G", "A", "B"],
   G: ["G", "A", "Bb", "B", "C", "D", "E", "F#"],
@@ -60,6 +68,7 @@ function randomNormal(mean, stdDev) {
   return Math.round(mean + z * stdDev);
 }
 
+//Maps value in 16th to string
 const durationMap = {
   1: "16n",
   2: "8n",
@@ -69,8 +78,8 @@ const durationMap = {
   8: "2n"
 };
 
+//Erlaubte Notenlängen in 16teln: 1=16tel; 2=8tel usw.
 function getNoteDurationOptions(difficulty) {
-  //Notenlänge in 16teln: 1=16tel; 2=8tel usw.
   switch (difficulty) {
     case "easy":
       return [4, 6, 8];
@@ -81,6 +90,7 @@ function getNoteDurationOptions(difficulty) {
   }
 }
 
+//Wahrscheinlichkeiten für die Notenlängen
 function getNoteDurationProbabilities(difficulty) {
   //Notenlänge in 16teln: 1=16tel; 2=8tel usw.
   switch (difficulty) {
@@ -96,7 +106,6 @@ function getNoteDurationProbabilities(difficulty) {
 function weightedRandomChoice(items, weights) {
   const totalWeight = weights.reduce((sum, w) => sum + w, 0);
   const r = Math.random() * totalWeight;
-
   let cumulative = 0;
   for (let i = 0; i < items.length; i++) {
     cumulative += weights[i];
@@ -105,7 +114,6 @@ function weightedRandomChoice(items, weights) {
     }
   }
 }
-
 
 // Globale Funktion zum Setzen des Sounds
 async function setSound(selected) {
@@ -116,7 +124,6 @@ async function setSound(selected) {
       const instrument = await SoundfontPlayer.instrument(Tone.context.rawContext, selected);
       loadedInstruments[selected] = instrument;
     }
-
     const player = loadedInstruments[selected];
     synth = {
       triggerAttackRelease: (note, duration, time) => {
@@ -131,36 +138,26 @@ soundSelect.addEventListener("change", (e) => {
   setSound(e.target.value);
 });
 
+//Generiere neuen Lick
 function generateLick() {
-  playButton.disabled = false;
-  likeButton.disabled = false;
-  dislikeButton.disabled = false;
-
   const key = keySelect.value;
   const difficulty = difficultySelect.value;
   const length = parseInt(lengthSelect.value);
-
   const scale = majorScales[key];
   const durations = getNoteDurationOptions(difficulty);
   const durationPs = getNoteDurationProbabilities(difficulty);
-
   const stepsPerBar = 16;
   const totalSteps = length * stepsPerBar;
-  lick = []; // globale Variable überschreiben
-
-  const pRest = 0.1;
-  const stdDevString = 1.5; // Standardabweichung für Saite
-  const stdDevFret = 2.0;   // Standardabweichung für Bund
   
+  lick = []; // globale Variable überschreiben 
   let lastStringIndex = Math.floor(Math.random() * strings.length);
   let lastFret = Math.floor(Math.random() * 18);
 
   for (let i = 0; i < totalSteps;) {
     const isRest = Math.random() < pRest;
-    
     let duration = weightedRandomChoice(durations, durationPs);
 
-    // Verhindere Überschreiten des totalSteps
+    // Verhindere Überschreiten des Lick-Endes
     if (i + duration > totalSteps) {
       duration = totalSteps - i;
     }
@@ -177,16 +174,14 @@ function generateLick() {
         stringIndex = Math.round(randomNormal(lastStringIndex, stdDevString));
       } while (stringIndex < 0 || stringIndex >= strings.length);
       const string = strings[stringIndex];
-  
-      // Gültige Bünde für diese Saite
-      const validFrets = fretboard[string]
+
+      // Gültige Bünde für diese Saite auswählen
+      const validFrets = fretboard[string]  
         .map((note, fret) => {
           const noteWithoutOctave = note.slice(0, -1); // z.B. "F#3" → "F#"
           return scale.includes(noteWithoutOctave) ? fret : null;
         })
         .filter(f => f !== null);
-  
-      if (validFrets.length === 0) continue;
   
       // Bund nach Normalverteilung wählen
       let fret;
@@ -197,8 +192,10 @@ function generateLick() {
         fret >= fretboard[string].length
       );
 
+      // Falls Bund und Saite gleich wären, wie bei der Note zuvor, springe zum Schleifenbeginn und suche andere Note. Wiederholung wird also unterbunden.
       if (fret === lastFret && stringIndex === lastStringIndex) {continue;}
-  
+
+      // Note speichern
       lick.push({ string, fret, step: i, duration: duration });
   
       // Letzte Werte aktualisieren
@@ -208,16 +205,15 @@ function generateLick() {
     i += duration;
     console.log(i);
   }
-  displayTab(lick, length);
+  
+  playButton.disabled = false;
+  likeButton.disabled = false;
+  dislikeButton.disabled = false;
+  displayTab(lick, length);  
 }
 
 generateButton.addEventListener("click", generateLick);
-
-playButton.addEventListener("click", () => {
-  if (lick.length > 0) {
-    playLick(lick);
-  }
-});
+playButton.addEventListener("click", playLick(lick));
 
 function displayTab(lick, bars) {
   const lines = {};
