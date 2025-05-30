@@ -73,10 +73,12 @@ function randomNormal(mean, stdDev) {
 const durationMap = {
   1: "16n",
   2: "8n",
-  3: "6n",
+  3: "8n.",
   4: "4n",
-  6: "3n",
-  8: "2n"
+  6: "4n.",
+  8: "2n",
+  12: "2n.",
+  16: "1n"
 };
 
 //Erlaubte Notenlängen in 16teln: 1=16tel; 2=8tel usw.
