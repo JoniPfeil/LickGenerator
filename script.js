@@ -178,7 +178,8 @@ function generateLick() {
     audioStarted = true;
   }
 
-  lick = [
+  //For debugging only
+  /*lick = [
   { string: "e", fret: 1, step: 0,  duration: 4 },
   { string: "e", fret: 2, step: 4,  duration: 4 },
   { string: "e", fret: 3, step: 8,  duration: 4 },
@@ -187,9 +188,9 @@ function generateLick() {
   { string: "e", fret: 6, step: 20,  duration: 4 },
   { string: "e", fret: 7, step: 24,  duration: 4 },
   { string: "e", fret: 8, step: 28,  duration: 4 }
-];
+]; */
 
-/*
+
   for (let i = 0; i < totalSteps;) {
     const isRest = Math.random() < pRest;
     let duration = weightedRandomChoice(durations, durationPs);
@@ -242,8 +243,7 @@ function generateLick() {
     i += duration;
     console.log(i);
   }
-
-  */
+  
   likeButton.disabled = false;
   dislikeButton.disabled = false;
   displayTab(lick, length);  
