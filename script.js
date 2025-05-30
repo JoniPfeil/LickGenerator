@@ -47,7 +47,7 @@ function getNoteDurationProbabilities(difficulty) {
     case "easy":
       return [5, 5, 2];
     case "medium":
-      return [5, 5, 3, 2, 1];
+      return [5, 5, 3, 1];
     case "hard":
       return [5, 5, 3, 2, 2];
   }
