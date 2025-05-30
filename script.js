@@ -181,14 +181,14 @@ playButton.addEventListener("click", async () => {
   }
 });
 clickVol.addEventListener("change", (e) => {
-    try {
-      clickSynth.volume.value = e.target.value; // Optional: parseInt
-      console.log(e.target.value);
-    } catch (error) {
-      console.error("Fehler clickVol", error);
-    }
+  try {
+    clickSynth.volume.value = parseFloat(e.target.value);
+    console.log(e.target.value);
+  } catch (error) {
+    console.error("Fehler clickVol", error);
   }
 });
+
 
 //Generiere neuen Lick
 function generateLick() {
