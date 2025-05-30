@@ -319,11 +319,7 @@ async function planLickPlayback(lick) {
       decay: 0.05,
       sustain: 0
     },
-  }).toDestination();
-
-  clickSynth.volume.value = clickVolSelect.value; // Optional: parseInt
-  console.log(clickVolSelect.value);
-  
+  }).toDestination();  
 
  // Ereignisliste für das Lick
   const events = lick.map(note => {
@@ -381,6 +377,8 @@ async function planLickPlayback(lick) {
 
 async function playLick() {
   playButton.disabled = true;  
+  clickSynth.volume.value = clickVolSelect.value; // Optional: parseInt
+  console.log(clickVolSelect.value);
   //await planLickPlayback(lick);
   Tone.Transport.stop();
   Tone.Transport.position = 0;
