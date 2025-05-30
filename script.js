@@ -353,6 +353,7 @@ async function playLick() {
   Tone.Transport.position = 0;
   Tone.Transport.bpm.value = parseInt(tempoSelect.value);  
   Tone.Transport.start();
+  planLickPlayback(lick);
   playButton.disabled = false;
 }
 
