@@ -13,10 +13,12 @@ const tempoSelect = document.getElementById("tempo");
 const lengthSelect = document.getElementById("length");
 const soundSelect = document.getElementById("sound");
 const generateButton = document.getElementById("generate-button");
+const clickVolSelect = document.getElementById("clickVol");
 const playButton = document.getElementById("play-button");
 const likeButton = document.getElementById("like-button");
 const dislikeButton = document.getElementById("dislike-button");
 const tabDisplay = document.getElementById("tab-display");
+
 
 let lick = []; // globale Variable for our lick
 let synth = null;
@@ -315,8 +317,9 @@ async function planLickPlayback(lick) {
       decay: 0.05,
       sustain: 0
     },
-    volume: -10
   }).toDestination();
+
+  clickSynth.volume.value = Number(clickVolSelect.value); // Optional: parseInt
 
  // Ereignisliste für das Lick
   const events = lick.map(note => {
