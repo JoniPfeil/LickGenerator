@@ -154,7 +154,7 @@ async function setSound(selected) {
     // Check: Ist das Instrument schon im Cache?
     if (!loadedInstruments[selected]) {
       // Lade und speichere im Cache
-      const instrument = await SoundfontPlayer.instrument(Tone.context.rawContext, selected);
+      const instrument = await Soundfont.instrument(Tone.context.rawContext, selected);
       loadedInstruments[selected] = instrument;
     }
     // Erstelle Synth-Wrapper
