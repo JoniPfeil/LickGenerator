@@ -130,7 +130,7 @@ function getNoteDurationOptions(difficulty) {
     case "easy":
       return [4, 6, 8];
     case "medium":
-      return [2, 3, 4, 6, 8];
+      return [2, 4, 6, 8];
     case "hard":
       return [1, 2, 3, 4, 6];
   }
