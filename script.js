@@ -180,11 +180,13 @@ playButton.addEventListener("click", async () => {
     console.error("Fehler beim Abspielen des Licks:", error);
   }
 });
-clickVol.addEventListener("click", (e) => {
+clickVol.addEventListener("change", (e) => {
     try {
-      clickSynth.volume.value = clickVolSelect.value; // Optional: parseInt
-      console.log(clickVolSelect.value);
-    } 
+      clickSynth.volume.value = e.target.value; // Optional: parseInt
+      console.log(e.target.value);
+    } catch (error) {
+      console.error("Fehler clickVol", error);
+    }
   }
 });
 
