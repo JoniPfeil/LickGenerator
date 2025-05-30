@@ -247,7 +247,6 @@ function generateLick() {
   likeButton.disabled = false;
   dislikeButton.disabled = false;
   displayTab(lick, length);  
-  planLickPlayback(lick);
 }
 
 function displayTab(lick, bars) {
@@ -351,9 +350,11 @@ async function planLickPlayback(lick) {
 
 async function playLick() {
   playButton.disabled = true;  
+  //await planLickPlayback(lick);
   Tone.Transport.stop();
   Tone.Transport.position = 0;
   Tone.Transport.bpm.value = parseInt(tempoSelect.value);  
+  Tone.Transport.start();
 }
 
 function highlightStep(step) {
