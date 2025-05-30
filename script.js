@@ -316,6 +316,8 @@ async function planLickPlayback(lick) {
     lickPart.stop();
     clickLoop.stop();
     highlightLoop.stop();
+    Tone.Transport.stop();
+    Tone.Transport.position = 0;
   }, totalTime);
  
   playButton.disabled = false;
