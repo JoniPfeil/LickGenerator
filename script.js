@@ -299,7 +299,7 @@ async function planLickPlayback(lick) {
   const events = lick.map(note => {
     
     const time = Tone.Time(sixteenthsToBBS(note.step));   
-    const duration = Tone.Time(durationMap(note.duration));
+    const duration = Tone.Time(durationMap[note.duration]);
 
     if (note.string === null) {
       return [time, null]; // Pause
