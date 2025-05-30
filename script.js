@@ -260,7 +260,7 @@ function generateLick() {
 
       // Note speichern
       lick.push({ string, fret, step: i, duration: duration });
-      console.log({ string, fret, step: i, duration: duration });
+      console.log({ string, fret, i, duration });
   
       // Letzte Werte aktualisieren
       lastStringIndex = stringIndex;
