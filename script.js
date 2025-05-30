@@ -319,8 +319,8 @@ async function planLickPlayback(lick) {
     },
   }).toDestination();
 
-  clickSynth.volume.value = parseInt(clickVolSelect.value); // Optional: parseInt
-  console.log(parseInt(clickVolSelect.value));
+  clickSynth.volume.value = clickVolSelect.value; // Optional: parseInt
+  console.log(clickVolSelect.value);
   
 
  // Ereignisliste für das Lick
