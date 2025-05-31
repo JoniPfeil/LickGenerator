@@ -55,6 +55,7 @@ async function saveLickToSupabase() {
   } else {
     console.log('Lick gespeichert:', data);
   }
+  rateButton.disabled = true;
   fadeOutDiv(afterRatingMsg)
 }
 
