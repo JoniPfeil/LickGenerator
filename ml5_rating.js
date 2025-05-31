@@ -3,19 +3,24 @@ const nnOptions = {
   debug: true
 };
 
+let nn = null;
+
 const ml5Button = document.getElementById("ml5Button");
 const ml5RatingText = document.getElementById("ml5Rating");
 
 rateButton.addEventListener("click", () => rateCurrentLick());
 
-const nn = ml5.neuralNetwork(nnOptions);
-
-nn.load('ml5_LickRatingModel/', () => {
-  console.log("✅ Modell erfolgreich geladen!");
-});
 
 async function rateCurrentLick()
 {
+  if (nn === null)
+  {
+    nn = ml5.neuralNetwork(nnOptions);
+    await nn.load('ml5_LickRatingModel/', () => {
+      console.log("✅ Modell erfolgreich geladen!");
+    });
+  }
+  
   const rating = await ml5predictAsync(myLick);
   console.log("⭐ Vorhergesagte Bewertung:", rating);
   ml5RatingText.innerHTML = rating;
