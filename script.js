@@ -342,7 +342,7 @@ function generateLick() {
   
     if (isRest) 
     {
-      lick.push({ stringIndex: null, fret: null, step: i, duration: duration });
+      lick.push({ stringIndex: null, fret: null, step: i, duration: duration, isRest: 1});
     } 
     else 
     {
@@ -374,8 +374,8 @@ function generateLick() {
       if (fret === lastFret && stringIndex === lastStringIndex) {continue;}
 
       // Note speichern
-      lick.push({ stringIndex, fret, step: i, duration: duration });
-      console.log({ stringIndex, fret, i, duration });
+      lick.push({ stringIndex, fret, step: i, duration: duration, isRest: 0});
+      console.log({ stringIndex, fret, i, duration, isRest});
   
       // Letzte Werte aktualisieren
       lastStringIndex = stringIndex;
@@ -395,7 +395,7 @@ function displayTab(lick, bars) {
   const lines = Array(strings.length).fill(null).map(() => Array(bars * 16).fill("--"));
 
   for (const note of lick) {
-    if (note.stringIndex === null) continue;
+    if (note.isRest === 1) continue;
     const fretStr = note.fret < 10 ? "0" + note.fret : note.fret.toString();
     lines[note.stringIndex][note.step] = fretStr;
   }
@@ -446,7 +446,7 @@ async function planLickPlayback(lick) {
     const time = Tone.Time(sixteenthsToBBS(note.step));   
     const duration = Tone.Time(durationMap[note.duration]);
 
-    if (note.stringIndex === null) {
+    if (note.isRest === 1) {
       return [time, null]; // Pause
     } else {
       const pitch = fretboardArray[note.stringIndex][note.fret];
