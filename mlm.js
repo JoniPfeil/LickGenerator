@@ -1,4 +1,12 @@
+// === Konfiguration ===============================================================================
 const lickLengthBars = 2;
+const totalSteps = 16*lickLengthBars;         // Takte in 16tel-Schritten
+const featuresPerStep = 5;     // fret, stringIndex, duration, isRest, isNewNote
+const fretMax = 17;            // höchster Bund, den du erwartest
+const stringMax = 5;           // Saiten: 0–5
+const durationMax = 8;         // längste Dauer = halbe Note = 8/16
+const maxRating = 5;
+// =================================================================================================
 
 let nn = null;
 const trainButton = document.getElementById("trainButton");
@@ -48,11 +56,12 @@ async function loadData() {
 
 // Teil 2: Licks flatten
 function flattenData(rawData) {
+  
   console.log("🧹 Flache Vektoren erzeugen...");
 
   return rawData.map(entry => ({
     input: flattenLick(entry.lick),
-    output: { rating: entry.rating }
+    output: { rating: entry.rating/maxRating }
   }));
 }
 
@@ -84,12 +93,6 @@ function trainModel(flattenedData) {
 
 
 function flattenLick(lick) {
-  // === Konfiguration ===
-  const totalSteps = 16*lickLengthBars;         // Takte in 16tel-Schritten
-  const featuresPerStep = 5;     // fret, stringIndex, duration, isRest, isNewNote
-  const fretMax = 17;            // höchster Bund, den du erwartest
-  const stringMax = 5;           // Saiten: 0–5
-  const durationMax = 8;         // längste Dauer = halbe Note = 8/16
   const vector = [];
 
   // Schritt-Mapping vorbereiten
