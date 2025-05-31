@@ -97,7 +97,7 @@ h1 {
   align-items: center;
   text-align: center;
   opacity: 0; 
-  transition: opacity 5s linear;
+  transition: opacity 2s linear;
 }
 
 .star-rating {
