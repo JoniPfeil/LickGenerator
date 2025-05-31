@@ -50,8 +50,6 @@ function trainModel(flattenedData) {
 
   flattenedData.forEach(d => nn.addData(d.input, d.output));
 
-  nn.normalizeData();
-
   const options = {
     epochs: 50,
     batchSize: 16
@@ -77,50 +75,51 @@ startTraining();
 
 
 /**
- * Wandelt ein Lick in einen flachen, normalisierten Vektor mit 320 Features um.
- * Kürzere Licks werden mit Pausen (normalisiert) aufgefüllt.
- * Normalisierungen:
- * - fret: -1 → -1, sonst /24
- * - stringIndex: -1 → -1, sonst /5
- * - duration: /16
- * - isRest: 0 oder 1
- * - isNewNote: 0 oder 1
+ * Wandelt ein Lick in einen flachen Vektor mit 320 Features (64 Schritte × 5 Features) um.
+ * Kürzere Licks werden mit Pausen aufgefüllt.
+ * Alle Werte werden direkt normalisiert.
  */
 function flattenLickTo320(lick) {
-  const maxSteps = 64;
-  const featuresPerStep = 5;
+  // === Konfiguration ===
+  const totalSteps = 64;         // max. 4 Takte in 16tel-Schritten
+  const featuresPerStep = 5;     // fret, stringIndex, duration, isRest, isNewNote
+  const fretMax = 17;            // höchster Bund, den du erwartest
+  const stringMax = 5;           // Saiten: 0–5
+  const durationMax = 8;         // längste Dauer = halbe Note = 8/16
   const vector = [];
 
-  const stepMap = Array(maxSteps).fill(null);
+  // Schritt-Mapping vorbereiten
+  const stepMap = Array(totalSteps).fill(null);
 
   for (const note of lick) {
-    if (note.step < maxSteps) {
+    if (note.step < totalSteps) {
       stepMap[note.step] = note;
     }
   }
 
-  for (let i = 0; i < maxSteps; i++) {
+  for (let i = 0; i < totalSteps; i++) {
     const note = stepMap[i];
 
     if (note === null) {
-      // Leerer Schritt = Pause (normalisiert)
-      vector.push(-1);            // fret (Pause)
-      vector.push(-1);            // stringIndex (Pause)
-      vector.push(0);             // duration
+      // Kein Ton an dieser Stelle = Leerer Schritt = Pause
+      vector.push(-1);            // fret (normiert: -1 = keine Note)
+      vector.push(-1);            // stringIndex (normiert: -1 = keine Note)
+      vector.push(0);             // duration (normiert: 0)
       vector.push(1);             // isRest
       vector.push(0);             // isNewNote
     } else {
-      // Normalisierte Werte
-      const fret = note.fret !== null ? note.fret / 24 : -1;
-      const stringIndex = note.stringIndex !== null ? note.stringIndex / 5 : -1;
-      const duration = note.duration / 16;
+      // Werte normalisieren
+      const fret = note.fret !== null ? note.fret / fretMax : -1;
+      const stringIndex = note.stringIndex !== null ? note.stringIndex / stringMax : -1;
+      const duration = note.duration / durationMax;
       const isRest = note.isRest ? 1 : 0;
 
+      // Neue Note beginnt, wenn:
       const prevNote = stepMap[i - 1];
       const isNewNote = (
         i === 0 ||
         !prevNote ||
-        (prevNote.step + prevNote.duration <= note.step)
+        prevNote.step + prevNote.duration <= note.step
       ) ? 1 : 0;
 
       vector.push(fret);
