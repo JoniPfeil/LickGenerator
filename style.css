@@ -34,7 +34,7 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   justify-content: center;
 }
 
