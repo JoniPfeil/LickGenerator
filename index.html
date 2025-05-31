@@ -75,17 +75,14 @@
       </select>
 
       <div class="control-box">
-        <div class="label-text">
+        <div>
           <span>Loop</span>
-          <span>Playback</span>
         </div>
         <input type="checkbox" id="loop" disabled>
       </div>
       
       <div class="volume-control">
-        <label for="clickVolRange">
-          <span>Click</span>
-          <span>Volume</span></label>
+        <div><label for="clickVolRange">Click Volume</label></div>
         <input type="range" id="clickVol" min="0" max="5" step="1" value="3" list="volumeLabels">
         <datalist id="volumeLabels">
           <option value="0" label="-Infinity">
@@ -96,8 +93,6 @@
           <option value="5" label="0">
         </datalist>
       </div>
-
-      
 
       <button id="play-button" disabled>▶️</button> 
     </div>
