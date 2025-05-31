@@ -6,7 +6,7 @@ const nnOptions = {
 //let nn = null;
 
 const nn = ml5.neuralNetwork(nnOptions);
-    await nn.load('ml5_LickRatingModel/', () => {
+nn.load('ml5_LickRatingModel/', () => {
       console.log("✅ Modell erfolgreich geladen!");
     });
 
