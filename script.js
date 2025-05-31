@@ -364,13 +364,22 @@ function generateLick() {
       console.log(validFrets);
   
       // Bund nach Normalverteilung wählen
-      let fret;
+      let randFret;
       do {
-        fret = Math.round(randomNormal(lastFret, stdDevFret));
+        randFret = Math.round(randomNormal(lastFret, stdDevFret));
       } while (
-        fret < 0 ||
-        fret >= fretboardArray[stringIndex].length
+        randFret < 0 ||
+        randFret >= fretboardArray[stringIndex].length
       );
+
+      // Finde den Wert in validFrets, der randFret am nächsten ist
+      for (let v of validFrets) {
+        const distance = Math.abs(v - randFret);
+        if (distance < minDistance) {
+          minDistance = distance;
+          fret = v;
+        }
+      }
 
       // Falls Bund und Saite gleich wären, wie bei der Note zuvor, springe zum Schleifenbeginn und suche andere Note. Wiederholung wird also unterbunden.
       if (fret === lastFret && stringIndex === lastStringIndex) {continue;}
