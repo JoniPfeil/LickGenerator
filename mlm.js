@@ -32,7 +32,7 @@ async function loadData() {
   console.log("📥 Lade Daten aus Supabase...");
 
   const { data, error } = await supabaseClient
-    .from('licks')
+    .from('ratedLicks')
     .select('lick, rating')
     //.eq('length', 2)
     //.eq('transpose', 0);
