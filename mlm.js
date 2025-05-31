@@ -51,7 +51,7 @@ function flattenData(rawData) {
   console.log("🧹 Flache Vektoren erzeugen...");
 
   return rawData.map(entry => ({
-    input: flattenLickTo320(entry.lick),
+    input: flattenLick(entry.lick),
     output: { rating: entry.rating }
   }));
 }
@@ -79,7 +79,7 @@ function trainModel(flattenedData) {
 }
 
 /**
- * Wandelt ein Lick in einen flachen Vektor mit 320 Features (64 Schritte × 5 Features) um.
+ * Wandelt ein Lick in einen flachen Vektor mit 5*16*lickLengthBar Features (5 Features pro Sechzehntel) um.
  * Kürzere Licks werden mit Pausen aufgefüllt.
  * Alle Werte werden direkt normalisiert.
  */
