@@ -3,7 +3,12 @@ const nnOptions = {
   debug: true
 };
 
-let nn = null;
+//let nn = null;
+
+const nn = ml5.neuralNetwork(nnOptions);
+    await nn.load('ml5_LickRatingModel/', () => {
+      console.log("✅ Modell erfolgreich geladen!");
+    });
 
 const ml5Button = document.getElementById("ml5Button");
 const ml5RatingText = document.getElementById("ml5Rating");
