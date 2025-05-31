@@ -122,11 +122,11 @@ const durationMap = {
 
 const clickVolMap = {
   0: "-Infinity",
-  1: "-50",
-  2: "-30",
-  3: "-20",
-  4: "-10",
-  5: "0"
+  1: "-45",
+  2: "-35",
+  3: "-25",
+  4: "-15",
+  5: "-5"
 };
 
 function sixteenthsToBBS(sixteenthsTotal) {
