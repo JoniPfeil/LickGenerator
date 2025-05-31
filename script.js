@@ -32,7 +32,7 @@ const lickInfo = {
   difficulty: null
 };
 
-const supabase = createClient(
+const supabaseClient = supabase.createClient(
   'https://hrsoaxdhyqkrsodvnbys.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhyc29heGRoeXFrcnNvZHZuYnlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg2ODE4NDMsImV4cCI6MjA2NDI1Nzg0M30.voG9dz3KgQ_W56mcw2okTqRDjNqeB8x63MWpwoaanyc'
 );
@@ -44,7 +44,7 @@ async function saveLickToSupabase() {
     ...lickInfo                   // fügt alle Key-Value-Paare aus lickInfo hinzu
   };
   
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('ratedLicks')
     .insert([lickObj]);
 
