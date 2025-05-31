@@ -62,21 +62,21 @@ h1 {
   text-align: center;
 }
 
-.button-group {
+.play-controls {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 1em;
 }
 
-.button-group button {
+.play-controls button {
   padding: 0.6rem 1.2rem;
   font-size: 1.1rem;
   cursor: pointer;
 }
 
-.button-group button:disabled {
+.play-controls button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
