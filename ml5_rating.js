@@ -3,24 +3,37 @@ const nnOptions = {
   debug: true
 };
 
+const ml5Button = document.getElementById("ml5Button");
+const ml5RatingText = document.getElementById("ml5Rating");
+
+rateButton.addEventListener("click", () => rateCurrentLick());
+
 const nn = ml5.neuralNetwork(nnOptions);
 
 nn.load('ml5_LickRatingModel/', () => {
   console.log("✅ Modell erfolgreich geladen!");
 });
 
+rateCurrentLick()
+{
+  const rating = await ml5predictAsync(myLick);
+  console.log("⭐ Vorhergesagte Bewertung:", rating);
+  ml5RatingText.innerHTML = rating;
+}
+
 // Beispiel: Vorhersage mit einem neuen Lick
-function ml5predict(lick, callback) {
-  const input = flattenLick(lick);
-  nn.predict(input, (err, result) => {
-    if (err) {
-      console.error(err);
-      callback(err, null);
-    } else {
-      const predictedRating = result[0].value * 5; // falls du normalisiert hast
-      console.log("🔮 Vorhergesagtes Rating:", predictedRating);
-      callback(null, predictedRating);
-    }
+async function ml5predictAsync(lick) {
+  const input = flattenLickTo320(lick);
+
+  return new Promise((resolve, reject) => {
+    nn.predict(input, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        const predictedRating = result[0].value * 5; // falls du normalisiert hast
+        resolve(predictedRating);
+      }
+    });
   });
 }
   
