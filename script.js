@@ -57,12 +57,40 @@ async function saveLickToSupabase() {
 }
 
 function transposeLick(lick, transpose) {
-  // transpose ist der Abstand zur Referenztonart C
-  // Wir ziehen transpose von jedem Bund ab
-  return lick.map(note => ({
-    ...note,
-    fret: note.fret + transpose
-  }));
+  return lick.map(note => {
+    let fret = note.fret + transpose;
+    let stringIndex = strings.indexOf(note.string);
+
+    // Nach oben verschieben, falls Bund < 0
+    while (fret < 0) {
+      if (stringIndex > 0) {
+        stringIndex -= 1;        // Eine Saite tiefer (kleinerer Index = musikalisch tiefer)
+        fret += semitoneStepsBetweenStrings[stringIndex];
+      } else {
+        stringIndex += 2;        // Tiefste Saite erreicht: zwei Saiten höher (größerer Index = musikalisch höher)
+        if (stringIndex > 5) stringIndex = 5; // Begrenzung auf höchste Saite
+        fret += semitoneStepsBetweenStrings[0] + semitoneStepsBetweenStrings[1]; // 5 + 5 Halbtöne = 10
+      }
+    }
+
+    // Nach unten verschieben, falls Bund > 17
+    while (fret > 17) {
+      if (stringIndex < 5) {
+        stringIndex += 1;         // Eine Saite höher (größerer Index = musikalisch höher)
+        fret -= semitoneStepsBetweenStrings[stringIndex];
+      } else {
+        stringIndex -= 2;        // Höchste Saite erreicht: zwei Saiten tiefer (kleinerer Index = musikalisch tiefer)
+        if (stringIndex < 0) stringIndex = 0; // Begrenzung auf tiefste Saite
+        fret -= semitoneStepsBetweenStrings[0] + semitoneStepsBetweenStrings[1]; // 10 Halbtöne runter
+      }
+    }
+
+    return {
+      ...note,
+      fret,
+      string: strings[stringIndex]
+    };
+  });
 }
 
 function getSelectedRating() {
@@ -70,8 +98,8 @@ function getSelectedRating() {
   return selected ? parseInt(selected.value) : null;
 }
 
-//const strings = ["E", "A", "D", "G", "B", "e"];
-const strings = ["e", "B", "G", "D", "A", "E"];
+const strings = ["E", "A", "D", "G", "B", "e"];
+const semitoneStepsBetweenStrings = [5, 5, 5, 4, 5];
 
 // Alle 12 Halbtöne in Reihenfolge, C als Referenz
 const chromaticScale = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
@@ -323,10 +351,10 @@ function generateLick() {
       do {
         stringIndex = Math.round(randomNormal(lastStringIndex, stdDevString));
       } while (stringIndex < 0 || stringIndex >= strings.length);
-      const string = strings[stringIndex];
+      //const string = strings[stringIndex];
 
       // Gültige Bünde für diese Saite auswählen
-      const validFrets = fretboard[string]  
+      const validFrets = fretboard[stringIndex]  
         .map((note, fret) => {
           const noteWithoutOctave = note.slice(0, -1); // z.B. "F#3" → "F#"
           return scale.includes(noteWithoutOctave) ? fret : null;
@@ -339,15 +367,15 @@ function generateLick() {
         fret = Math.round(randomNormal(lastFret, stdDevFret));
       } while (
         fret < 0 ||
-        fret >= fretboard[string].length
+        fret >= fretboard[stringIndex].length
       );
 
       // Falls Bund und Saite gleich wären, wie bei der Note zuvor, springe zum Schleifenbeginn und suche andere Note. Wiederholung wird also unterbunden.
       if (fret === lastFret && stringIndex === lastStringIndex) {continue;}
 
       // Note speichern
-      lick.push({ string, fret, step: i, duration: duration });
-      console.log({ string, fret, i, duration });
+      lick.push({ stringIndex, fret, step: i, duration: duration });
+      console.log({ stringIndex, fret, i, duration });
   
       // Letzte Werte aktualisieren
       lastStringIndex = stringIndex;
@@ -363,13 +391,13 @@ function generateLick() {
 }
 
 function displayTab(lick, bars) {
-  const lines = {};
-  strings.forEach(s => lines[s] = Array(bars * 16).fill("--"));
+  // lines als Array: index entspricht stringIndex
+  const lines = Array(strings.length).fill(null).map(() => Array(bars * 16).fill("--"));
 
   for (const note of lick) {
-    if (note.string === null) continue;
+    if (note.stringIndex === null) continue;
     const fretStr = note.fret < 10 ? "0" + note.fret : note.fret.toString();
-    lines[note.string][note.step] = fretStr;
+    lines[note.stringIndex][note.step] = fretStr;
   }
 
   let header = "   ";
@@ -378,14 +406,17 @@ function displayTab(lick, bars) {
   }
 
   let output = header + "\n";
-  strings.forEach(s => {
+
+  // Reihenfolge umdrehen, damit stringIndex=0 unten ist
+  for (let i = strings.length - 1; i >= 0; i--) {
+    const s = strings[i];
     const barLines = [];
     for (let b = 0; b < bars; b++) {
-      const chunk = lines[s].slice(b * 16, (b + 1) * 16).join(" ");
+      const chunk = lines[i].slice(b * 16, (b + 1) * 16).join(" ");
       barLines.push("|" + chunk);
     }
     output += s + " " + barLines.join("") + "|\n";
-  });
+  }
 
   tabDisplay.innerHTML = `<pre>${output}</pre>`;
 }
