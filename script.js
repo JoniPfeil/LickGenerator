@@ -22,6 +22,7 @@ const tabDisplay = document.getElementById("tab-display");
 
 let lick = []; // globale Variable for our lick
 let synth = null;
+let clickSynth = null;
 const loadedInstruments = {}; // Cache für geladene Instrumente
 let audioStarted = false;
 
@@ -321,7 +322,7 @@ async function planLickPlayback(lick) {
 
   await setSound(soundSelect.value);
 
-  const clickSynth = new Tone.NoiseSynth({
+  clickSynth = new Tone.NoiseSynth({
     noise: { type: "white" },
     envelope: {
       attack: 0.001,
