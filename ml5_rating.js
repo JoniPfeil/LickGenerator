@@ -21,9 +21,9 @@ async function rateCurrentLick()
     });
   }
   
-  const rating = await ml5predictAsync(myLick);
+  const rating = await ml5predictAsync(lick);
   console.log("⭐ Vorhergesagte Bewertung:", rating);
-  ml5RatingText.innerHTML = rating;
+  ml5RatingText.textContent = rating;
 }
 
 // Beispiel: Vorhersage mit einem neuen Lick
