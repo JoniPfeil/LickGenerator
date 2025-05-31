@@ -188,14 +188,14 @@ const majorScales = [
 ];
 
 
-const fretboard = {
-  e:  ["E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5", "C#5", "D5", "D#5", "E5", "F5", "F#5", "G5", "G#5", "A5"],
-  B:  ["B3", "C4", "C#4", "D4", "D#4", "E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5", "C#5", "D5", "D#5", "E5"],
-  G:  ["G3", "G#3", "A3", "A#3", "B3", "C4", "C#4", "D4", "D#4", "E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5"],
-  D:  ["D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3", "C4", "C#4", "D4", "D#4", "E4", "F4", "F#4", "G4"],
-  A:  ["A2", "A#2", "B2", "C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3", "C4", "C#4", "D4"],
-  E:  ["E2", "F2", "F#2", "G2", "G#2", "A2", "A#2", "B2", "C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3"]
-};
+const fretboardArray = [
+  ["E2", "F2", "F#2", "G2", "G#2", "A2", "A#2", "B2", "C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3"],  // E low (stringIndex 0)
+  ["A2", "A#2", "B2", "C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3", "C4", "C#4", "D4"],  // A (1)
+  ["D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3", "C4", "C#4", "D4", "D#4", "E4", "F4", "F#4", "G4"],   // D (2)
+  ["G3", "G#3", "A3", "A#3", "B3", "C4", "C#4", "D4", "D#4", "E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5"],   // G (3)
+  ["B3", "C4", "C#4", "D4", "D#4", "E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5", "C#5", "D5", "D#5", "E5"],    // B (4)
+  ["E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5", "C#5", "D5", "D#5", "E5", "F5", "F#5", "G5", "G#5", "A5"]     // e high (5)
+];
 
 //Maps value in 16th to string
 const durationMap = {
@@ -354,7 +354,7 @@ function generateLick() {
       //const string = strings[stringIndex];
 
       // Gültige Bünde für diese Saite auswählen
-      const validFrets = fretboard[stringIndex]  
+      const validFrets = fretboardArray[stringIndex]  
         .map((note, fret) => {
           const noteWithoutOctave = note.slice(0, -1); // z.B. "F#3" → "F#"
           return scale.includes(noteWithoutOctave) ? fret : null;
@@ -367,7 +367,7 @@ function generateLick() {
         fret = Math.round(randomNormal(lastFret, stdDevFret));
       } while (
         fret < 0 ||
-        fret >= fretboard[stringIndex].length
+        fret >= fretboardArray[stringIndex].length
       );
 
       // Falls Bund und Saite gleich wären, wie bei der Note zuvor, springe zum Schleifenbeginn und suche andere Note. Wiederholung wird also unterbunden.
@@ -449,7 +449,7 @@ async function planLickPlayback(lick) {
     if (note.string === null) {
       return [time, null]; // Pause
     } else {
-      const pitch = fretboard[note.string][note.fret];
+      const pitch = fretboardArray[note.stringIndex][note.fret];
       return [time, { pitch, duration, step: note.step }];
     }
   });
