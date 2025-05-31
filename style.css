@@ -92,6 +92,8 @@ h1 {
 
 afterRatingMsg {
   text-align: center;
+  opacity: 0; 
+  transition: opacity 5s linear;
 }
 
 .star-rating {
