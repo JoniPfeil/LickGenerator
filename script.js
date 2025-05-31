@@ -2,8 +2,8 @@
 
 //Lick generation options
 const pRest = 0.1;        // Wahrscheinlichkeit für Pausen. Kleinere Werte machen Pausen unwahrscheinlicher.
-const stdDevString = 2.0; // Standardabweichung für Saite. Kleinere Werte machen Saitenwechsel unwahrscheinlicher.
-const stdDevFret = 2.0;   // Standardabweichung für Bund. Kleinere Werte machen Bundwechsel unwahrscheinlicher.
+const stdDevString = 1.5; // Standardabweichung für Saite. Kleinere Werte machen Saitenwechsel unwahrscheinlicher.
+const stdDevFret = 1.5;   // Standardabweichung für Bund. Kleinere Werte machen Bundwechsel unwahrscheinlicher.
 
 // html elements
 const keySelect = document.getElementById("key");
