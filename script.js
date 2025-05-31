@@ -18,6 +18,7 @@ const playButton = document.getElementById("play-button");
 const rateButton = document.getElementById("rateLickBtn");
 const tabDisplay = document.getElementById("tab-display");
 const ratingStars = document.querySelectorAll('input[name="rating"]');
+const afterRatingMsg = document.getElementById("afterRatingMsg");
 
 let lick = []; // globale Variable for our lick
 let synth = null;
@@ -54,6 +55,7 @@ async function saveLickToSupabase() {
   } else {
     console.log('Lick gespeichert:', data);
   }
+  fadeOutDiv(afterRatingMsg)
 }
 
 function transposeLick(lick, transpose) {
@@ -547,4 +549,13 @@ function highlightStep(step) {
   const combinedLines = [...tabLines, pointerLine.join("")];
 
   tabDisplay.innerHTML = `<pre>${combinedLines.join("\n")}</pre>`;
+}
+
+function fadeOutDiv(div) {
+  div.style.opacity = "1"; // Sofort sichtbar machen
+
+  // Kleines Delay, damit die Änderung zu 0 animiert wird
+  setTimeout(() => {
+    div.style.opacity = "0"; // Über 5 Sekunden ausblenden
+  }, 50); // 50ms Verzögerung, damit der Browser die erste Änderung bemerkt
 }
