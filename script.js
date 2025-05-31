@@ -372,6 +372,9 @@ function generateLick() {
         randFret >= fretboardArray[stringIndex].length
       );
 
+      fret = validFrets[0];
+      let minDistance = Infinity;
+
       // Finde den Wert in validFrets, der randFret am nächsten ist
       for (let v of validFrets) {
         const distance = Math.abs(v - randFret);
