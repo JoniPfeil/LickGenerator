@@ -1,3 +1,6 @@
+const trainButton = document.getElementById("trainButton");
+trainButton.addEventListener("click", () => saveLickToSupabase());
+
 const supabaseClient = supabase.createClient(
   'https://hrsoaxdhyqkrsodvnbys.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhyc29heGRoeXFrcnNvZHZuYnlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg2ODE4NDMsImV4cCI6MjA2NDI1Nzg0M30.voG9dz3KgQ_W56mcw2okTqRDjNqeB8x63MWpwoaanyc',
@@ -14,7 +17,15 @@ const nnOptions = {
   hiddenUnits: 64 // probier z. B. auch mal 128 oder 32
 };
 
-const nn = ml5.neuralNetwork(nnOptions);
+let nn = null;
+
+// Ablauf starten
+async function startTraining() {
+  nn = ml5.neuralNetwork(nnOptions);
+  const raw = await loadData();
+  const flat = flattenData(raw);
+  trainModel(flat);
+}
 
 // Teil 1: Daten aus Supabase laden
 async function loadData() {
@@ -63,16 +74,6 @@ function trainModel(flattenedData) {
     // nn.save('guitar-lick-model');
   });
 }
-
-// Ablauf starten
-async function startTraining() {
-  const raw = await loadData();
-  const flat = flattenData(raw);
-  trainModel(flat);
-}
-
-startTraining();
-
 
 /**
  * Wandelt ein Lick in einen flachen Vektor mit 320 Features (64 Schritte × 5 Features) um.
