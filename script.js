@@ -287,6 +287,11 @@ clickVol.addEventListener("change", (e) => {
     console.error("Fehler clickVol", error);
   }
 });
+ratingStars.forEach(input => {
+  input.addEventListener('change', () => {
+    rateButton.disabled = false;
+  });
+});
 
 //Generiere neuen Lick
 function generateLick() {
@@ -310,6 +315,7 @@ function generateLick() {
   let lastFret = Math.floor(Math.random() * 18);
 
   playButton.disabled = true;
+  rateButton.disabled = true;
   ratingStars.forEach(ratingStars => ratingStars.checked = false);
 
   // Audioausgabe aktivieren, damit Lick später abgespielt werden kann
@@ -399,7 +405,6 @@ function generateLick() {
     //console.log(i);
   }
   
-  rateButton.disabled = false;
   displayTab(lick, length);  
   planLickPlayback(lick);
 }
