@@ -342,7 +342,7 @@ function generateLick() {
   
     if (isRest) 
     {
-      lick.push({ string: null, fret: null, step: i, duration: duration });
+      lick.push({ stringIndex: null, fret: null, step: i, duration: duration });
     } 
     else 
     {
@@ -446,7 +446,7 @@ async function planLickPlayback(lick) {
     const time = Tone.Time(sixteenthsToBBS(note.step));   
     const duration = Tone.Time(durationMap[note.duration]);
 
-    if (note.string === null) {
+    if (note.stringIndex === null) {
       return [time, null]; // Pause
     } else {
       const pitch = fretboardArray[note.stringIndex][note.fret];
