@@ -25,6 +25,49 @@ let clickSynth = null;
 const loadedInstruments = {}; // Cache für geladene Instrumente
 let audioStarted = false;
 
+const lickInfo = {
+  key: null,
+  scale: null,
+  length: null,
+  difficulty: null
+};
+
+const supabase = createClient(
+  'https://hrsoaxdhyqkrsodvnbys.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhyc29heGRoeXFrcnNvZHZuYnlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg2ODE4NDMsImV4cCI6MjA2NDI1Nzg0M30.voG9dz3KgQ_W56mcw2okTqRDjNqeB8x63MWpwoaanyc'
+);
+
+async function saveLickToSupabase() {
+  const lickObj = {
+    lick: lick,       // globales Lick-Array
+    ...lickInfo       // fügt alle Key-Value-Paare aus lickInfo hinzu
+  };
+  
+  const { data, error } = await supabase
+    .from('ratedLicks')
+    .insert([lickObj]);
+
+  if (error) {
+    console.error('Fehler beim Speichern:', error.message);
+  } else {
+    console.log('Lick gespeichert:', data);
+  }
+}
+
+saveLickToSupabase({
+  lick: [
+    { string: 3, fret: 5, duration: "8n" },
+    { string: 2, fret: 7, duration: "4n" }
+  ],
+  rating: 4,
+  key: "Am/C",
+  scale: "Pentatonic",
+  length: 2,
+  difficulty: "medium"
+});
+
+
+
 //const strings = ["E", "A", "D", "G", "B", "e"];
 const strings = ["e", "B", "G", "D", "A", "E"];
 
@@ -208,6 +251,11 @@ function generateLick() {
   const durationPs = getNoteDurationProbabilities(difficulty);
   const stepsPerBar = 16;
   const totalSteps = length * stepsPerBar;
+
+  lickInfo.key = keySelect.value;
+  lickInfo.scale = scaleSelect.value;
+  lickInfo.length = parseInt(lengthSelect.value);
+  lickInfo.difficulty = difficultySelect.value;
   
   lick = []; // globale Variable überschreiben 
   let lastStringIndex = Math.floor(Math.random() * strings.length);
