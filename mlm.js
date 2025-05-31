@@ -48,7 +48,7 @@ function flattenData(rawData) {
 function trainModel(flattenedData) {
   console.log(`🧠 Trainingsdaten: ${flattenedData.length} Einträge`);
 
-  flattenedData.forEach(d => nn.addData(d.input, d.output));
+  flattenedData.forEach(d => nn.addData({xs: d.input, ys: d.output}));
 
   const options = {
     epochs: 50,
