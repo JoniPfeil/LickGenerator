@@ -191,8 +191,8 @@ playButton.addEventListener("click", async () => {
 });
 clickVol.addEventListener("change", (e) => {
   try {
-    clickSynth.volume.value = labelMap(e.target.value);
-    console.log(labelMap(e.target.value));
+    clickSynth.volume.value = clickVolMap[e.target.value];
+    console.log(clickVolMap[e.target.value]);
   } catch (error) {
     console.error("Fehler clickVol", error);
   }
@@ -337,8 +337,8 @@ async function planLickPlayback(lick) {
     },
   }).toDestination();  
 
-  clickSynth.volume.value = labelMap(clickVolSelect.value); // Optional: parseInt
-  console.log(labelMap(clickVolSelect.value));
+  clickSynth.volume.value = clickVolMap[clickVolSelect.value]; // Optional: parseInt
+  console.log(clickVolMap[clickVolSelect.value]);
 
  // Ereignisliste für das Lick
   const events = lick.map(note => {
