@@ -64,6 +64,9 @@ function getSelectedRating() {
 //const strings = ["E", "A", "D", "G", "B", "e"];
 const strings = ["e", "B", "G", "D", "A", "E"];
 
+// Alle 12 Halbtöne in Reihenfolge, C als Referenz
+const chromaticScale = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
 //Erlaubte Notenlängen in 16teln: 1=16tel; 2=8tel usw.
 function getNoteDurationOptions(difficulty) {
   switch (difficulty) {
@@ -102,38 +105,51 @@ function getScale(key)
   }
 }
 
-const majorPentatonics = {
-  C: ["C", "D", "E", "G", "A"],
-  G: ["G", "A", "B", "D", "E"],
-  D: ["D", "E", "F#", "A", "B"],
-  A: ["A", "B", "C#", "E", "F#"],
-  E: ["E", "F#", "G#", "B", "C#"],
-  B: ["B", "C#", "D#", "F#", "G#"],
-  Fs: ["F#", "G#", "A#", "C#", "D#"],
-  F: ["F", "G", "A", "C", "D"]
-};
+const majorPentatonics = [
+  ["C", "D", "E", "G", "A"],               // C
+  ["C#", "D#", "F", "G#", "A#"],           // C#
+  ["D", "E", "F#", "A", "B"],              // D
+  ["D#", "F", "G", "A#", "C"],              // D#
+  ["E", "F#", "G#", "B", "C#"],            // E
+  ["F", "G", "A", "C", "D"],                // F
+  ["F#", "G#", "A#", "C#", "D#"],           // F#
+  ["G", "A", "B", "D", "E"],                // G
+  ["G#", "A#", "C", "D#", "F"],             // G#
+  ["A", "B", "C#", "E", "F#"],              // A
+  ["A#", "C", "D", "F", "G"],               // A#
+  ["B", "C#", "D#", "F#", "G#"]             // B
+];
 
-const majorBluesScales = {
-  C:  ["C", "D", "Eb", "E", "G", "A"],
-  G:  ["G", "A", "Bb", "B", "D", "E"],
-  D:  ["D", "E", "F", "F#", "A", "B"],
-  A:  ["A", "B", "C", "C#", "E", "F#"],
-  E:  ["E", "F#", "G", "G#", "B", "C#"],
-  B:  ["B", "C#", "D", "D#", "F#", "G#"],
-  Fs: ["F#", "G#", "A", "A#", "C#", "D#"],
-  F:  ["F", "G", "Ab", "A", "C", "D"]
-};
+const majorBluesScales = [
+  ["C", "D", "Eb", "E", "G", "A"],          // C
+  ["C#", "D#", "E", "F", "G#", "A#"],       // C#
+  ["D", "E", "F", "F#", "A", "B"],           // D
+  ["D#", "F", "F#", "G", "A#", "C"],         // D#
+  ["E", "F#", "G", "G#", "B", "C#"],         // E
+  ["F", "G", "Ab", "A", "C", "D"],           // F
+  ["F#", "G#", "A", "A#", "C#", "D#"],       // F#
+  ["G", "A", "Bb", "B", "D", "E"],           // G
+  ["G#", "A#", "B", "C", "D#", "F"],         // G#
+  ["A", "B", "C", "C#", "E", "F#"],          // A
+  ["A#", "C", "C#", "D", "F", "G"],          // A#
+  ["B", "C#", "D", "D#", "F#", "G#"]         // B
+];
 
-const majorScales = {
-  C: ["C", "D", "Eb", "E", "F", "G", "A", "B"],
-  G: ["G", "A", "Bb", "B", "C", "D", "E", "F#"],
-  D: ["D", "E", "F", "F#", "G", "A", "B", "C#"],
-  A: ["A", "B", "C", "C#", "D", "E", "F#", "G#"],
-  E: ["E", "F#", "G", "G#", "A", "B", "C#", "D#"],
-  B: ["B", "C#", "D", "D#", "E", "F#", "G#", "A#"],
-  Fs: ["F#", "G#", "A", "A#", "B", "C#", "D#", "E#"],
-  F: ["F", "G", "Ab", "A", "Bb", "C", "D", "E"]
-};
+const majorScales = [
+  ["C", "D", "E", "F", "G", "A", "B"],      // C
+  ["C#", "D#", "F", "F#", "G#", "A#", "C"], // C#
+  ["D", "E", "F#", "G", "A", "B", "C#"],    // D
+  ["D#", "F", "G", "G#", "A#", "C", "D"],   // D#
+  ["E", "F#", "G#", "A", "B", "C#", "D#"],  // E
+  ["F", "G", "A", "A#", "C", "D", "E"],     // F
+  ["F#", "G#", "A#", "B", "C#", "D#", "E#"],// F#
+  ["G", "A", "B", "C", "D", "E", "F#"],     // G
+  ["G#", "A#", "C", "C#", "D#", "F", "G"],  // G#
+  ["A", "B", "C#", "D", "E", "F#", "G#"],   // A
+  ["A#", "C", "D", "D#", "F", "G", "A"],    // A#
+  ["B", "C#", "D#", "E", "F#", "G#", "A#"]  // B
+];
+
 
 const fretboard = {
   e:  ["E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5", "C#5", "D5", "D#5", "E5", "F5", "F#5", "G5", "G#5", "A5"],
@@ -246,7 +262,8 @@ function generateLick() {
   const stepsPerBar = 16;
   const totalSteps = length * stepsPerBar;
 
-  lickInfo.key = keySelect.value;
+  lickInfo.transpose = keySelect.value;
+  lickInfo.key = chromaticScale[keySelect.value];
   lickInfo.scale = scaleSelect.value;
   lickInfo.length = parseInt(lengthSelect.value);
   lickInfo.difficulty = difficultySelect.value;
