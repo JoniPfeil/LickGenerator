@@ -65,43 +65,50 @@
       <select id="sound">
         <option value="acoustic_guitar_nylon">A-Git Nylon</option>
         <option value="acoustic_guitar_steel">A-Git Steel</option>
-        <option value="electric_guitar_clean">Clean</option>
-        <option value="electric_guitar_jazz" selected>Jazz</option>
-        <option value="overdriven_guitar">Overdrive</option>
-        <option value="distortion_guitar">Distortion</option>
-        <option value="electric_guitar_muted">Muted</option>
+        <option value="electric_guitar_clean">E-Git Clean</option>
+        <option value="electric_guitar_jazz" selected>E-Git Jazz</option>
+        <option value="overdriven_guitar">E-Git OD</option>
+        <option value="distortion_guitar">E-Git DS</option>
+        <option value="electric_guitar_muted">E-Git Muted</option>
         <option value="guitar_harmonics">Harmonics</option>  
         <option value="synth">Synth</option>
       </select>
 
-      <!-- 
-      <div>
-      <label>Click <input type="checkbox" id="click" checked></label> \n
-
-      <label>Loop <input type="checkbox" id="loop" disabled></label>
+      <div class="control-box">
+        <div class="label-text">
+          <span>Loop</span>
+          <span>Playback</span>
+        </div>
+        <input type="checkbox" id="loop" disabled>
       </div>
-      -->
+      
+      <div class="volume-control">
+        <label for="clickVolRange">Click Volume</label>
+        <input type="range" id="clickVol" min="0" max="5" step="1" value="3">
+      </div>
 
-      <select id="clickVol">
-        <option value="-10" selected>normal click</option>
-        <option value="-30" >quiet click</option>
-        <option value="-Infinity"> no click </option>
-      </select>
-      
-      <select id="loop">
-        <option value="false">no loop</option>
-        <option value="true" disabled> loop </option>
-      </select>
-      
+      <button id="play-button" disabled>▶️</button> 
+    </div>
 
-      <button id="play-button" disabled>▶️</button>
-      
-      
-      <button id="like-button" disabled>👍</button>
-      <button id="dislike-button" disabled>👎</button>
-      
-      
+    <div class="rating-container">
+      <button id="rateLickBtn">Rate Lick</button>
     
+      <div class="star-rating">
+        <input type="radio" id="star5" name="rating" value="5" />
+        <label for="star5" title="5 stars">★</label>
+    
+        <input type="radio" id="star4" name="rating" value="4" />
+        <label for="star4" title="4 stars">★</label>
+    
+        <input type="radio" id="star3" name="rating" value="3" />
+        <label for="star3" title="3 stars">★</label>
+    
+        <input type="radio" id="star2" name="rating" value="2" />
+        <label for="star2" title="2 stars">★</label>
+    
+        <input type="radio" id="star1" name="rating" value="1" />
+        <label for="star1" title="1 star">★</label>
+      </div>
     </div>
   </div>
   <script src="script.js" defer></script>
