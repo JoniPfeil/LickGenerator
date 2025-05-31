@@ -192,7 +192,7 @@ playButton.addEventListener("click", async () => {
 clickVol.addEventListener("change", (e) => {
   try {
     clickSynth.volume.value = labelMap(e.target.value);
-    console.log(labelMap(e.target.value););
+    console.log(labelMap(e.target.value));
   } catch (error) {
     console.error("Fehler clickVol", error);
   }
