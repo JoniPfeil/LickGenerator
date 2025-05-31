@@ -120,6 +120,15 @@ const durationMap = {
   16: "1n"
 };
 
+const clickVolMap = {
+  0: "-Infinity",
+  1: "-50",
+  2: "-30",
+  3: "-20",
+  4: "-10",
+  5: "0"
+};
+
 function sixteenthsToBBS(sixteenthsTotal) {
   const bars = Math.floor(sixteenthsTotal / 16);
   const afterBars = sixteenthsTotal % 16;
@@ -182,13 +191,12 @@ playButton.addEventListener("click", async () => {
 });
 clickVol.addEventListener("change", (e) => {
   try {
-    clickSynth.volume.value = parseFloat(e.target.value);
-    console.log(e.target.value);
+    clickSynth.volume.value = labelMap(e.target.value);
+    console.log(labelMap(e.target.value););
   } catch (error) {
     console.error("Fehler clickVol", error);
   }
 });
-
 
 //Generiere neuen Lick
 function generateLick() {
@@ -329,8 +337,8 @@ async function planLickPlayback(lick) {
     },
   }).toDestination();  
 
-  clickSynth.volume.value = clickVolSelect.value; // Optional: parseInt
-  console.log(clickVolSelect.value);
+  clickSynth.volume.value = labelMap(clickVolSelect.value); // Optional: parseInt
+  console.log(labelMap(clickVolSelect.value));
 
  // Ereignisliste für das Lick
   const events = lick.map(note => {
