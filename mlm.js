@@ -1,3 +1,6 @@
+const lickLengthBars = 2;
+
+let nn = null;
 const trainButton = document.getElementById("trainButton");
 trainButton.addEventListener("click", () => startTraining());
 
@@ -9,15 +12,13 @@ const supabaseClient = supabase.createClient(
 
 // ml5-Konfiguration (global)
 const nnOptions = {
-  inputs: 320,
+  inputs: lickLengthBars*80,
   outputs: 1,
   task: 'regression',
   debug: true,
   learningRate: 0.01,
-  hiddenUnits: 64 // probier z. B. auch mal 128 oder 32
+  hiddenUnits: 128 // probier z. B. auch mal 128 oder 32
 };
-
-let nn = null;
 
 // Ablauf starten
 async function startTraining() {
@@ -34,7 +35,7 @@ async function loadData() {
   const { data, error } = await supabaseClient
     .from('ratedLicks')
     .select('lick, rating')
-    //.eq('length', 2)
+    .eq('length', lickLengthBars)
     //.eq('transpose', 0);
 
   if (error) {
@@ -62,7 +63,7 @@ function trainModel(flattenedData) {
   flattenedData.forEach(d => nn.addData(d.input, d.output));    //{xs: d.input, ys: d.output}
 
   const options = {
-    epochs: 50,
+    epochs: 128,
     batchSize: 16
   };
 
@@ -73,6 +74,8 @@ function trainModel(flattenedData) {
     // Optional speichern:
     // nn.save('guitar-lick-model');
   });
+
+  nn.save('guitar-lick-model');
 }
 
 /**
@@ -80,9 +83,11 @@ function trainModel(flattenedData) {
  * Kürzere Licks werden mit Pausen aufgefüllt.
  * Alle Werte werden direkt normalisiert.
  */
-function flattenLickTo320(lick) {
+
+
+function flattenLick(lick) {
   // === Konfiguration ===
-  const totalSteps = 64;         // max. 4 Takte in 16tel-Schritten
+  const totalSteps = 16*lickLengthBars;         // Takte in 16tel-Schritten
   const featuresPerStep = 5;     // fret, stringIndex, duration, isRest, isNewNote
   const fretMax = 17;            // höchster Bund, den du erwartest
   const stringMax = 5;           // Saiten: 0–5
