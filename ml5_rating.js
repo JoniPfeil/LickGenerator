@@ -14,7 +14,7 @@ nn.load('ml5_LickRatingModel/', () => {
   console.log("✅ Modell erfolgreich geladen!");
 });
 
-async rateCurrentLick()
+async function rateCurrentLick()
 {
   const rating = await ml5predictAsync(myLick);
   console.log("⭐ Vorhergesagte Bewertung:", rating);
