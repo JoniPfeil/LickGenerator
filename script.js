@@ -342,7 +342,7 @@ function generateLick() {
   
     if (isRest) 
     {
-      lick.push({ stringIndex: null, fret: null, step: i, duration: duration, isRest: 1});
+      lick.push({step: i, stringIndex: null, fret: null, duration: duration, isRest: 1});
     } 
     else 
     {
@@ -374,7 +374,7 @@ function generateLick() {
       if (fret === lastFret && stringIndex === lastStringIndex) {continue;}
 
       // Note speichern
-      lick.push({ stringIndex, fret, step: i, duration: duration, isRest: 0});
+      lick.push({ step: i, stringIndex, fret, duration: duration, isRest: 0});
       console.log({ stringIndex, fret, i, duration, isRest});
   
       // Letzte Werte aktualisieren
