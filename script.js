@@ -39,8 +39,9 @@ const supabase = createClient(
 
 async function saveLickToSupabase() {
   const lickObj = {
-    lick: lick,       // globales Lick-Array
-    ...lickInfo       // fügt alle Key-Value-Paare aus lickInfo hinzu
+    lick: lick,                   // globales Lick-Array
+    rating: getSelectedRating(),
+    ...lickInfo                   // fügt alle Key-Value-Paare aus lickInfo hinzu
   };
   
   const { data, error } = await supabase
@@ -54,19 +55,10 @@ async function saveLickToSupabase() {
   }
 }
 
-saveLickToSupabase({
-  lick: [
-    { string: 3, fret: 5, duration: "8n" },
-    { string: 2, fret: 7, duration: "4n" }
-  ],
-  rating: 4,
-  key: "Am/C",
-  scale: "Pentatonic",
-  length: 2,
-  difficulty: "medium"
-});
-
-
+function getSelectedRating() {
+  const selected = document.querySelector('input[name="rating"]:checked');
+  return selected ? parseInt(selected.value) : null;
+}
 
 //const strings = ["E", "A", "D", "G", "B", "e"];
 const strings = ["e", "B", "G", "D", "A", "E"];
@@ -223,6 +215,7 @@ async function setSound(selected) {
 }
 
 // Event-Listener definieren
+rateButton.addEventListener("click", () => saveLickToSupabase());
 soundSelect.addEventListener("change", (e) => setSound(e.target.value));
 generateButton.addEventListener("click", () => generateLick());
 playButton.addEventListener("click", async () => {
