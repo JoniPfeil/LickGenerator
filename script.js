@@ -15,8 +15,7 @@ const soundSelect = document.getElementById("sound");
 const generateButton = document.getElementById("generate-button");
 const clickVolSelect = document.getElementById("clickVol");
 const playButton = document.getElementById("play-button");
-const likeButton = document.getElementById("like-button");
-const dislikeButton = document.getElementById("dislike-button");
+const rateButton = document.getElementById("rateLickBtn");
 const tabDisplay = document.getElementById("tab-display");
 
 
@@ -281,8 +280,7 @@ function generateLick() {
     //console.log(i);
   }
   
-  likeButton.disabled = false;
-  dislikeButton.disabled = false;
+  rateButton.disabled = false;
   displayTab(lick, length);  
   planLickPlayback(lick);
 }
