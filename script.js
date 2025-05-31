@@ -555,8 +555,10 @@ function highlightStep(step) {
 function fadeOutDiv(div) {
   div.style.opacity = "1"; // Sofort sichtbar machen
 
-  // Kleines Delay, damit die Änderung zu 0 animiert wird
+  console.log('Nachricht eingeblendet: ', div);
+
+  // Nach 5 Sekunden wieder ausblenden
   setTimeout(() => {
-    div.style.opacity = "0"; // Über 5 Sekunden ausblenden
-  }, 50); // 50ms Verzögerung, damit der Browser die erste Änderung bemerkt
+    div.style.opacity = "0";
+  }, 5000);
 }
