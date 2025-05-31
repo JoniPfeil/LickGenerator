@@ -71,3 +71,39 @@ h1 {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.rating-container {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  margin-top: 1em;
+}
+
+.star-rating {
+  display: flex;
+  flex-direction: row-reverse; /* Wichtig für richtige Färbung */
+}
+
+.star-rating input {
+  display: none; /* Radio-Buttons komplett unsichtbar */
+}
+
+.star-rating label {
+  font-size: 2em;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 0 2px;
+}
+
+/* Wenn ein Stern ausgewählt wurde: färbe ihn und alle "kleineren" */
+.star-rating input:checked ~ label {
+  color: gold;
+}
+
+/* Beim Überfahren mit der Maus: temporär färben */
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: gold;
+}
+
