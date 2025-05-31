@@ -17,7 +17,7 @@ const clickVolSelect = document.getElementById("clickVol");
 const playButton = document.getElementById("play-button");
 const rateButton = document.getElementById("rateLickBtn");
 const tabDisplay = document.getElementById("tab-display");
-
+const ratingStars = document.querySelectorAll('input[name="rating"]');
 
 let lick = []; // globale Variable for our lick
 let synth = null;
@@ -214,6 +214,7 @@ function generateLick() {
   let lastFret = Math.floor(Math.random() * 18);
 
   playButton.disabled = true;
+  ratingStars.forEach(ratingStars => ratingStars.checked = false);
 
   // Audioausgabe aktivieren, damit Lick später abgespielt werden kann
   if (!audioStarted) {
