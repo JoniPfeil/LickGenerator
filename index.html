@@ -74,25 +74,34 @@
         <option value="synth">Synth</option>
       </select>
 
-      <div class="control-box" style="text-align: center;">
-        <div>
-          <span>Loop</span>
-        </div>
-        <input type="checkbox" id="loop" disabled>
-      </div>
+      <table style="margin: 1em auto; text-align: center;">
+        <tr>
+          <td>
+            <div><label for="loop">Loop</label></div>
+          </td>
       
-      <div class="volume-control" style="text-align: center;">
-        <div><label for="clickVolRange">Click Volume</label></div>
-        <input type="range" id="clickVol" min="0" max="5" step="1" value="3" list="volumeLabels">
-        <datalist id="volumeLabels">
-          <option value="0" label="-Infinity">
-          <option value="1" label="-50">
-          <option value="2" label="-30">
-          <option value="3" label="-20">
-          <option value="4" label="-10">
-          <option value="5" label="0">
-        </datalist>
-      </div>
+          <td>
+            <div><label for="clickVol">Click Volume</label></div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input type="checkbox" id="loop" disabled>
+          </td>
+
+          <td>
+            <input type="range" id="clickVol" min="0" max="5" step="1" value="3" list="volumeLabels">
+            <datalist id="volumeLabels">
+              <option value="0" label="-Infinity"></option>
+              <option value="1" label="-50"></option>
+              <option value="2" label="-30"></option>
+              <option value="3" label="-20"></option>
+              <option value="4" label="-10"></option>
+              <option value="5" label="0"></option>
+            </datalist>
+          </td>
+        
+      </table>
 
       <button id="play-button" disabled>▶️</button> 
     </div>
