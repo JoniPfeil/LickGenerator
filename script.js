@@ -40,7 +40,7 @@ const supabaseClient = supabase.createClient(
 
 async function saveLickToSupabase() {
   const lickObj = {
-    lick: lick,                   // globales Lick-Array
+    lick: transposeLick(lick, -lickInfo.transpose),                   // globales Lick-Array in C-Dur
     rating: getSelectedRating(),
     ...lickInfo                   // fügt alle Key-Value-Paare aus lickInfo hinzu
   };
@@ -54,6 +54,15 @@ async function saveLickToSupabase() {
   } else {
     console.log('Lick gespeichert:', data);
   }
+}
+
+function transposeLick(lick, transpose) {
+  // transpose ist der Abstand zur Referenztonart C
+  // Wir ziehen transpose von jedem Bund ab
+  return lick.map(note => ({
+    ...note,
+    fret: note.fret + transpose
+  }));
 }
 
 function getSelectedRating() {
