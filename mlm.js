@@ -72,10 +72,8 @@ function trainModel(flattenedData) {
   nn.train(options, () => {
     console.log("✅ Training abgeschlossen.");
     // Optional speichern:
-    // nn.save('guitar-lick-model');
-  });
-
-  nn.save('guitar-lick-model');
+    nn.save('guitar-lick-model');
+  }); 
 }
 
 /**
