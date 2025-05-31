@@ -353,8 +353,6 @@ function generateLick() {
       } while (stringIndex < 0 || stringIndex >= strings.length);
       //const string = strings[stringIndex];
 
-      alert(key);
-
       // Gültige Bünde für diese Saite auswählen
       const validFrets = fretboardArray[stringIndex].map((note, fret) => {
           const noteWithoutOctave = note.slice(0, -1); // z.B. "F#3" → "F#"
@@ -362,6 +360,7 @@ function generateLick() {
         })
         .filter(f => f !== null);
 
+      console.log(stringIndex);
       console.log(validFrets);
   
       // Bund nach Normalverteilung wählen
@@ -378,7 +377,7 @@ function generateLick() {
 
       // Note speichern
       lick.push({ step: i, stringIndex, fret, duration: duration, isRest: 0});
-      console.log({ stringIndex, fret, i, duration, isRest});
+      //console.log({ stringIndex, fret, i, duration, isRest});
   
       // Letzte Werte aktualisieren
       lastStringIndex = stringIndex;
