@@ -1,5 +1,5 @@
 const trainButton = document.getElementById("trainButton");
-trainButton.addEventListener("click", () => saveLickToSupabase());
+trainButton.addEventListener("click", () => startTraining());
 
 const supabaseClient = supabase.createClient(
   'https://hrsoaxdhyqkrsodvnbys.supabase.co',
