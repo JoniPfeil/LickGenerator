@@ -65,20 +65,12 @@
     </div>
   
     <div class="play-controls">
-      <select id="sound" style="height: 2.5em;">
-        <option value="acoustic_guitar_nylon">A-Git Nylon</option>
-        <option value="acoustic_guitar_steel">A-Git Steel</option>
-        <option value="electric_guitar_clean">E-Git Clean</option>
-        <option value="electric_guitar_jazz" selected>E-Git Jazz</option>
-        <option value="overdriven_guitar">E-Git OD</option>
-        <option value="distortion_guitar">E-Git DS</option>
-        <option value="electric_guitar_muted">E-Git Muted</option>
-        <option value="guitar_harmonics">Harmonics</option>  
-        <option value="synth">Synth</option>
-      </select>
-
       <table style="padding: 0.5em;; text-align: center; border: none; border-collapse: collapse; display: inline-block;">
         <tr>
+          <td style="padding: 0.5em 1em;">
+            <div><label for="sound">Playback Sound</label></div>
+          </td>
+          
           <td style="padding: 0.5em 1em;">
             <div><label for="loop">Loop</label></div>
           </td>
@@ -88,6 +80,20 @@
           </td>
         </tr>
         <tr>
+          <td>
+            <select id="sound">
+              <option value="acoustic_guitar_nylon">A-Git Nylon</option>
+              <option value="acoustic_guitar_steel">A-Git Steel</option>
+              <option value="electric_guitar_clean">E-Git Clean</option>
+              <option value="electric_guitar_jazz" selected>E-Git Jazz</option>
+              <option value="overdriven_guitar">E-Git OD</option>
+              <option value="distortion_guitar">E-Git DS</option>
+              <option value="electric_guitar_muted">E-Git Muted</option>
+              <option value="guitar_harmonics">Harmonics</option>  
+              <option value="synth">Synth</option>
+            </select>
+          </td>
+          
           <td>
             <input type="checkbox" id="loop" disabled>
           </td>
