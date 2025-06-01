@@ -13,7 +13,7 @@ nn.load('./ml5_LickRatingModel/guitar-lick-model.json', () => {
 const ml5Button = document.getElementById("ml5Button");
 const ml5RatingText = document.getElementById("ml5Rating");
 
-rateButton.addEventListener("click", () => rateCurrentLick());
+ml5Button.addEventListener("click", () => rateCurrentLick());
 
 
 async function rateCurrentLick()
