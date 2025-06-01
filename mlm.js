@@ -61,7 +61,7 @@ function flattenData(rawData) {
 
   return rawData.map(entry => ({
     input: flattenLick(entry.lick),
-    output: { rating: entry.rating/maxRating }
+    output: { rating: (entry.rating-1)/(maxRating-1) }
   }));
 }
 
