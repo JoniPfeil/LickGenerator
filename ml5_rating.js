@@ -13,9 +13,9 @@ const nnOptions = {
   debug: true
 };
 
-//let nn = null;
+let nn = null;
 
-const nn = ml5.neuralNetwork(nnOptions);
+nn = ml5.neuralNetwork(nnOptions);
 nn.load('./ml5_LickRatingModel/guitar-lick-model.json', () => {
       console.log("✅ Modell erfolgreich geladen!");
     });
@@ -28,19 +28,19 @@ ml5Button.addEventListener("click", () => rateCurrentLick());
 
 async function rateCurrentLick()
 {
-  console.log("⭐ Lick wird bewerted");
-  ml5RatingText.textContent = "now rating...";
-  console.log(lick);
+  //console.log("⭐ Lick wird bewerted");
+  //ml5RatingText.textContent = "now rating...";
+  //console.log(lick);
   if (nn === null)
   {
     nn = ml5.neuralNetwork(nnOptions);
-    await nn.load('ml5_LickRatingModel/', () => {
+    await nn.load('./ml5_LickRatingModel/guitar-lick-model.json', () => {
       console.log("✅ Modell erfolgreich geladen!");
     });
   }
   
   const rating = await ml5predictAsync(lick);
-  console.log("⭐ Vorhergesagte Bewertung:", rating);
+  console.log("⭐ ml5 Bewertung:", rating);
   ml5RatingText.textContent = rating;
 }
 
@@ -53,8 +53,8 @@ async function ml5predictAsync(lick) {
       if (err) {
         reject(err);
       } else {
-        const predictedRating = result[0].value * 5; // falls du normalisiert hast
-        resolve(predictedRating);
+        const predictedRating = result[0].value * 4 + 1; // falls du normalisiert hast
+        resolve(predictedRating.toFixed(1));
       }
     });
   });
