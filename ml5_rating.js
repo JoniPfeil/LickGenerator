@@ -6,7 +6,7 @@ const nnOptions = {
 //let nn = null;
 
 const nn = ml5.neuralNetwork(nnOptions);
-nn.load('./ml5_LickRatingModel/', () => {
+nn.load('./ml5_LickRatingModel/guitar-lick-model.json', () => {
       console.log("✅ Modell erfolgreich geladen!");
     });
 
