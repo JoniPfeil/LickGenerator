@@ -55,9 +55,6 @@ async function saveLickToSupabase() {
   } else {
     console.log('Lick gespeichert:', data);
   }
-  rateButton.disabled = true;
-  rateCurrentLick();
-  fadeOutDiv(afterRatingMsg)
 }
 
 function transposeLick(lick, transpose) {
@@ -273,7 +270,13 @@ async function setSound(selected) {
 }
 
 // Event-Listener definieren
-rateButton.addEventListener("click", () => saveLickToSupabase());
+rateButton.addEventListener("click", async () => {
+  saveLickToSupabase();
+  rateButton.disabled = true;
+  rateCurrentLick();
+  fadeOutDiv(afterRatingMsg);
+});
+
 soundSelect.addEventListener("change", (e) => setSound(e.target.value));
 generateButton.addEventListener("click", () => generateLick());
 playButton.addEventListener("click", async () => {
