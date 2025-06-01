@@ -18,6 +18,9 @@ rateButton.addEventListener("click", () => rateCurrentLick());
 
 async function rateCurrentLick()
 {
+  console.log("⭐ Lick wird bewerted");
+  ml5RatingText.textContent = "now rating...";
+  console.log(lick);
   if (nn === null)
   {
     nn = ml5.neuralNetwork(nnOptions);
