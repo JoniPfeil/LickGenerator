@@ -1,3 +1,13 @@
+// === Konfiguration ===============================================================================
+const lickLengthBars = 2;
+const totalSteps = 16*lickLengthBars;         // Takte in 16tel-Schritten
+const featuresPerStep = 5;     // fret, stringIndex, duration, isRest, isNewNote
+const fretMax = 17;            // höchster Bund, den du erwartest
+const stringMax = 5;           // Saiten: 0–5
+const durationMax = 8;         // längste Dauer = halbe Note = 8/16
+const maxRating = 5;
+// =================================================================================================
+
 const nnOptions = {
   task: 'regression',
   debug: true
@@ -36,7 +46,7 @@ async function rateCurrentLick()
 
 // Beispiel: Vorhersage mit einem neuen Lick
 async function ml5predictAsync(lick) {
-  const input = flattenLickTo320(lick);
+  const input = flattenLick(lick);
 
   return new Promise((resolve, reject) => {
     nn.predict(input, (err, result) => {
