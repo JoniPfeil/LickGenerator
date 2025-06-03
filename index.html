@@ -122,7 +122,12 @@
 
       <div class="option-group">
         <label for="loop">Loop</label>
-        <input type="checkbox" id="loop" disabled>
+        <select id="loop">
+          <option value="-1" selected>Play once</option>
+          <option value="0" disabled>Loop all</option>
+          <option value="1" disabled>Loop 1st bar</option>
+          <option value="2" disabled>Loop 2nd bar</option>
+        </select>
       </div>
         
       <div class="option-group">
