@@ -76,54 +76,45 @@
     </div>
   
     <div class="play-controls">
-      <select id="tempo">
-        <option value="60">60 BPM</option>
-        <option value="80">80 BPM</option>
-        <option value="100" selected>100 BPM</option>
-        <option value="120">120 BPM</option>
-        <option value="140">140 BPM</option>
-      </select>
-      
-      <table style="padding: 0.5em;; text-align: center; border: none; border-collapse: collapse; display: inline-block;">
-        <tr>
-          <td style="padding: 0em 1em;">
-            <div><label for="sound">Playback Sound</label></div>
-          </td>
-          
-          <td style="padding: 0em 1em;">
-            <div><label for="loop">Loop</label></div>
-          </td>
-      
-          <td style="padding: 0em 1em;">
-            <div><label for="clickVol">Click Volume</label></div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <select id="sound">
-              <option value="acoustic_guitar_nylon">A-Git Nylon</option>
-              <option value="acoustic_guitar_steel">A-Git Steel</option>
-              <option value="electric_guitar_clean">E-Git Clean</option>
-              <option value="electric_guitar_jazz" selected>E-Git Jazz</option>
-              <option value="overdriven_guitar">E-Git OD</option>
-              <option value="distortion_guitar">E-Git DS</option>
-              <option value="electric_guitar_muted">E-Git Muted</option>
-              <option value="guitar_harmonics">Harmonics</option>  
-              <option value="synth">Synth</option>
-            </select>
-          </td>
-          
-          <td>
-            <input type="checkbox" id="loop" disabled>
-          </td>
+      <div class="option-group">
+        <label for="tempo">Tempo</label>
+        <select id="tempo">
+          <option value="60">60 BPM</option>
+          <option value="80">80 BPM</option>
+          <option value="100" selected>100 BPM</option>
+          <option value="120">120 BPM</option>
+          <option value="140">140 BPM</option>
+        </select>
+      </div>
 
-          <td>
-            <input type="range" id="clickVol" min="0" max="4" step="1" value="2" list="volumeLabels">
-          </td>
+      <div class="option-group">
+        <label for="sound">Playback Sound</label>
+        <select id="sound">
+          <option value="acoustic_guitar_nylon">A-Git Nylon</option>
+          <option value="acoustic_guitar_steel">A-Git Steel</option>
+          <option value="electric_guitar_clean">E-Git Clean</option>
+          <option value="electric_guitar_jazz" selected>E-Git Jazz</option>
+          <option value="overdriven_guitar">E-Git OD</option>
+          <option value="distortion_guitar">E-Git DS</option>
+          <option value="electric_guitar_muted">E-Git Muted</option>
+          <option value="guitar_harmonics">Harmonics</option>  
+          <option value="synth">Synth</option>
+        </select>
+      </div>
+
+      <div class="option-group">
+        <label for="loop">Loop</label>
+        <input type="checkbox" id="loop" disabled>
+      </div>
         
-      </table>
+      <div class="option-group">
+        <label for="clickVol">Click Volume</label>
+        <input type="range" id="clickVol" min="0" max="4" step="1" value="2" list="volumeLabels">
+      </div>
 
-      <button id="play-button" disabled>▶️</button> 
+      <div class="option-group">
+        <button id="play-button" disabled>▶️</button> 
+      </div>
     </div>
 
     <div class="rating-container">
