@@ -30,6 +30,12 @@ h1 {
   justify-content: center;
 }
 
+.option-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 120px; /* optional, für einheitliche Breite */
+}
+
 .generate-control {
   display: flex;
   flex-wrap: wrap;
