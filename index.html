@@ -20,48 +20,51 @@
     <h1>🎸 Guitar Lick Generator 🎸</h1>
   
     <div class="lick-options">
-      <select id="key">
-        <option value="0" selected>C-maj / A-min</option>
-        <option value="1">C#-maj / A#-min</option>
-        <option value="2">D-maj / B-min</option>
-        <option value="3">D#-maj / C-min</option>
-        <option value="4">E-maj / C#-min</option>
-        <option value="5">F-maj / D-min</option>
-        <option value="6">F#-maj / D#-min</option>
-        <option value="7">G-maj / E-min</option>
-        <option value="8">G#-maj / F-min</option>
-        <option value="9">A-maj / F#-min</option>
-        <option value="10">A#-maj / G-min</option>
-        <option value="11">B-maj / G#-min</option>
-      </select>
+      <div class="option-group">
+        <label for="key">Key</label>
+        <select id="key">
+          <option value="0" selected>C-maj / A-min</option>
+          <option value="1">C#-maj / A#-min</option>
+          <option value="2">D-maj / B-min</option>
+          <option value="3">D#-maj / C-min</option>
+          <option value="4">E-maj / C#-min</option>
+          <option value="5">F-maj / D-min</option>
+          <option value="6">F#-maj / D#-min</option>
+          <option value="7">G-maj / E-min</option>
+          <option value="8">G#-maj / F-min</option>
+          <option value="9">A-maj / F#-min</option>
+          <option value="10">A#-maj / G-min</option>
+          <option value="11">B-maj / G#-min</option>
+        </select>
+      </div>      
 
-      <select id="scale">
-        <option value="pentatonic" selected>Pentatonic </option>
-        <option value="bluesScale">Blues scale </option>
-        <option value="majorScale">Maj/Min scale</option>
-      </select>
-
-      <select id="tempo">
-        <option value="60">60 BPM</option>
-        <option value="80">80 BPM</option>
-        <option value="100" selected>100 BPM</option>
-        <option value="120">120 BPM</option>
-        <option value="140">140 BPM</option>
-      </select>
-
-      <select id="length">
-        <option value="1">1 bar</option>
-        <option value="2" selected>2 bars</option>
-        <option value="3">3 bars</option>
-        <option value="4">4 bars</option>
-      </select>
+      <div class="option-group">
+        <label for="scale">Scale</label>
+        <select id="scale">
+          <option value="pentatonic" selected>Pentatonic </option>
+          <option value="bluesScale">Blues scale </option>
+          <option value="majorScale">Maj/Min scale</option>
+        </select>
+      </div>
       
-      <select id="difficulty">
-        <option value="easy">Easy</option>
-        <option value="medium" selected>Medium</option>
-        <option value="hard">Hard</option>
-      </select>
-  
+      <div class="option-group">
+        <label for="length">length</label>
+        <select id="length">
+          <option value="1">1 bar</option>
+          <option value="2" selected>2 bars</option>
+          <option value="3">3 bars</option>
+          <option value="4">4 bars</option>
+        </select>
+      </div>
+      
+      <div class="option-group">
+        <label for="scale">Skala</label>
+        <select id="difficulty">
+          <option value="easy">Easy</option>
+          <option value="medium" selected>Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>  
     </div>
 
     <div class="generate-control">
@@ -73,6 +76,14 @@
     </div>
   
     <div class="play-controls">
+      <select id="tempo">
+        <option value="60">60 BPM</option>
+        <option value="80">80 BPM</option>
+        <option value="100" selected>100 BPM</option>
+        <option value="120">120 BPM</option>
+        <option value="140">140 BPM</option>
+      </select>
+      
       <table style="padding: 0.5em;; text-align: center; border: none; border-collapse: collapse; display: inline-block;">
         <tr>
           <td style="padding: 0em 1em;">
