@@ -2,8 +2,8 @@
 
 //Lick generation options
 const pRest = 0.1;        // Wahrscheinlichkeit für Pausen. Kleinere Werte machen Pausen unwahrscheinlicher.
-const stdDevString = 1.5; // Standardabweichung für Saite. Kleinere Werte machen Saitenwechsel unwahrscheinlicher.
-const stdDevFret = 1.5;   // Standardabweichung für Bund. Kleinere Werte machen Bundwechsel unwahrscheinlicher.
+//let stdDevString = 1.5; // Standardabweichung für Saite. Kleinere Werte machen Saitenwechsel unwahrscheinlicher.
+//let stdDevFret = 1.5;   // Standardabweichung für Bund. Kleinere Werte machen Bundwechsel unwahrscheinlicher.
 
 // html elements
 const keySelect = document.getElementById("key");
@@ -11,6 +11,8 @@ const scaleSelect = document.getElementById("scale");
 const difficultySelect = document.getElementById("difficulty");
 const tempoSelect = document.getElementById("tempo");
 const lengthSelect = document.getElementById("length");
+const fretChange = document.getElementById("fretChange");
+const stringChange = document.getElementById("stringChange");
 const soundSelect = document.getElementById("sound");
 const generateButton = document.getElementById("generate-button");
 const clickVolSelect = document.getElementById("clickVol");
@@ -19,6 +21,8 @@ const rateButton = document.getElementById("rateLickBtn");
 const tabDisplay = document.getElementById("tab-display");
 const ratingStars = document.querySelectorAll('input[name="rating"]');
 const afterRatingMsg = document.getElementById("afterRatingMsg");
+
+
 
 let lick = []; // globale Variable for our lick
 let synth = null;
@@ -116,6 +120,17 @@ function getNoteDurationOptions(difficulty) {
       return [1, 2, 3, 4, 6];
   }
 }
+
+/*function getChangeStdD(option) {
+  switch (option) {
+    case "unlikely":
+      return 0.5;
+    case "default":
+      return 1.5;
+    case "likely":
+      return 3;
+  }
+}*/
 
 //Wahrscheinlichkeiten für die Notenlängen
 function getNoteDurationProbabilities(difficulty) {
@@ -362,7 +377,7 @@ function generateLick() {
       // Saite nach Normalverteilung wählen
       let stringIndex;
       do {
-        stringIndex = Math.round(randomNormal(lastStringIndex, stdDevString));
+        stringIndex = Math.round(randomNormal(lastStringIndex, parseInt(stringChange.value)));
       } while (stringIndex < 0 || stringIndex >= strings.length);
       //const string = strings[stringIndex];
 
@@ -379,7 +394,7 @@ function generateLick() {
       // Bund nach Normalverteilung wählen
       let randFret;
       do {
-        randFret = Math.round(randomNormal(lastFret, stdDevFret));
+        randFret = Math.round(randomNormal(lastFret, parseInt(fretChange.value)));
       } while (
         randFret < 0 ||
         randFret >= fretboardArray[stringIndex].length
