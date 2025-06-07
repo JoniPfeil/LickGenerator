@@ -295,7 +295,7 @@ async function setSound(selected) {
       const instrument = await Soundfont.instrument(
         Tone.context.rawContext,
         selected,
-        { destination: sfGain }
+        { destination: sfGain.input }
       );
 
       loadedInstruments[selected] = instrument;
