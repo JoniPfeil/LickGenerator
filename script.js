@@ -263,7 +263,43 @@ function randomNormal(mean, stdDev) {
   return Math.round(mean + z * stdDev);
 }
 
-// Globale Funktion zum Setzen des Sounds
+//Reverb erstellen
+const reverb = new Tone.Reverb({
+  decay: 2.5,
+  preDelay: 0.05,
+  wet: 0.5
+}).toDestination();
+await reverb.generate(); // Reverb laden
+
+// Globale Funktion zum Setzen des Sounds (mit Reverb)
+async function setSound(selected) {
+  if (selected === "synth") {
+    // Tone.Synth direkt an Reverb anschließen
+    synth = new Tone.Synth().connect(reverb);
+  } else {
+    // Soundfont-basiert
+    if (!loadedInstruments[selected]) {
+      const instrument = await Soundfont.instrument(Tone.context.rawContext, selected, {
+        // Gib deinen Reverb als Ziel an
+        destination: reverb._nativeAudioNode // Low-level Zugriff für Web Audio API
+      });
+      loadedInstruments[selected] = instrument;
+    }
+    const player = loadedInstruments[selected];
+
+    // Synth-Wrapper für Kompatibilität mit .triggerAttackRelease
+    synth = {
+      triggerAttackRelease: (note, duration, time) => {
+        player.play(note, time, {
+          duration: Tone.Time(duration).toSeconds()
+        });
+      }
+    };
+  }
+}
+
+
+/* Globale Funktion zum Setzen des Sounds (ohne Reverb)
 async function setSound(selected) {
   if (selected === "synth") {
     synth = new Tone.Synth().toDestination();
@@ -282,14 +318,18 @@ async function setSound(selected) {
       }
     };
   }
-}
+} */
 
-// Event-Listener definieren
+// Event-Listener definieren --------------------------------------------------------------------------------------------------
 rateButton.addEventListener("click", async () => {
   saveLickToSupabase();
   rateButton.disabled = true;
   rateCurrentLick();
   fadeOutDiv(afterRatingMsg);
+});
+
+document.getElementById("reverbWet").addEventListener("input", e => {
+  reverb.wet.value = parseFloat(e.target.value);
 });
 
 soundSelect.addEventListener("change", (e) => setSound(e.target.value));
@@ -469,6 +509,7 @@ async function planLickPlayback(lick) {
 
   await setSound(soundSelect.value);
 
+  // Metronom Sound ------------------------------------------------------------------------------------------
   clickSynth = new Tone.NoiseSynth({
     noise: { type: "white" },
     envelope: {
@@ -477,11 +518,10 @@ async function planLickPlayback(lick) {
       sustain: 0
     },
   }).toDestination();  
-
   clickSynth.volume.value = clickVolMap[clickVolSelect.value]; // Optional: parseInt
   console.log(clickVolMap[clickVolSelect.value]);
 
- // Ereignisliste für das Lick
+ // Ereignisliste für das Lick --------------------------------------------------------------------------------
   const events = lick.map(note => {
     
     const time = Tone.Time(sixteenthsToBBS(note.step));   
@@ -495,7 +535,7 @@ async function planLickPlayback(lick) {
     }
   });
 
-  // Tone.Part für das Lick
+  // Tone.Part für das Lick --------------------------------------------------------------------------------------
   const lickPart = new Tone.Part((time, value) => {
     if (value) {
       highlightStep(value.step);
@@ -505,13 +545,13 @@ async function planLickPlayback(lick) {
   lickPart.start(0);
   lickPart.loop = false;
 
-  // Metronom mit Loop
+  // Metronom Loop -----------------------------------------------------------------------------------------------
   const clickLoop = new Tone.Loop((time) => {
     clickSynth.triggerAttackRelease("8n", time);
   }, "8n");
   clickLoop.start(0);
 
-  // 16tel-Loop für highlightStep
+  // 16tel-Loop für highlightStep --------------------------------------------------------------------------------
   let currentStep = 0;  // Laufende Step-Nummer für Highlight
   const highlightLoop = new Tone.Loop((time) => {
     highlightStep(currentStep);
@@ -522,7 +562,7 @@ async function planLickPlayback(lick) {
   // Ende des Licks
   const totalTime = Tone.Time(`${parseInt(lengthSelect.value)}m`);
 
-  // Events am Ende des Licks
+  // Events am Ende des Licks ---------------------------------------------------------------------------------------
   Tone.Transport.schedule(() => {
     lickPart.stop();
     clickLoop.stop();
