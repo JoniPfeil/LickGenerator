@@ -579,8 +579,14 @@ async function planLickPlayback(lick) {
   }, "16n");
   highlightLoop.start(0);
 
+  // Zusätzliche Ausklang-Zeit für den Reverb (z. B. 2 Sekunden)
+  const reverbTail = 2;
+
   // Ende des Licks
   const totalTime = Tone.Time(`${parseInt(lengthSelect.value)}m`);
+  console.log("totalTime");
+  console.log(totalTime);
+  
 
   // Events am Ende des Licks ---------------------------------------------------------------------------------------
   Tone.Transport.schedule(() => {
@@ -589,7 +595,7 @@ async function planLickPlayback(lick) {
     highlightLoop.stop();
     planLickPlayback(lick);
     playButton.disabled = false;
-  }, totalTime);
+  }, totalTime+reverbTail);
  
   playButton.disabled = false;
 }
