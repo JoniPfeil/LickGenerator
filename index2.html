@@ -68,20 +68,12 @@
 
       <div class="option-group">
         <label for="fretChange">Fret changes</label>
-        <select id="fretChange">
-          <option value="1">unlikely</option>
-          <option value="1.5" selected>default</option>
-          <option value="3">likely</option>
-        </select>
+        <input type="range" id="fretChange" min="0" max="4" step="1" value="2">
       </div>
 
       <div class="option-group">
         <label for="stringChange">String changes</label>
-        <select id="stringChange">
-          <option value="0.5">unlikely</option>
-          <option value="1.5" selected>default</option>
-          <option value="3">likely</option>
-        </select>
+        <input type="range" id="stringChange" min="0" max="4" step="1" value="2">
       </div>
     </div>
 
@@ -151,6 +143,11 @@
       <div class="option-group">
         <label for="clickVol">Click Volume</label>
         <input type="range" id="clickVol" min="0" max="4" step="1" value="2" list="volumeLabels">
+      </div>
+
+      <div class="option-group">
+        <label for="padVol">Click Volume</label>
+        <input type="range" id="padVol" min="0" max="4" step="1" value="2" list="volumeLabels">
       </div>
 
       <div class="option-group">
