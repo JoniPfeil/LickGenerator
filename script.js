@@ -242,6 +242,25 @@ const clickVolMap = {
   5: "-5"
 };
 
+const techniqueMap = {
+  none: 0,        // normale Note
+  rest: 1,        // Pause
+  mute: 2,        // Muted Note
+  slideUp: 3,     // Slide zur höheren Note (z.B. 5s7)
+  slideDown: 4,   // Slide zur tieferen Note (z.B. 7s5)
+  bend: 5,        // Bend (z.B. 7b)
+  release: 6,     // Bend-Release (z.B. 7b~7)
+  pbRelease: 7,   // PreBend-Release (z.B. 7pb~7)
+  hammerOn: 8,    // Hammer-on (z.B. 5h7)
+  pullOff: 9,     // Pull-off (z.B. 7p5)  
+  doubleStop: 10, // Two notes at once
+  vibrato: 11,    // Vibrato (z.B. 7~)
+  harmonic: 12,
+  tap: 13
+};
+
+function getTechnique = {
+
 function sixteenthsToBBS(sixteenthsTotal) {
   const bars = Math.floor(sixteenthsTotal / 16);
   const afterBars = sixteenthsTotal % 16;
@@ -420,7 +439,7 @@ function generateLick() {
 
 
   for (let i = 0; i < totalSteps;) {
-    const isRest = Math.random() < pRest;
+    const technique = Math.random() < pRest;
     let duration = weightedRandomChoice(durations, durationPs);
 
     // Verhindere Überschreiten des Lick-Endes
@@ -428,9 +447,9 @@ function generateLick() {
       duration = totalSteps - i;
     }
   
-    if (isRest) 
+    if (technique) 
     {
-      lick.push({step: i, stringIndex: null, fret: null, duration: duration, isRest: 1});
+      lick.push({step: i, stringIndex: null, fret: null, duration: duration, technique: 1});
     } 
     else 
     {
@@ -476,8 +495,8 @@ function generateLick() {
       if (fret === lastFret && stringIndex === lastStringIndex) {continue;}
 
       // Note speichern
-      lick.push({ step: i, stringIndex, fret, duration: duration, isRest: 0});
-      //console.log({ stringIndex, fret, i, duration, isRest});
+      lick.push({ step: i, stringIndex, fret, duration: duration, technique: 0});
+      //console.log({ stringIndex, fret, i, duration, technique});
   
       // Letzte Werte aktualisieren
       lastStringIndex = stringIndex;
@@ -496,7 +515,7 @@ function displayTab(lick, bars) {
   const lines = Array(strings.length).fill(null).map(() => Array(bars * 16).fill("--"));
 
   for (const note of lick) {
-    if (note.isRest === 1) continue;
+    if (note.technique === 1) continue;
     const fretStr = note.fret < 10 ? "0" + note.fret : note.fret.toString();
     lines[note.stringIndex][note.step] = fretStr;
   }
@@ -547,7 +566,7 @@ async function planLickPlayback(lick) {
     const time = Tone.Time(sixteenthsToBBS(note.step));   
     const duration = Tone.Time(durationMap[note.duration]);
 
-    if (note.isRest === 1) {
+    if (note.technique === 1) {
       return [time, null]; // Pause
     } else {
       const pitch = fretboardArray[note.stringIndex][note.fret];
