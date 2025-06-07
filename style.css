@@ -52,7 +52,7 @@ h1 {
   justify-content: center;
 }
 
-.lick-options label {
+label {
   display: flex;
   flex-direction: column;
   font-size: 0.9rem;
