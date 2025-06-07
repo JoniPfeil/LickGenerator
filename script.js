@@ -274,20 +274,25 @@ function randomNormal(mean, stdDev) {
 // Globale Funktion zum Setzen des Sounds (mit Reverb)
 async function setSound(selected) {
   if (selected === "synth") {
-    // Tone.Synth direkt an Reverb anschließen
     synth = new Tone.Synth().connect(reverb);
   } else {
-    // Soundfont-basiert
     if (!loadedInstruments[selected]) {
-      const instrument = await Soundfont.instrument(Tone.context.rawContext, selected, {
-        // Gib deinen Reverb als Ziel an
-        destination: reverb._nativeAudioNode // Low-level Zugriff für Web Audio API
-      });
+      // Erzeuge einmalig GainNode für Soundfont
+      const sfGain = Tone.context.createGain();
+      sfGain.connect(reverb); // Leite durch den Tone-Reverb
+
+      const instrument = await Soundfont.instrument(
+        Tone.context.rawContext,
+        selected,
+        { destination: sfGain }
+      );
+
       loadedInstruments[selected] = instrument;
+      loadedInstruments[selected].sfGain = sfGain; // falls du später Zugriff brauchst
     }
+
     const player = loadedInstruments[selected];
 
-    // Synth-Wrapper für Kompatibilität mit .triggerAttackRelease
     synth = {
       triggerAttackRelease: (note, duration, time) => {
         player.play(note, time, {
@@ -297,6 +302,7 @@ async function setSound(selected) {
     };
   }
 }
+
 
 
 /* Globale Funktion zum Setzen des Sounds (ohne Reverb)
