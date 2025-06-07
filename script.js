@@ -330,6 +330,7 @@ rateButton.addEventListener("click", async () => {
 
 document.getElementById("reverbWet").addEventListener("input", e => {
   reverb.wet.value = parseFloat(e.target.value);
+  console.log(clickVolMap[e.target.value]);
 });
 
 soundSelect.addEventListener("change", (e) => setSound(e.target.value));
