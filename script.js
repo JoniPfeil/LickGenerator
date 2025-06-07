@@ -44,12 +44,12 @@ const supabaseClient = supabase.createClient(
 );
 
 //Reverb erstellen
-const reverb = new Tone.Reverb({
+let reverb = new Tone.Reverb({
   decay: 2.5,
   preDelay: 0.05,
   wet: 0.5
 }).toDestination();
-reverb.generate(); // Reverb laden
+//reverb.generate(); // Reverb laden
 
 async function saveLickToSupabase() {
   const lickObj = {
@@ -273,6 +273,8 @@ function randomNormal(mean, stdDev) {
 
 // Globale Funktion zum Setzen des Sounds (mit Reverb)
 async function setSound(selected) {
+  await reverb.generate(); // Reverb laden
+  
   if (selected === "synth") {
     synth = new Tone.Synth().connect(reverb);
   } else {
@@ -290,6 +292,9 @@ async function setSound(selected) {
       loadedInstruments[selected] = instrument;
       loadedInstruments[selected].sfGain = sfGain; // falls du später Zugriff brauchst
     }
+
+    console.log("sfGain instanceof AudioNode:", sfGain instanceof AudioNode);
+    console.log("reverb.ready?", reverb && reverb.input);
 
     const player = loadedInstruments[selected];
 
