@@ -283,12 +283,13 @@ async function setSound(selected) {
   } else {
     if (!loadedInstruments[selected]) {
       // Erzeuge einmalig GainNode für Soundfont
-      const sfGain = Tone.context.createGain();
+      //const sfGain = Tone.context.createGain();
+      const sfGain = new Tone.Gain().connect(reverb);
 
       console.log("sfGain instanceof AudioNode:", sfGain instanceof AudioNode);
       console.log("reverb.ready?", reverb && reverb.input);
       
-      sfGain.connect(reverb); // Leite durch den Tone-Reverb
+      //sfGain.connect(reverb); // Leite durch den Tone-Reverb
 
       const instrument = await Soundfont.instrument(
         Tone.context.rawContext,
