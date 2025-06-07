@@ -30,6 +30,14 @@ h1 {
   justify-content: center;
 }
 
+.lick-options2 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+
 .option-group {
   display: flex;
   flex-direction: column;
