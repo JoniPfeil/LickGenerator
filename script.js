@@ -583,10 +583,11 @@ async function planLickPlayback(lick) {
   const reverbTail = 2;
 
   // Ende des Licks
-  const totalTime = Tone.Time(`${parseInt(lengthSelect.value)}m`);
-  console.log("totalTime");
-  console.log(totalTime);
-  
+  let totalTime = Tone.Time(`${parseInt(lengthSelect.value)}m`);
+  //if (!loop)
+  {
+    totalTime = totalTime + Tone.Time("1m"); //time for reverb
+  }
 
   // Events am Ende des Licks ---------------------------------------------------------------------------------------
   Tone.Transport.schedule(() => {
