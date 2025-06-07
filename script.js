@@ -43,6 +43,14 @@ const supabaseClient = supabase.createClient(
   {auth: { autoRefreshToken: false, persistSession: false }}
 );
 
+//Reverb erstellen
+const reverb = new Tone.Reverb({
+  decay: 2.5,
+  preDelay: 0.05,
+  wet: 0.5
+}).toDestination();
+reverb.generate(); // Reverb laden
+
 async function saveLickToSupabase() {
   const lickObj = {
     lick: transposeLick(lick, -lickInfo.transpose),                   // globales Lick-Array in C-Dur
@@ -262,14 +270,6 @@ function randomNormal(mean, stdDev) {
   const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
   return Math.round(mean + z * stdDev);
 }
-
-//Reverb erstellen
-const reverb = new Tone.Reverb({
-  decay: 2.5,
-  preDelay: 0.05,
-  wet: 0.5
-}).toDestination();
-await reverb.generate(); // Reverb laden
 
 // Globale Funktion zum Setzen des Sounds (mit Reverb)
 async function setSound(selected) {
