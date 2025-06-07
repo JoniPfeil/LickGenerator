@@ -583,11 +583,8 @@ async function planLickPlayback(lick) {
   const reverbTail = 2;
 
   // Ende des Licks
-  let totalTime = Tone.Time(`${parseInt(lengthSelect.value)}m`);
-  //if (!loop)
-  {
-    totalTime = totalTime + Tone.Time("1m"); //time for reverb
-  }
+  const totalTime = Tone.Time(`${parseInt(lengthSelect.value)}m`);
+  const totalWithReverb = totalTime + Tone.Time("1m");
 
   // Events am Ende des Licks ---------------------------------------------------------------------------------------
   Tone.Transport.schedule(() => {
@@ -595,8 +592,11 @@ async function planLickPlayback(lick) {
     clickLoop.stop();
     highlightLoop.stop();
     planLickPlayback(lick);
+  }, totalTime);
+
+  Tone.Transport.schedule(() => {
     playButton.disabled = false;
-  }, totalTime+reverbTail);
+    }, totalWithReverb);
  
   playButton.disabled = false;
 }
