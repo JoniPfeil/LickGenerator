@@ -273,7 +273,10 @@ function randomNormal(mean, stdDev) {
 
 // Globale Funktion zum Setzen des Sounds (mit Reverb)
 async function setSound(selected) {
-  await reverb.generate(); // Reverb laden
+
+  if (!reverb.buffer) {
+    await reverb.generate(); // Reverb laden
+  }
   
   if (selected === "synth") {
     synth = new Tone.Synth().connect(reverb);
@@ -281,6 +284,10 @@ async function setSound(selected) {
     if (!loadedInstruments[selected]) {
       // Erzeuge einmalig GainNode für Soundfont
       const sfGain = Tone.context.createGain();
+
+      console.log("sfGain instanceof AudioNode:", sfGain instanceof AudioNode);
+      console.log("reverb.ready?", reverb && reverb.input);
+      
       sfGain.connect(reverb); // Leite durch den Tone-Reverb
 
       const instrument = await Soundfont.instrument(
@@ -293,8 +300,7 @@ async function setSound(selected) {
       loadedInstruments[selected].sfGain = sfGain; // falls du später Zugriff brauchst
     }
 
-    console.log("sfGain instanceof AudioNode:", sfGain instanceof AudioNode);
-    console.log("reverb.ready?", reverb && reverb.input);
+    
 
     const player = loadedInstruments[selected];
 
