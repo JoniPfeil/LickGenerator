@@ -439,7 +439,7 @@ function generateLick() {
     0,                               //tap: 13
   ];
 
-  //console.log(techniqueProbabilities);
+  console.log(techniqueProbabilities);
 
   lickInfo.transpose = keySelect.value;
   lickInfo.key = chromaticScale[keySelect.value];
