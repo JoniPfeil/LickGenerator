@@ -451,14 +451,14 @@ function generateLick() {
     1,              //normale Note
     0.1,            //rest: 1, 
     0.1,            //mute: 2,        
-    slides.value/2, //slideUp: 3,     
-    slides.value/2, //slideDown: 4,  
-    bends.value,    //bend: 5,      
+    parseFloat(slides.value)/2, //slideUp: 3,     
+    parseFloat(slides.value)/2, //slideDown: 4,  
+    parseFloat(bends.value),    //bend: 5,      
     0.1,            //release: 6,   
     0,              //pbRelease: 7,
     0.1,            //hammerOn: 8,
     0.1,            //pullOff: 9,
-    doubles.value,  //doubleStop: 10,
+    parseFloat(doubles.value),  //doubleStop: 10,
     0,              //vibrato: 11,
     0,              //harmonic: 12,
     0,              //tap: 13
