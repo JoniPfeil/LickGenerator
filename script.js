@@ -1,10 +1,5 @@
 // script.js
 
-//Lick generation options
-const pRest = 0.1;        // Wahrscheinlichkeit für Pausen. Kleinere Werte machen Pausen unwahrscheinlicher.
-//let stdDevString = 1.5; // Standardabweichung für Saite. Kleinere Werte machen Saitenwechsel unwahrscheinlicher.
-//let stdDevFret = 1.5;   // Standardabweichung für Bund. Kleinere Werte machen Bundwechsel unwahrscheinlicher.
-
 // html elements
 const keySelect = document.getElementById("key");
 const scaleSelect = document.getElementById("scale");
@@ -14,6 +9,8 @@ const lengthSelect = document.getElementById("length");
 const fretChange = document.getElementById("fretChange");
 const stringChange = document.getElementById("stringChange");
 const pNormal = document.getElementById("pNormal");
+const pRest = document.getElementById("pRest");
+const pDead = document.getElementById("pDead");
 const pSlides = document.getElementById("pSlides");
 const pBends = document.getElementById("pBends");
 const pHammerPull = document.getElementById("pHammerPull");
@@ -424,13 +421,13 @@ function generateLick() {
 
   techniqueProbabilities = [
     parseFloat(pNormal.value),       //normale Note
-    0.1,                             //rest: 1, 
-    0.1,                             //mute: 2,        
+    parseFloat(pRest.value),         //rest: 1, 
+    parseFloat(pDead.value),         //mute: 2,        
     parseFloat(pSlides.value)/2,     //slideUp: 3,     
     parseFloat(pSlides.value)/2,     //slideDown: 4,  
     parseFloat(pBends.value),        //bend: 5,      
     0,                               //release: 6,   
-    0.1,                             //pbRelease: 7,
+    parseFloat(pBends.value)/2,      //pbRelease: 7,
     parseFloat(pHammerPull.value)/2, //hammerOn: 8,
     parseFloat(pHammerPull.value)/2, //pullOff: 9,
     parseFloat(pDoubles.value),      //doublestop: 10,
