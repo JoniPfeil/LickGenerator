@@ -16,6 +16,7 @@ const stringChange = document.getElementById("stringChange");
 const pNormal = document.getElementById("pNormal");
 const pSlides = document.getElementById("pSlides");
 const pBends = document.getElementById("pBends");
+const pHammerPull = document.getElementById("pHammerPull");
 const pDoubles = document.getElementById("pDoubles");
 const soundSelect = document.getElementById("sound");
 const generateButton = document.getElementById("generate-button");
@@ -422,20 +423,20 @@ function generateLick() {
   const totalSteps = length * stepsPerBar;
 
   techniqueProbabilities = [
-    1,              //normale Note
-    0.1,            //rest: 1, 
-    0.1,            //mute: 2,        
-    parseFloat(pSlides.value)/2, //slideUp: 3,     
-    parseFloat(pSlides.value)/2, //slideDown: 4,  
-    parseFloat(pBends.value),    //bend: 5,      
-    0.1,            //release: 6,   
-    0,              //pbRelease: 7,
-    0.1,            //hammerOn: 8,
-    0.1,            //pullOff: 9,
-    parseFloat(pDoubles.value),  //doublestop: 10,
-    0,              //vibrato: 11,
-    0,              //harmonic: 12,
-    0,              //tap: 13
+    parseFloat(pNormal.value),       //normale Note
+    0.1,                             //rest: 1, 
+    0.1,                             //mute: 2,        
+    parseFloat(pSlides.value)/2,     //slideUp: 3,     
+    parseFloat(pSlides.value)/2,     //slideDown: 4,  
+    parseFloat(pBends.value),        //bend: 5,      
+    0,                               //release: 6,   
+    0.1,                             //pbRelease: 7,
+    parseFloat(pHammerPull.value)/2, //hammerOn: 8,
+    parseFloat(pHammerPull.value)/2, //pullOff: 9,
+    parseFloat(pDoubles.value),      //doublestop: 10,
+    0,                               //vibrato: 11,
+    0,                               //harmonic: 12,
+    0,                               //tap: 13
   ];
 
   //console.log(techniqueProbabilities);
