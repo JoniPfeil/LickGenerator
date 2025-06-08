@@ -13,6 +13,9 @@ const tempoSelect = document.getElementById("tempo");
 const lengthSelect = document.getElementById("length");
 const fretChange = document.getElementById("fretChange");
 const stringChange = document.getElementById("stringChange");
+const slides = document.getElementById("slides");
+const bends = document.getElementById("bends");
+const doubles = document.getElementById("doubles");
 const soundSelect = document.getElementById("sound");
 const generateButton = document.getElementById("generate-button");
 const clickVolSelect = document.getElementById("clickVol");
@@ -284,7 +287,7 @@ const techniques = [
 ];
 
 let techniqueProbabilities = [
-    1,          // normale Note
+    1,          //normale Note
     0.1,        //rest: 1, 
     0.1,        //mute: 2,        
     0.2,        //slideUp: 3,     
@@ -444,6 +447,23 @@ function generateLick() {
   const stepsPerBar = 16;
   const totalSteps = length * stepsPerBar;
 
+  techniqueProbabilities = [
+    1,              //normale Note
+    0.1,            //rest: 1, 
+    0.1,            //mute: 2,        
+    slides.value/2, //slideUp: 3,     
+    slides.value/2, //slideDown: 4,  
+    bends.value,    //bend: 5,      
+    0.1,            //release: 6,   
+    0,              //pbRelease: 7,
+    0.1,            //hammerOn: 8,
+    0.1,            //pullOff: 9,
+    doubles.value,  //doubleStop: 10,
+    0,              //vibrato: 11,
+    0,              //harmonic: 12,
+    0,              //tap: 13
+  ];
+
   lickInfo.transpose = keySelect.value;
   lickInfo.key = chromaticScale[keySelect.value];
   lickInfo.scale = scaleSelect.value;
@@ -465,7 +485,7 @@ function generateLick() {
   }
 
   //Generate one note at a time until tab is full
-  for (let i = 0; i < totalSteps;) {
+  for (let i = 0; i < totalSteps;) 
     let technique = weightedRandomChoice(techniques, techniqueProbabilities); 
     console.log("technique: ", technique);
     let duration = weightedRandomChoice(durations, durationProbabilities);
@@ -599,7 +619,7 @@ function displayTab(lick, bars) {
     lines[note.stringIndex][note.step] = sign + fretStr;   // z. B. "h07"
   }
 
-  let header = "   ";
+  let header = "    ";
   for (let b = 0; b < bars; b++) {
     for (let i = 0; i < 4; i++) header += (i + 1) + "     &     ";
     header += " ";
