@@ -669,7 +669,7 @@ async function planLickPlayback(lick) {
     const time = Tone.Time(sixteenthsToBBS(note.step));   
     const duration = Tone.Time(durationMap[note.duration]);
 
-    if (note.technique === 1) {
+    if (note.technique === "rest") {
       return [time, null]; // Pause
     } else {
       const pitch = fretboardArray[note.stringIndex][note.fret];
