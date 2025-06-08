@@ -373,6 +373,15 @@ async function setSound(selected) {
 }
 
 // Event-Listener definieren --------------------------------------------------------------------------------------------------
+document.getElementById("help").addEventListener("click", () => {
+  document.getElementById("popUp-Help").classList.remove("hidden");
+});
+
+document.getElementById("close-help").addEventListener("click", () => {
+  document.getElementById("popUp-Help").classList.add("hidden");
+});
+
+
 rateButton.addEventListener("click", async () => {
   saveLickToSupabase();
   rateButton.disabled = true;
