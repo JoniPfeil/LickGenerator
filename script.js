@@ -29,6 +29,7 @@ let synth = null;
 let clickSynth = null;
 const loadedInstruments = {}; // Cache für geladene Instrumente
 let audioStarted = false;
+let scale;
 
 const lickInfo = {
   key: null,
@@ -420,7 +421,7 @@ function generateLick() {
   const key = keySelect.value;
   const difficulty = difficultySelect.value;
   const length = parseInt(lengthSelect.value);
-  const scale = getScale(key);
+  scale = getScale(key);
   const durations = getNoteDurationOptions(difficulty);
   const durationProbabilities = getNoteDurationProbabilities(difficulty);
   const stepsPerBar = 16;
