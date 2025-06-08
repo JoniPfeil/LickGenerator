@@ -551,7 +551,7 @@ function chooseString (lastStringIndex) {
   do {
     stringIndex = Math.round(randomNormal(lastStringIndex, parseInt(stringChange.value)));
   } while (stringIndex < 0 || stringIndex >= strings.length);
-  return stringIndex;
+  return Math.abs(stringIndex);
 }
 
 // Saite nach Normalverteilung wählen -------------------------------------------------------------------------------------------
@@ -560,7 +560,7 @@ function chooseFret (lastFret) {
   do {
     someFret = Math.round(randomNormal(lastFret, parseInt(fretChange.value)));
   } while (someFret < 0 || someFret >= fretboardArray[0].length);
-  return someFret;
+  return Math.abs(someFret);
 } 
 
 // Get closest valid fret -------------------------------------------------------------------------------------------
