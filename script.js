@@ -510,7 +510,7 @@ function generateLick() {
         stringIndex = chooseString (lastStringIndex);
         do {
           stringIndex2 = chooseString (stringIndex);
-        } while (stringIndex === strintIndex2);        
+        } while (stringIndex === stringIndex2);        
         fret = getValidFret(stringIndex, chooseFret(lastFret));
         fret2 = getValidFret(stringIndex2, chooseFret(fret));
       break;
