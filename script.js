@@ -528,10 +528,10 @@ function generateLick() {
 
     // Note speichern
     lick.push({ step: i, stringIndex, fret, duration, technique});
-    console.log({ i, stringIndex, fret, duration, technique});
+    //console.log({ step: i, stringIndex, fret, duration, technique});
     if (technique === "doubleStop") {
       lick.push({ step: i, stringIndex: stringIndex2, fret: fret2, duration, technique});
-      console.log({ step: i, stringIndex: stringIndex2, fret: fret2, duration, technique});
+      //console.log({ step: i, stringIndex: stringIndex2, fret: fret2, duration, technique});
     }
     
     // Letzte Werte aktualisieren
@@ -590,9 +590,11 @@ function displayTab(lick, bars) {
 
   for (const note of lick) {
     if (note.technique === "rest") continue;
+    console.log(note.step, note.stringIndex, note.fret, note.technique);
     const sign = techniqueSignsMap[note.technique] || " ";
     const fretStr = note.fret.toString().padStart(2, '0'); // z. B. "07"
     lines[note.stringIndex][note.step] = sign + fretStr;   // z. B. "h07"
+    console.log(lines[note.stringIndex][note.step]);
   }
 
   let header = "    ";
