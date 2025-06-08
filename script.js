@@ -260,6 +260,8 @@ const techniqueMap = {
 };
 
 function getTechnique = {
+  console.log("hallo");
+};
 
 function sixteenthsToBBS(sixteenthsTotal) {
   const bars = Math.floor(sixteenthsTotal / 16);
