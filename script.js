@@ -610,7 +610,7 @@ function displayTab(lick, bars) {
     const s = strings[i];
     const barLines = [];
     for (let b = 0; b < bars; b++) {
-      const chunk = lines[i].slice(b * 16, (b + 1) * 16).join(" ");
+      const chunk = lines[i].slice(b * 16, (b + 1) * 16).join("");
       barLines.push("|" + chunk);
     }
     output += s + " " + barLines.join("") + "|\n";
