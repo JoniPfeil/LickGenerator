@@ -129,17 +129,6 @@ function getNoteDurationOptions(difficulty) {
   }
 }
 
-/*function getChangeStdD(option) {
-  switch (option) {
-    case "unlikely":
-      return 0.5;
-    case "default":
-      return 1.5;
-    case "likely":
-      return 3;
-  }
-}*/
-
 //Wahrscheinlichkeiten für die Notenlängen
 function getNoteDurationProbabilities(difficulty) {
   //Notenlänge in 16teln: 1=16tel; 2=8tel usw.
@@ -259,9 +248,39 @@ const techniqueMap = {
   tap: 13
 };
 
-function getTechnique = {
-  console.log("hallo");
-};
+const techniques = [
+  "note",
+  "rest",
+  "mute",
+  "slideUp",
+  "slideDown",
+  "bend",
+  "release",
+  "pbRelease",
+  "hammerOn",
+  "pullOff",
+  "doubleStop",
+  "vibrato",
+  "harmonic",
+  "tap"
+];
+
+let techniqueProbabilities = [
+    1,          // normale Note
+    0.1,        //rest: 1, 
+    0.1,        //mute: 2,        
+    0.2,        //slideUp: 3,     
+    0.2,        //slideDown: 4,  
+    0.2,        //bend: 5,      
+    0.1,        //release: 6,   
+    0,          //pbRelease: 7,
+    0.2,        //hammerOn: 8,
+    0.1,        //pullOff: 9,
+    0.2,        //doubleStop: 10,
+    0,          //vibrato: 11,
+    0,          //harmonic: 12,
+    0,          //tap: 13
+];
 
 function sixteenthsToBBS(sixteenthsTotal) {
   const bars = Math.floor(sixteenthsTotal / 16);
@@ -396,14 +415,14 @@ ratingStars.forEach(input => {
   });
 });
 
-//Generiere neuen Lick
+// Generiere neuen Lick ----------------------------------------------------------------------------------------------------------------
 function generateLick() {
   const key = keySelect.value;
   const difficulty = difficultySelect.value;
   const length = parseInt(lengthSelect.value);
   const scale = getScale(key);
   const durations = getNoteDurationOptions(difficulty);
-  const durationPs = getNoteDurationProbabilities(difficulty);
+  const durationProbabilities = getNoteDurationProbabilities(difficulty);
   const stepsPerBar = 16;
   const totalSteps = length * stepsPerBar;
 
@@ -413,9 +432,9 @@ function generateLick() {
   lickInfo.length = parseInt(lengthSelect.value);
   lickInfo.difficulty = difficultySelect.value;
   
-  lick = []; // globale Variable überschreiben 
-  let lastStringIndex = Math.floor(Math.random() * strings.length);
-  let lastFret = Math.floor(Math.random() * 18);
+  lick = []; // delete last lick
+  let lastStringIndex = Math.floor(Math.random() * strings.length);   //random start string
+  let lastFret = Math.floor(Math.random() * 18);                      //random start fret
 
   playButton.disabled = true;
   rateButton.disabled = true;
@@ -427,28 +446,55 @@ function generateLick() {
     audioStarted = true;
   }
 
-  //For debugging only
-  /*lick = [
-  { string: "e", fret: 1, step: 0,  duration: 4 },
-  { string: "e", fret: 2, step: 4,  duration: 4 },
-  { string: "e", fret: 3, step: 8,  duration: 4 },
-  { string: "e", fret: 4, step: 12,  duration: 4 },
-  { string: "e", fret: 5, step: 16,  duration: 4 },
-  { string: "e", fret: 6, step: 20,  duration: 4 },
-  { string: "e", fret: 7, step: 24,  duration: 4 },
-  { string: "e", fret: 8, step: 28,  duration: 4 }
-]; */
-
-
+  //Generate one note at a time until tab is full
   for (let i = 0; i < totalSteps;) {
-    const technique = Math.random() < pRest;
-    let duration = weightedRandomChoice(durations, durationPs);
+    const technique = weightedRandomChoice(techniques, techniqueProbabilities); 
+    let duration = weightedRandomChoice(durations, durationProbabilities);
 
     // Verhindere Überschreiten des Lick-Endes
     if (i + duration > totalSteps) {
       duration = totalSteps - i;
     }
-  
+
+  /*
+  "note",
+  "rest",
+  "mute",
+  "slideUp",
+  "slideDown",
+  "bend",
+  "release",
+  "pbRelease",
+  "hammerOn",
+  "pullOff",
+  "doubleStop",
+  "vibrato",
+  "harmonic",
+  "tap"
+  */
+
+    switch (technique)
+    {
+      case "note":
+      break;
+      case "rest":
+      break;
+      case "mute":
+      break;
+      case "slideUp":
+      break;
+      case "slideDown":
+      break;
+      case "bend":
+      break;
+      case "release":
+      break;
+      case "pbRelease":
+      break;
+    }
+
+
+        
     if (technique) 
     {
       lick.push({step: i, stringIndex: null, fret: null, duration: duration, technique: 1});
