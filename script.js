@@ -601,7 +601,8 @@ function displayTab(lick, bars) {
 
   let header = "   ";
   for (let b = 0; b < bars; b++) {
-    for (let i = 0; i < 4; i++) header += (i + 1) + "           ";
+    for (let i = 0; i < 4; i++) header += (i + 1) + "     &     ";
+    header += " ";
   }
 
   let output = header + "\n";
