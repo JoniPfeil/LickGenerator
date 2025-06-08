@@ -449,7 +449,7 @@ function generateLick() {
 
   //Generate one note at a time until tab is full
   for (let i = 0; i < totalSteps;) {
-    const technique = weightedRandomChoice(techniques, techniqueProbabilities); 
+    let technique = weightedRandomChoice(techniques, techniqueProbabilities); 
     console.log("technique: ", technique);
     let duration = weightedRandomChoice(durations, durationProbabilities);
     let stringIndex;
