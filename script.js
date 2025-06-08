@@ -350,8 +350,8 @@ async function setSound(selected) {
       sfGain.connect(reverb);             // Reverb = Tone.Reverb
       reverb.toDestination();             // oder bereits verbunden
 
-      console.log("sfGain instanceof AudioNode:", sfGain instanceof AudioNode);
-      console.log("reverb.ready?", reverb && reverb.input);
+      //console.log("sfGain instanceof AudioNode:", sfGain instanceof AudioNode);
+      //console.log("reverb.ready?", reverb && reverb.input);
 
       const instrument = await Soundfont.instrument(
         Tone.context.rawContext,
@@ -362,11 +362,7 @@ async function setSound(selected) {
       loadedInstruments[selected] = instrument;
       loadedInstruments[selected].sfGain = sfGain; // falls du später Zugriff brauchst
     }
-
-    
-
     const player = loadedInstruments[selected];
-
     synth = {
       triggerAttackRelease: (note, duration, time) => {
         player.play(note, time, {
@@ -376,29 +372,6 @@ async function setSound(selected) {
     };
   }
 }
-
-
-
-/* Globale Funktion zum Setzen des Sounds (ohne Reverb)
-async function setSound(selected) {
-  if (selected === "synth") {
-    synth = new Tone.Synth().toDestination();
-  } else {
-    // Check: Ist das Instrument schon im Cache?
-    if (!loadedInstruments[selected]) {
-      // Lade und speichere im Cache
-      const instrument = await Soundfont.instrument(Tone.context.rawContext, selected);
-      loadedInstruments[selected] = instrument;
-    }
-    // Erstelle Synth-Wrapper
-    const player = loadedInstruments[selected];
-    synth = {
-      triggerAttackRelease: (note, duration, time) => {
-        player.play(note, time, { duration: Tone.Time(duration).toSeconds() });
-      }
-    };
-  }
-} */
 
 // Event-Listener definieren --------------------------------------------------------------------------------------------------
 rateButton.addEventListener("click", async () => {
@@ -410,7 +383,7 @@ rateButton.addEventListener("click", async () => {
 
 document.getElementById("reverbWet").addEventListener("input", e => {
   reverb.wet.value = parseFloat(e.target.value);
-  console.log(clickVolMap[e.target.value]);
+  //console.log(clickVolMap[e.target.value]);
 });
 
 soundSelect.addEventListener("change", (e) => setSound(e.target.value));
@@ -425,7 +398,7 @@ playButton.addEventListener("click", async () => {
 clickVol.addEventListener("change", (e) => {
   try {
     clickSynth.volume.value = clickVolMap[e.target.value];
-    console.log(clickVolMap[e.target.value]);
+    //console.log(clickVolMap[e.target.value]);
   } catch (error) {
     console.error("Fehler clickVol", error);
   }
@@ -464,7 +437,7 @@ function generateLick() {
     0,              //tap: 13
   ];
 
-  console.log(techniqueProbabilities);
+  //console.log(techniqueProbabilities);
 
   lickInfo.transpose = keySelect.value;
   lickInfo.key = chromaticScale[keySelect.value];
@@ -490,7 +463,7 @@ function generateLick() {
   for (let i = 0; i < totalSteps;) 
   {
     let technique = weightedRandomChoice(techniques, techniqueProbabilities); 
-    console.log("technique: ", technique);
+    //console.log("technique: ", technique);
     let duration = weightedRandomChoice(durations, durationProbabilities);
     let stringIndex;
     let fret;
@@ -558,7 +531,7 @@ function generateLick() {
     console.log({ i, stringIndex, fret, duration, technique});
     if (technique === "doubleStop") {
       lick.push({ step: i, stringIndex: stringIndex2, fret: fret2, duration, technique});
-      console.log({ i, stringIndex2, fret2, duration, technique});
+      console.log({ step: i, stringIndex: stringIndex2, fret: fret2, duration, technique});
     }
     
     // Letzte Werte aktualisieren
