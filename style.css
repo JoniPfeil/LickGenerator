@@ -26,6 +26,7 @@ body {
   /* max-width: 800px;  z.B. auf großen Bildschirmen */
   padding-left: 1rem;
   padding-right: 1rem;
+  display: none;
 }
 
 h1 {
