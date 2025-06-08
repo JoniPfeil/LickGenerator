@@ -13,9 +13,10 @@ const tempoSelect = document.getElementById("tempo");
 const lengthSelect = document.getElementById("length");
 const fretChange = document.getElementById("fretChange");
 const stringChange = document.getElementById("stringChange");
-const slides = document.getElementById("slides");
-const bends = document.getElementById("bends");
-const doubles = document.getElementById("doubles");
+const pNormal = document.getElementById("pNormal");
+const pSlides = document.getElementById("pSlides");
+const pBends = document.getElementById("pBends");
+const pDoubles = document.getElementById("pDoubles");
 const soundSelect = document.getElementById("sound");
 const generateButton = document.getElementById("generate-button");
 const clickVolSelect = document.getElementById("clickVol");
@@ -246,7 +247,7 @@ const techniqueMap = {
   pbRelease: 7,   // PreBend-Release (z.B. 7pb~7)
   hammerOn: 8,    // Hammer-on (z.B. 5h7)
   pullOff: 9,     // Pull-off (z.B. 7p5)  
-  doubleStop: 10, // Two notes at once
+  pDoublestop: 10, // Two notes at once
   vibrato: 11,    // Vibrato (z.B. 7~)
   harmonic: 12,
   tap: 13
@@ -263,7 +264,7 @@ const techniqueSignsMap = {
   pbRelease: " ",   // PreBend-Release (z.B. 7pb~7)
   hammerOn: "h",    // Hammer-on (z.B. 5h7)
   pullOff: "p",     // Pull-off (z.B. 7p5)  
-  doubleStop: " ",  // Two notes at once
+  pDoublestop: " ",  // Two notes at once
   vibrato: "~",     // Vibrato (z.B. 7~)
   harmonic: "f",    // künstliches Flageolett
   tap: "t"          // Tapping
@@ -280,7 +281,7 @@ const techniques = [
   "pbRelease",
   "hammerOn",
   "pullOff",
-  "doubleStop",
+  "pDoublestop",
   "vibrato",
   "harmonic",
   "tap"
@@ -297,7 +298,7 @@ let techniqueProbabilities = [
     0,          //pbRelease: 7,
     0.2,        //hammerOn: 8,
     0.1,        //pullOff: 9,
-    0.2,        //doubleStop: 10,
+    0.2,        //pDoublestop: 10,
     0,          //vibrato: 11,
     0,          //harmonic: 12,
     0,          //tap: 13
@@ -424,14 +425,14 @@ function generateLick() {
     1,              //normale Note
     0.1,            //rest: 1, 
     0.1,            //mute: 2,        
-    parseFloat(slides.value)/2, //slideUp: 3,     
-    parseFloat(slides.value)/2, //slideDown: 4,  
-    parseFloat(bends.value),    //bend: 5,      
+    parseFloat(pSlides.value)/2, //slideUp: 3,     
+    parseFloat(pSlides.value)/2, //slideDown: 4,  
+    parseFloat(pBends.value),    //bend: 5,      
     0.1,            //release: 6,   
     0,              //pbRelease: 7,
     0.1,            //hammerOn: 8,
     0.1,            //pullOff: 9,
-    parseFloat(doubles.value),  //doubleStop: 10,
+    parseFloat(pDoubles.value),  //pDoublestop: 10,
     0,              //vibrato: 11,
     0,              //harmonic: 12,
     0,              //tap: 13
@@ -506,7 +507,7 @@ function generateLick() {
         stringIndex = lastStringIndex;
         fret = getValidFret(stringIndex, (lastFret - 1));  //Release half tone or full tone
       break;
-      case "doubleStop":
+      case "pDoublestop":
         stringIndex = chooseString (lastStringIndex);
         do {
           stringIndex2 = chooseString (stringIndex);
@@ -529,7 +530,7 @@ function generateLick() {
     // Note speichern
     lick.push({ step: i, stringIndex, fret, duration, technique});
     //console.log({ step: i, stringIndex, fret, duration, technique});
-    if (technique === "doubleStop") {
+    if (technique === "pDoublestop") {
       lick.push({ step: i, stringIndex: stringIndex2, fret: fret2, duration, technique});
       //console.log({ step: i, stringIndex: stringIndex2, fret: fret2, duration, technique});
     }
@@ -600,7 +601,7 @@ function displayTab(lick, bars) {
   let header = "    ";
   for (let b = 0; b < bars; b++) {
     for (let i = 0; i < 4; i++) header += (i + 1) + "     &     ";
-    //header += "";
+    header += " ";
   }
 
   let output = header + "\n";
@@ -612,7 +613,7 @@ function displayTab(lick, bars) {
       const chunk = lines[i].slice(b * 16, (b + 1) * 16).join("");
       barLines.push("|" + chunk);
     }
-    output += s + " " + barLines.join("") + "|\n";
+    output += s + " " + barLines.join("") + "| \n";
   }
 
   tabDisplay.innerHTML = `<pre>${output}</pre>`;
