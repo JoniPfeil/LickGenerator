@@ -233,7 +233,7 @@ const clickVolMap = {
 };
 
 const techniqueMap = {
-  none: 0,        // normale Note
+  note: 0,        // normale Note
   rest: 1,        // Pause
   mute: 2,        // Muted Note
   slideUp: 3,     // Slide zur höheren Note (z.B. 5s7)
@@ -247,6 +247,23 @@ const techniqueMap = {
   vibrato: 11,    // Vibrato (z.B. 7~)
   harmonic: 12,
   tap: 13
+};
+
+const techniqueSignsMap = {
+  note: " ",        // normale Note
+  rest: " ",        // Pause
+  mute: "X",        // Muted Note
+  slideUp: "/",     // Slide zur höheren Note (z.B. 5/7)
+  slideDown: "\\",  // Slide zur tieferen Note (z.B. 7\5)
+  bend: "b",        // Bend (z.B. 7b)
+  release: "r",     // Bend-Release (z.B. 7b~7)
+  pbRelease: " ",   // PreBend-Release (z.B. 7pb~7)
+  hammerOn: "h",    // Hammer-on (z.B. 5h7)
+  pullOff: "p",     // Pull-off (z.B. 7p5)  
+  doubleStop: " ",  // Two notes at once
+  vibrato: "~",     // Vibrato (z.B. 7~)
+  harmonic: "f",    // künstliches Flageolett
+  tap: "t"          // Tapping
 };
 
 const techniques = [
@@ -517,7 +534,7 @@ function generateLick() {
     lick.push({ step: i, stringIndex, fret, duration, technique});
     console.log({ i, stringIndex, fret, duration, technique});
     if (technique === "doubleStop") {
-      lick.push({ step: i, stringIndex2, fret2, duration, technique});
+      lick.push({ step: i, stringIndex: stringIndex2, fret: fret2, duration, technique});
       console.log({ i, stringIndex2, fret2, duration, technique});
     }
     
@@ -571,14 +588,15 @@ function getValidFret (stringIndex, someFret) {
   return fret;
 }
 
+//Display tab --------------------------------------------------------------------------------------------------------------------------------------------
 function displayTab(lick, bars) {
-  // lines als Array: index entspricht stringIndex
-  const lines = Array(strings.length).fill(null).map(() => Array(bars * 16).fill("--"));
+  const lines = Array(strings.length).fill(null).map(() => Array(bars * 16).fill(" - "));
 
   for (const note of lick) {
-    if (note.technique === 1) continue;
-    const fretStr = note.fret < 10 ? "0" + note.fret : note.fret.toString();
-    lines[note.stringIndex][note.step] = fretStr;
+    if (note.technique === "rest") continue;
+    const sign = techniqueSignsMap[note.technique] || " ";
+    const fretStr = note.fret.toString().padStart(2, '0'); // z. B. "07"
+    lines[note.stringIndex][note.step] = sign + fretStr;   // z. B. "h07"
   }
 
   let header = "   ";
@@ -588,7 +606,6 @@ function displayTab(lick, bars) {
 
   let output = header + "\n";
 
-  // Reihenfolge umdrehen, damit stringIndex=0 unten ist
   for (let i = strings.length - 1; i >= 0; i--) {
     const s = strings[i];
     const barLines = [];
@@ -602,6 +619,7 @@ function displayTab(lick, bars) {
   tabDisplay.innerHTML = `<pre>${output}</pre>`;
 }
 
+//Plan Playback ------------------------------------------------------------------------------------------------------------
 async function planLickPlayback(lick) {
   Tone.Transport.stop();
   Tone.Transport.cancel();
@@ -609,7 +627,7 @@ async function planLickPlayback(lick) {
 
   await setSound(soundSelect.value);
 
-  // Metronom Sound ------------------------------------------------------------------------------------------
+  // Metronom Sound ---------------------------
   clickSynth = new Tone.NoiseSynth({
     noise: { type: "white" },
     envelope: {
@@ -621,7 +639,7 @@ async function planLickPlayback(lick) {
   clickSynth.volume.value = clickVolMap[clickVolSelect.value]; // Optional: parseInt
   console.log(clickVolMap[clickVolSelect.value]);
 
- // Ereignisliste für das Lick --------------------------------------------------------------------------------
+ // Ereignisliste für das Lick ------------------
   const events = lick.map(note => {
     
     const time = Tone.Time(sixteenthsToBBS(note.step));   
@@ -635,7 +653,7 @@ async function planLickPlayback(lick) {
     }
   });
 
-  // Tone.Part für das Lick --------------------------------------------------------------------------------------
+  // Tone.Part für das Lick ---------------------
   const lickPart = new Tone.Part((time, value) => {
     if (value) {
       highlightStep(value.step);
@@ -645,13 +663,13 @@ async function planLickPlayback(lick) {
   lickPart.start(0);
   lickPart.loop = false;
 
-  // Metronom Loop -----------------------------------------------------------------------------------------------
+  // Metronom Loop -----------------------------
   const clickLoop = new Tone.Loop((time) => {
     clickSynth.triggerAttackRelease("8n", time);
   }, "8n");
   clickLoop.start(0);
 
-  // 16tel-Loop für highlightStep --------------------------------------------------------------------------------
+  // 16tel-Loop für highlightStep --------------
   let currentStep = 0;  // Laufende Step-Nummer für Highlight
   const highlightLoop = new Tone.Loop((time) => {
     highlightStep(currentStep);
@@ -666,7 +684,7 @@ async function planLickPlayback(lick) {
   const totalTime = Tone.Time(`${parseInt(lengthSelect.value)}m`);
   const totalWithReverb = totalTime + Tone.Time("1m");
 
-  // Events am Ende des Licks ---------------------------------------------------------------------------------------
+  // Events am Ende des Licks ------------------
   Tone.Transport.schedule(() => {
     lickPart.stop();
     clickLoop.stop();
@@ -681,7 +699,7 @@ async function planLickPlayback(lick) {
   playButton.disabled = false;
 }
   
-
+// play -----------------------------------------------------------------------------------------------------------------------------
 async function playLick() {
   playButton.disabled = true;  
   //await planLickPlayback(lick);
