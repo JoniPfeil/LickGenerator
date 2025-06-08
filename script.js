@@ -247,7 +247,7 @@ const techniqueMap = {
   pbRelease: 7,   // PreBend-Release (z.B. 7pb~7)
   hammerOn: 8,    // Hammer-on (z.B. 5h7)
   pullOff: 9,     // Pull-off (z.B. 7p5)  
-  pDoublestop: 10, // Two notes at once
+  doublestop: 10, // Two notes at once
   vibrato: 11,    // Vibrato (z.B. 7~)
   harmonic: 12,
   tap: 13
@@ -264,7 +264,7 @@ const techniqueSignsMap = {
   pbRelease: " ",   // PreBend-Release (z.B. 7pb~7)
   hammerOn: "h",    // Hammer-on (z.B. 5h7)
   pullOff: "p",     // Pull-off (z.B. 7p5)  
-  pDoublestop: " ",  // Two notes at once
+  doublestop: " ",  // Two notes at once
   vibrato: "~",     // Vibrato (z.B. 7~)
   harmonic: "f",    // künstliches Flageolett
   tap: "t"          // Tapping
@@ -281,7 +281,7 @@ const techniques = [
   "pbRelease",
   "hammerOn",
   "pullOff",
-  "pDoublestop",
+  "doublestop",
   "vibrato",
   "harmonic",
   "tap"
@@ -298,7 +298,7 @@ let techniqueProbabilities = [
     0,          //pbRelease: 7,
     0.2,        //hammerOn: 8,
     0.1,        //pullOff: 9,
-    0.2,        //pDoublestop: 10,
+    0.2,        //doublestop: 10,
     0,          //vibrato: 11,
     0,          //harmonic: 12,
     0,          //tap: 13
@@ -432,7 +432,7 @@ function generateLick() {
     0,              //pbRelease: 7,
     0.1,            //hammerOn: 8,
     0.1,            //pullOff: 9,
-    parseFloat(pDoubles.value),  //pDoublestop: 10,
+    parseFloat(pDoubles.value),  //doublestop: 10,
     0,              //vibrato: 11,
     0,              //harmonic: 12,
     0,              //tap: 13
@@ -507,7 +507,7 @@ function generateLick() {
         stringIndex = lastStringIndex;
         fret = getValidFret(stringIndex, (lastFret - 1));  //Release half tone or full tone
       break;
-      case "pDoublestop":
+      case "doublestop":
         stringIndex = chooseString (lastStringIndex);
         do {
           stringIndex2 = chooseString (stringIndex);
@@ -530,7 +530,7 @@ function generateLick() {
     // Note speichern
     lick.push({ step: i, stringIndex, fret, duration, technique});
     //console.log({ step: i, stringIndex, fret, duration, technique});
-    if (technique === "pDoublestop") {
+    if (technique === "doublestop") {
       lick.push({ step: i, stringIndex: stringIndex2, fret: fret2, duration, technique});
       //console.log({ step: i, stringIndex: stringIndex2, fret: fret2, duration, technique});
     }
