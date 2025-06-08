@@ -461,7 +461,7 @@ function generateLick() {
 
     switch (technique)
     {
-      case default:
+      default:
       case "note":
         stringIndex = chooseString (lastStringIndex);
         fret = getValidFret(stringIndex, chooseFret(lastFret));
