@@ -261,7 +261,7 @@ const techniqueSignsMap = {
   slideDown: "\\",  // Slide zur tieferen Note (z.B. 7\5)
   bend: "b",        // Bend (z.B. 7b)
   release: "r",     // Bend-Release (z.B. 7b~7)
-  pbRelease: " ",   // PreBend-Release (z.B. 7pb~7)
+  pbRelease: "r",   // PreBend-Release (z.B. 7pb~7)
   hammerOn: "h",    // Hammer-on (z.B. 5h7)
   pullOff: "p",     // Pull-off (z.B. 7p5)  
   doublestop: " ",  // Two notes at once
@@ -449,6 +449,7 @@ function generateLick() {
   lick = []; // delete last lick
   let lastStringIndex = Math.floor(Math.random() * strings.length);   //random start string
   let lastFret = Math.floor(Math.random() * 18);                      //random start fret
+  let lastTechnique = "note";
 
   playButton.disabled = true;
   rateButton.disabled = true;
@@ -463,18 +464,22 @@ function generateLick() {
   //Generate one note at a time until tab is full
   for (let i = 0; i < totalSteps;) 
   {
-    let technique = weightedRandomChoice(techniques, techniqueProbabilities); 
-    //console.log("technique: ", technique);
-    let duration = weightedRandomChoice(durations, durationProbabilities);
     let stringIndex;
     let fret;
     let strintIndex2;  //second string for double stops
     let fret2;         //second fret for double stops
 
-    // Verhindere Überschreiten des Lick-Endes
+    let duration = weightedRandomChoice(durations, durationProbabilities);
     if (i + duration > totalSteps) {
-      duration = totalSteps - i;
+      duration = totalSteps - i;  // Verhindere Überschreiten des Lick-Endes
     }
+
+    let technique = weightedRandomChoice(techniques, techniqueProbabilities); 
+    if (lastTechnique === "bend") {
+      if (Math.random() < 0.3) {technique = "release"};    //release can (only) occur after bend (30% chance)
+      if (technique === "bend") {technique = "note"};      //dont allow to bend an existing bend even more
+    }
+    //console.log("technique: ", technique);
 
     switch (technique)
     {
@@ -538,6 +543,7 @@ function generateLick() {
     // Letzte Werte aktualisieren
     if (stringIndex != null) {lastStringIndex = stringIndex;}
     if (fret != null) {lastFret = fret;}
+    lastTechnique = technique;
 
     i += duration;
   }
