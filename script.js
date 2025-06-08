@@ -550,11 +550,14 @@ function generateLick() {
   planLickPlayback(lick);
 }
 
+sliderToStdD = [0.8, 1, 1.5, 2.5, 4];
+
 // Saite nach Normalverteilung wählen -------------------------------------------------------------------------------------------
 function chooseString (lastStringIndex) {  
   let stringIndex;
   do {
-    stringIndex = Math.round(randomNormal(lastStringIndex, parseInt(stringChange.value)));
+    stringIndex = Math.round(randomNormal(lastStringIndex, sliderToStdD[parseInt(stringChange.value)]));
+    console.log("sliderToStdD", sliderToStdD[parseInt(stringChange.value)]);
   } while (stringIndex < 0 || stringIndex >= strings.length);
   return Math.abs(stringIndex);
 }
@@ -563,7 +566,7 @@ function chooseString (lastStringIndex) {
 function chooseFret (lastFret) {
   let someFret;
   do {
-    someFret = Math.round(randomNormal(lastFret, parseInt(fretChange.value)));
+    someFret = Math.round(randomNormal(lastFret, sliderToStdD[parseInt(fretChange.value)]));
   } while (someFret < 0 || someFret >= fretboardArray[0].length);
   return Math.abs(someFret);
 } 
