@@ -451,8 +451,10 @@ function generateLick() {
     const technique = weightedRandomChoice(techniques, techniqueProbabilities); 
     console.log("technique: ", technique);
     let duration = weightedRandomChoice(durations, durationProbabilities);
-    let stringIndex = null;
-    let fret = null;
+    let stringIndex;
+    let fret;
+    let strintIndex2;  //second string for double stops
+    let fret2;         //second fret for double stops
 
     // Verhindere Überschreiten des Lick-Endes
     if (i + duration > totalSteps) {
@@ -461,7 +463,6 @@ function generateLick() {
 
     switch (technique)
     {
-      default:
       case "note":
         stringIndex = chooseString (lastStringIndex);
         fret = getValidFret(stringIndex, chooseFret(lastFret));
@@ -493,13 +494,14 @@ function generateLick() {
       break;
       case "doubleStop":
         stringIndex = chooseString (lastStringIndex);
-        let strintIndex2;  //second string
         do {
-          strintIndex2 = chooseString (stringIndex);
-          while (stringIndex === strintIndex2);        
+          stringIndex2 = chooseString (stringIndex);
+        } while (stringIndex === strintIndex2);        
         fret = getValidFret(stringIndex, chooseFret(lastFret));
-        const fret2 = getValidFret(stringIndex2, chooseFret(fret));
+        fret2 = getValidFret(stringIndex2, chooseFret(fret));
       break;
+      default:
+        continue;
     }
 
     // Falls Bund und Saite gleich wären, wie bei der Note zuvor, springe zum Schleifenbeginn und suche andere Note. Wiederholung wird also unterbunden.
