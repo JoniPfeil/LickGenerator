@@ -449,113 +449,123 @@ function generateLick() {
   //Generate one note at a time until tab is full
   for (let i = 0; i < totalSteps;) {
     const technique = weightedRandomChoice(techniques, techniqueProbabilities); 
+    console.log("technique: ", technique);
     let duration = weightedRandomChoice(durations, durationProbabilities);
+    let stringIndex = null;
+    let fret = null;
 
     // Verhindere Überschreiten des Lick-Endes
     if (i + duration > totalSteps) {
       duration = totalSteps - i;
     }
 
-  /*
-  "note",
-  "rest",
-  "mute",
-  "slideUp",
-  "slideDown",
-  "bend",
-  "release",
-  "pbRelease",
-  "hammerOn",
-  "pullOff",
-  "doubleStop",
-  "vibrato",
-  "harmonic",
-  "tap"
-  */
-
     switch (technique)
     {
+      case default:
       case "note":
+        stringIndex = chooseString (lastStringIndex);
+        fret = getValidFret(stringIndex, chooseFret(lastFret));
       break;
       case "rest":
+        stringIndex = null;
+        fret = null;
       break;
       case "mute":
+        stringIndex = chooseString (lastStringIndex);
+        fret = getValidFret(stringIndex, chooseFret(lastFret));
       break;
       case "slideUp":
-      break;
       case "slideDown":
+        stringIndex = lastStringIndex;
+        fret = getValidFret(stringIndex, chooseFret(lastFret));  //random note on same string
       break;
       case "bend":
+        stringIndex = lastStringIndex;
+        fret = getValidFret(stringIndex, (lastFret + 2));  //Bend half tone or full tone
       break;
       case "release":
+        stringIndex = lastStringIndex;
+        fret = getValidFret(stringIndex, (lastFret - 1));  //Release half tone or full tone
       break;
       case "pbRelease":
+        stringIndex = lastStringIndex;
+        fret = getValidFret(stringIndex, (lastFret - 1));  //Release half tone or full tone
+      break;
+      case "doubleStop":
+        stringIndex = chooseString (lastStringIndex);
+        let strintIndex2;  //second string
+        do {
+          strintIndex2 = chooseString (stringIndex);
+          while (stringIndex === strintIndex2);        
+        fret = getValidFret(stringIndex, chooseFret(lastFret));
+        const fret2 = getValidFret(stringIndex2, chooseFret(fret));
       break;
     }
 
+    // Falls Bund und Saite gleich wären, wie bei der Note zuvor, springe zum Schleifenbeginn und suche andere Note. Wiederholung wird also unterbunden.
+    if (fret === lastFret && stringIndex === lastStringIndex) {continue;}
 
-        
-    if (technique) 
-    {
-      lick.push({step: i, stringIndex: null, fret: null, duration: duration, technique: 1});
-    } 
-    else 
-    {
-      // Saite nach Normalverteilung wählen
-      let stringIndex;
-      do {
-        stringIndex = Math.round(randomNormal(lastStringIndex, parseInt(stringChange.value)));
-      } while (stringIndex < 0 || stringIndex >= strings.length);
-      //const string = strings[stringIndex];
-
-      // Gültige Bünde für diese Saite auswählen
-      const validFrets = fretboardArray[stringIndex].map((note, fret) => {
-          const noteWithoutOctave = note.slice(0, -1); // z.B. "F#3" → "F#"
-          return scale.includes(noteWithoutOctave) ? fret : null;
-        })
-        .filter(f => f !== null);
-
-      console.log(stringIndex);
-      console.log(validFrets);
-  
-      // Bund nach Normalverteilung wählen
-      let randFret;
-      do {
-        randFret = Math.round(randomNormal(lastFret, parseInt(fretChange.value)));
-      } while (
-        randFret < 0 ||
-        randFret >= fretboardArray[stringIndex].length
-      );
-
-      fret = validFrets[0];
-      let minDistance = Infinity;
-
-      // Finde den Wert in validFrets, der randFret am nächsten ist
-      for (let v of validFrets) {
-        const distance = Math.abs(v - randFret);
-        if (distance < minDistance) {
-          minDistance = distance;
-          fret = v;
-        }
-      }
-
-      // Falls Bund und Saite gleich wären, wie bei der Note zuvor, springe zum Schleifenbeginn und suche andere Note. Wiederholung wird also unterbunden.
-      if (fret === lastFret && stringIndex === lastStringIndex) {continue;}
-
-      // Note speichern
-      lick.push({ step: i, stringIndex, fret, duration: duration, technique: 0});
-      //console.log({ stringIndex, fret, i, duration, technique});
-  
-      // Letzte Werte aktualisieren
-      lastStringIndex = stringIndex;
-      lastFret = fret;
+    if (technique === "slideUp" || technique === "slideDown") {
+      if (fret > lastFret) {technique = "slideUp";}
+      else  {technique = "slideDown";}
     }
+
+    // Note speichern
+    lick.push({ step: i, stringIndex, fret, duration, technique});
+    console.log({ i, stringIndex, fret, duration, technique});
+    if (technique === "doubleStop") {
+      lick.push({ step: i, stringIndex2, fret2, duration, technique});
+      console.log({ i, stringIndex2, fret2, duration, technique});
+    }
+    
+    // Letzte Werte aktualisieren
+    if (stringIndex != null) {lastStringIndex = stringIndex;}
+    if (fret != null) {lastFret = fret;}
+
     i += duration;
-    //console.log(i);
   }
-  
+
   displayTab(lick, length);  
   planLickPlayback(lick);
+}
+
+// Saite nach Normalverteilung wählen -------------------------------------------------------------------------------------------
+function chooseString (lastStringIndex) {  
+  let stringIndex;
+  do {
+    stringIndex = Math.round(randomNormal(lastStringIndex, parseInt(stringChange.value)));
+  } while (stringIndex < 0 || stringIndex >= strings.length);
+  return stringIndex;
+}
+
+// Saite nach Normalverteilung wählen -------------------------------------------------------------------------------------------
+function chooseFret (lastFret) {
+  let someFret;
+  do {
+    someFret = Math.round(randomNormal(lastFret, parseInt(fretChange.value)));
+  } while (someFret < 0 || someFret >= fretboardArray[0].length);
+  return someFret;
+} 
+
+// Get closest valid fret -------------------------------------------------------------------------------------------
+function getValidFret (stringIndex, someFret) {
+  // Gültige Bünde für diese Saite auswählen
+  const validFrets = fretboardArray[stringIndex].map((note, fret) => {
+      const noteWithoutOctave = note.slice(0, -1); // z.B. "F#3" → "F#"
+      return scale.includes(noteWithoutOctave) ? fret : null;
+    })
+    .filter(f => f !== null);
+  fret = validFrets[0];
+  let minDistance = Infinity;
+  // Finde den Wert in validFrets, der someFret am nächsten ist
+  for (let v of validFrets) {
+    const distance = Math.abs(v - someFret);
+    if (distance < minDistance) {
+      minDistance = distance;
+      fret = v;
+    }
+  }
+  return fret;
 }
 
 function displayTab(lick, bars) {
