@@ -104,6 +104,39 @@ label {
   text-align: center;
 }
 
+/* Einzelne Tab-Slots */
+.tab-slot {
+  display: inline-block;
+  width: calc(3ch + 0.5ch); /* 3 Zeichen + halber Abstand */
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  padding: 0; /* 0.25ch;  sorgt für optischen Abstand */
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* Eingabefeld, gleiche Breite wie Slot */
+.tab-slot input.tab-input {
+  width: calc(3ch + 0.5ch); /* 3 Zeichen + halber Abstand */
+  font-family: inherit;
+  font-size: inherit;
+  text-align: center;
+  border: none;
+  padding: 0;
+  margin: 0; /* 0.25ch;          optischer Abstand wie Slot */
+  outline: 1px solid #999;
+  background-color: #fff9db;
+  box-sizing: border-box;
+  height: 1em;
+  line-height: 1em;
+}
+
+/* Optional: Animation oder Effekt beim Editieren */
+.tab-slot input.tab-input:focus {
+  outline: 1px solid #333;
+}
+
 .play-controls {
   display: flex;
   flex-wrap: wrap;
