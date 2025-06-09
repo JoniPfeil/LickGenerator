@@ -47,7 +47,7 @@ function addTabListeners() {
       const input = document.createElement("input");
       input.type = "text";
       input.maxLength = 3;
-      input.value = currentText === " - " ? "" : currentText;
+      input.value = currentText.trim() === "-" ? "" : currentText.trim();
       input.className = "tab-input";
       input.style.width = "24px";
 
@@ -64,7 +64,7 @@ function addTabListeners() {
 
         let value = input.value.trim();
         if (value === "") value = " - ";
-        if (value.length === 1) value = "0" + value;
+        else if (value.length === 1) value = "0" + value;
         slot.textContent = value; // Inhalt des Span zurücksetzen
       }
 
