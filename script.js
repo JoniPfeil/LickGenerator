@@ -381,7 +381,7 @@ document.getElementById("close-help").addEventListener("click", () => {
   document.getElementById("popUp-Help").classList.add("hidden");
 });
 
-document.getElementById('popUp').addEventListener('click', function(event) {
+document.getElementById('popUp-Help').addEventListener('click', function(event) {
   // Schließe nur, wenn außerhalb von .popUp-content geklickt wurde
   if (!event.target.closest('.popUp-content')) {
     this.classList.add('hidden'); // oder z.B. this.style.display = 'none';
