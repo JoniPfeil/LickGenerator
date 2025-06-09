@@ -38,6 +38,7 @@ body {
   z-index: 10000;
   overflow-y: auto;
   max-height: 90vh;
+  font-size: 0.9rem;
 }
 
 .hidden {
