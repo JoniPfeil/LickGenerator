@@ -499,7 +499,7 @@ function setTabSlot(stringIndex, step, value) {
 function displayTab(lick) {
   for (const note of lick) {
     if (note.technique === "rest") continue;
-    const sign = techniqueSignsMap[note.technique] || " ";
+    const sign = techniqueSignsMap[note.technique] || "";
     const fretStr = note.fret.toString().padStart(2, '0'); // z. B. "07"
     setTabSlot(note.stringIndex, note.step, sign + fretStr);   // z. B. "h07"
     console.log(note.stringIndex, note.step, sign + fretStr);
