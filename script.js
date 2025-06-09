@@ -811,8 +811,8 @@ const techniqueMap = {
 };
 
 const techniqueSignsMap = {
-  note: " ",        // normale Note
-  rest: " ",        // Pause
+  note: "",        // normale Note
+  rest: "",        // Pause
   mute: "X",        // Muted Note
   slideUp: "/",     // Slide zur höheren Note (z.B. 5/7)
   slideDown: "\\",  // Slide zur tieferen Note (z.B. 7\5)
@@ -821,7 +821,7 @@ const techniqueSignsMap = {
   pbRelease: "r",   // PreBend-Release (z.B. 7pb~7)
   hammerOn: "h",    // Hammer-on (z.B. 5h7)
   pullOff: "p",     // Pull-off (z.B. 7p5)  
-  doublestop: " ",  // Two notes at once
+  doublestop: "",  // Two notes at once
   vibrato: "~",     // Vibrato (z.B. 7~)
   harmonic: "f",    // künstliches Flageolett
   tap: "t"          // Tapping
