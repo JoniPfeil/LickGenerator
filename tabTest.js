@@ -49,7 +49,7 @@ function addTabListeners() {
       input.maxLength = 3;
       input.value = currentText.trim() === "-" ? "" : currentText.trim();
       input.className = "tab-input";
-      input.style.width = "24px";
+      //input.style.width = "24px";
 
       // Inhalt leeren und Input einfügen
       slot.textContent = "";
