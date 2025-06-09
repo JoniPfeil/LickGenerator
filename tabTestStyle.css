@@ -27,6 +27,7 @@
 /* Eingabefeld, gleiche Breite wie Slot */
 .tab-slot input.tab-input {
   padding-right: 0.25ch;
+   width: 30px;
   font-family: inherit;
   font-size: inherit;
   text-align: center;
