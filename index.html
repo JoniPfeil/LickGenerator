@@ -21,10 +21,11 @@
     <div class="popUp-content">
       <p>How it works</p>
       <p>First the algorithm takes the key and scale to determin which notes are valid for the lick. Then the lick is generated one note at a time as follows:
-      - Randomly choose the duration of the note or rest based on the option "note length". 
-      - Randomly choose the technique for the note. The weights for choosing randomly are taken from the sliders on the website.
-      - Some technique determin the fret and string based on the last note that was played (e.g. a full tone bend up). 
-      - For all other notes use a normal distribution where the mean is the fret and string that was last played. The standard deviation for the distribution is based on the slieders "fret changes" and "string changes".</p>
+      <ul> Randomly choose the duration of the note or rest based on the option "note length". </ul>
+      <ul>Randomly choose the technique for the note. The weights for choosing randomly are taken from the sliders on the website.</ul> 
+      <ul>Some technique determin the fret and string based on the last note that was played (e.g. a full tone bend up).</ul>  
+      <ul>For all other notes use a normal distribution where the mean is the fret and string that was last played. The standard deviation for the distribution is based on the slieders "fret changes" and "string changes".</ul>
+      </p>
       <p>Don't know how to read tabs? Learn it here: <a href="https://yousician.com/blog/how-to-read-guitar-tabs">yousician.com/blog/how-to-read-guitar-tabs</a></p>
       <button id="close-help">Back</button>
     </div>
