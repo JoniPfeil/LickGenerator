@@ -26,7 +26,7 @@
 
 /* Eingabefeld, gleiche Breite wie Slot */
 .tab-slot input.tab-input {
-  width: 3ch;               /* nur für tatsächliche Zeichen */
+  width: calc(3ch + 0.5ch);               /* nur für tatsächliche Zeichen */
   font-family: inherit;
   font-size: inherit;
   text-align: center;
