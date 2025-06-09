@@ -414,13 +414,12 @@ function createTab(bars) {
   const tabDisplay = document.getElementById("tab-display");
   tabDisplay.innerHTML = ""; // leeren
 
-  const numStrings = 6;
   const slotsPerBar = 16;
   const totalSlots = bars * slotsPerBar;
 
   //const stringNames = ["e", "B", "G", "D", "A", "E"]; // hohe e oben, tiefe E unten
 
-  for (let s = 0; s < numStrings; s++) {
+  for (let s = 5; s > -1; s--) {
     const line = document.createElement("div");
     line.className = "tab-line";
 
@@ -458,7 +457,6 @@ function addTabListeners() {
       input.maxLength = 3;
       input.value = currentText.trim() === "-" ? "" : currentText.trim();
       input.className = "tab-input";
-      //input.style.width = "24px";
 
       // Inhalt leeren und Input einfügen
       slot.textContent = "";
@@ -488,8 +486,26 @@ function addTabListeners() {
   });
 }
 
+function setTabSlot(stringIndex, step, value) {
+  const slot = document.querySelector(`.tab-slot[data-string="${stringIndex}"][data-step="${step}"]`);
+  if (slot) {
+    slot.textContent = value.toString().padStart(2, "0");
+  }
+}
+
 //Display tab --------------------------------------------------------------------------------------------------------------------------------------------
 function displayTab(lick, bars) {
+  for (const note of lick) {
+    if (note.technique === "rest") continue;
+    const sign = techniqueSignsMap[note.technique] || " ";
+    const fretStr = note.fret.toString().padStart(2, '0'); // z. B. "07"
+    setTabSlot(note.stringIndex, note.step, sign + fretStr);   // z. B. "h07"
+    console.log(note.stringIndex, note.step, sign + fretStr);
+  }
+}
+
+//Display tab --------------------------------------------------------------------------------------------------------------------------------------------
+/*function displayTab(lick, bars) {
   const lines = Array(stringNames.length).fill(null).map(() => Array(bars * 16).fill(" - "));
 
   for (const note of lick) {
@@ -520,7 +536,7 @@ function displayTab(lick, bars) {
   }
 
   tabDisplay.innerHTML = `<pre>${output}</pre>`;
-}
+}*/
 
 //Plan Playback ------------------------------------------------------------------------------------------------------------
 async function planLickPlayback(lick) {
