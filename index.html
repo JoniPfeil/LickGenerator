@@ -19,13 +19,36 @@
 
   <div id="popUp-Help" class="popUp hidden">
     <div class="popUp-content">
-      <p>How it works</p>
-      <p>First the algorithm takes the key and scale to determin which notes are valid for the lick. Then the lick is generated one note at a time as follows:
-      <ul> Randomly choose the duration of the note or rest based on the option "note length". </ul>
-      <ul>Randomly choose the technique for the note. The weights for choosing randomly are taken from the sliders on the website.</ul> 
-      <ul>Some technique determin the fret and string based on the last note that was played (e.g. a full tone bend up).</ul>  
-      <ul>For all other notes use a normal distribution where the mean is the fret and string that was last played. The standard deviation for the distribution is based on the slieders "fret changes" and "string changes".</ul>
-      </p>
+     <h2>How to use</h2>
+
+<p>
+  The slider <strong>“String Changes”</strong> determines whether the melody mostly stays on one string or jumps between strings frequently.<br>
+  The same goes for the <strong>“Fret Changes”</strong> slider.
+</p>
+
+<p>
+  The technique sliders control how likely each playing technique is to appear in the lick.<br>
+  For example, if you increase the <strong>“Doubles”</strong> slider and turn all others down, you'll get a lick made up mostly of double stops.
+</p>
+
+<p>
+  With the <strong>playback options</strong>, you can control how the lick is played back.<br>
+  Note that some techniques can't currently be played back accurately — including <em>bends</em>, <em>slides</em>, <em>vibrato</em>, and <em>dead notes</em>.
+</p>
+
+<h2>How it works</h2>
+
+<p>First, the algorithm uses the selected <strong>key</strong> and <strong>scale</strong> to determine which notes are valid.</p>
+
+<p>Then it generates the lick one note at a time, as follows:</p>
+
+<ul>
+  <li>Randomly choose the <strong>duration</strong> of the note or rest, based on the <strong>“Note Length”</strong> setting.</li>
+  <li>Randomly choose the <strong>technique</strong> for the note. The probability for each technique is based on the sliders.</li>
+  <li>Some techniques determine <strong>fret</strong> and <strong>string</strong> based on the previous note (e.g. a full-tone bend up).</li>
+  <li>For all other notes, the algorithm uses a <strong>normal distribution</strong> centered around the previous fret and string.<br>
+      The <strong>standard deviation</strong> is set by the <strong>“Fret Changes”</strong> and <strong>“String Changes”</strong> sliders.</li>
+</ul>
       <p>Don't know how to read tabs? Learn it here: <a href="https://yousician.com/blog/how-to-read-guitar-tabs">yousician.com/blog/how-to-read-guitar-tabs</a></p>
       <button id="close-help">Back</button>
     </div>
