@@ -23,7 +23,7 @@ function createTab(bars) {
     for (let step = 0; step < totalSlots; step++) {
       const slot = document.createElement("span");
       slot.className = "tab-slot";
-      slot.textContent = "--";
+      slot.textContent = " - ";
       slot.dataset.string = s;
       slot.dataset.step = step;
       line.appendChild(slot);
@@ -46,8 +46,8 @@ function addTabListeners() {
 
       const input = document.createElement("input");
       input.type = "text";
-      input.maxLength = 2;
-      input.value = currentText === "--" ? "" : currentText;
+      input.maxLength = 3;
+      input.value = currentText === " - " ? "" : currentText;
       input.className = "tab-input";
       input.style.width = "24px";
 
@@ -63,7 +63,7 @@ function addTabListeners() {
         finished = true;
 
         let value = input.value.trim();
-        if (value === "") value = "--";
+        if (value === "") value = " - ";
         if (value.length === 1) value = "0" + value;
         slot.textContent = value; // Inhalt des Span zurücksetzen
       }
