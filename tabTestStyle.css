@@ -15,31 +15,32 @@
 /* Einzelne Tab-Slots */
 .tab-slot {
   display: inline-block;
-  width: 2ch;           /* zwei Zeichen Platz, z. B. für "05" oder "--" */
+  width: calc(3ch + 0.5ch); /* 3 Zeichen + halber Abstand */
   text-align: center;
   cursor: pointer;
   user-select: none;
-  padding: 0;
+  padding: 0 0.25ch; /* sorgt für optischen Abstand */
+  box-sizing: border-box;
   margin: 0;
 }
 
-/* Eingabefeld im Tab */
+/* Eingabefeld, gleiche Breite wie Slot */
 .tab-slot input.tab-input {
-  width: 2ch;             /* exakt gleiche Breite wie .tab-slot */
-  font-family: inherit;   /* gleiche Schrift wie sonst */
+  width: 3ch;               /* nur für tatsächliche Zeichen */
+  font-family: inherit;
   font-size: inherit;
   text-align: center;
   border: none;
   padding: 0;
-  margin: 0;
+  margin: 0 0.25ch;         /* optischer Abstand wie Slot */
   outline: 1px solid #999;
   background-color: #fff9db;
   box-sizing: border-box;
-  height: 1em;            /* Höhe wie Text */
+  height: 1em;
   line-height: 1em;
 }
 
 /* Optional: Animation oder Effekt beim Editieren */
 .tab-slot input.tab-input:focus {
-  outline: 2px solid #333;
+  outline: 1px solid #333;
 }
