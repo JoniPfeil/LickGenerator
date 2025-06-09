@@ -37,11 +37,11 @@
       <p>First, the algorithm uses the selected <strong>key</strong> and <strong>scale</strong> to determine which notes are valid.</p>
       <p>Then it generates the lick one note at a time, as follows:</p>
       <ul>
-        <li>Randomly choose the <strong>duration</strong> of the note or rest, based on the <strong>“Note Length”</strong> setting.</li>
-        <li>Randomly choose the <strong>technique</strong> for the note. The probability for each technique is based on the sliders.</li>
-        <li>Some techniques determine <strong>fret</strong> and <strong>string</strong> based on the previous note (e.g. a full-tone bend up).</li>
-        <li>For all other notes, the algorithm uses a <strong>normal distribution</strong> centered around the previous fret and string.<br>
-            The <strong>standard deviation</strong> is set by the <strong>“Fret Changes”</strong> and <strong>“String Changes”</strong> sliders.</li>
+        <li>Randomly choose the duration of the note or rest, based on the <strong>Note length</strong> setting.</li>
+        <li>Randomly choose the technique for the note. The probability for each technique is based on the sliders (bends, slides, ...).</li>
+        <li>Some techniques determine fret and string based on the previous note (e.g. a full-tone bend up).</li>
+        <li>For all other notes, the algorithm uses a normal distribution centered around the previous fret and string.<br>
+            The standard deviation is set by the <strong>Fret changes</strong> and <strong>String changes</strong> sliders.</li>
       </ul>
       <p>More information on guitar tabs can be found here: <a href="https://yousician.com/blog/how-to-read-guitar-tabs">yousician.com/blog/how-to-read-guitar-tabs</a></p>
       <button id="close-help">Back</button>
