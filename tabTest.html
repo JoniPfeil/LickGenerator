@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Tab Test</title>
+  <link rel="stylesheet" href="tabTestStyle.css">
+</head>
+<body>
+  <h1>Gitarren-Tab Test – 3 Varianten</h1>
+
+  <h2>1. Variante mit &lt;span&gt;</h2>
+  <div class="tab variant1">
+    <div class="string-row">
+      <span data-string="0" data-step="0" class="tab-cell" contenteditable="true">--</span>
+      <span data-string="0" data-step="1" class="tab-cell" contenteditable="true">--</span>
+      <!-- ... bis step 15 -->
+    </div>
+    <!-- Weitere 5 Strings -->
+  </div>
+
+  <h2>2. Variante mit &lt;table&gt;</h2>
+  <table class="tab variant2">
+    <tbody>
+      <!-- 6 Zeilen für 6 Saiten -->
+      <tr>
+        <!-- 16 Spalten -->
+        <td contenteditable="true" data-string="0" data-step="0">--</td>
+        <td contenteditable="true" data-string="0" data-step="1">--</td>
+        <!-- ... bis step 15 -->
+      </tr>
+      <!-- Weitere 5 Zeilen -->
+    </tbody>
+  </table>
+
+  <h2>3. Variante mit &lt;input type="text"&gt;</h2>
+  <div class="tab variant3">
+    <div class="string-row">
+      <input type="text" maxlength="2" data-string="0" data-step="0" class="tab-input" value="--">
+      <input type="text" maxlength="2" data-string="0" data-step="1" class="tab-input" value="--">
+      <!-- ... bis step 15 -->
+    </div>
+    <!-- Weitere 5 Strings -->
+  </div>
+
+  <script src="tabTest.js"></script>
+</body>
+</html>
