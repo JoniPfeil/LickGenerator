@@ -72,7 +72,7 @@ async function saveLickToSupabase() {
 function transposeLick(lick, transpose) {
   return lick.map(note => {
     let fret = note.fret + transpose;
-    let stringIndex = strings.indexOf(note.string);
+    let stringIndex = stringNames.indexOf(note.string);
     // Nach oben verschieben, falls Bund < 0
     while (fret < 0) {
       if (stringIndex > 0) {
@@ -98,7 +98,7 @@ function transposeLick(lick, transpose) {
     return {
       ...note,
       fret,
-      string: strings[stringIndex]
+      string: stringNames[stringIndex]
     };
   });
 }
@@ -262,7 +262,7 @@ function generateLick() {
   lickInfo.difficulty = difficultySelect.value;
   
   lick = []; // delete last lick
-  let lastStringIndex = Math.floor(Math.random() * strings.length);   //random start string
+  let lastStringIndex = Math.floor(Math.random() * stringNames.length);   //random start string
   let lastFret = Math.floor(Math.random() * 18);                      //random start fret
   let lastTechnique = "note";
 
@@ -375,7 +375,7 @@ function chooseString (lastStringIndex) {
   do {
     stringIndex = Math.round(randomNormal(lastStringIndex, sliderToStdD[parseInt(stringChange.value)]));
     console.log("sliderToStdD", sliderToStdD[parseInt(stringChange.value)]);
-  } while (stringIndex < 0 || stringIndex >= strings.length);
+  } while (stringIndex < 0 || stringIndex >= stringNames.length);
   return Math.abs(stringIndex);
 }
 
@@ -418,7 +418,7 @@ function createTab(bars) {
   const slotsPerBar = 16;
   const totalSlots = bars * slotsPerBar;
 
-  const stringNames = ["e", "B", "G", "D", "A", "E"]; // hohe e oben, tiefe E unten
+  //const stringNames = ["e", "B", "G", "D", "A", "E"]; // hohe e oben, tiefe E unten
 
   for (let s = 0; s < numStrings; s++) {
     const line = document.createElement("div");
@@ -490,7 +490,7 @@ function addTabListeners() {
 
 //Display tab --------------------------------------------------------------------------------------------------------------------------------------------
 function displayTab(lick, bars) {
-  const lines = Array(strings.length).fill(null).map(() => Array(bars * 16).fill(" - "));
+  const lines = Array(stringNames.length).fill(null).map(() => Array(bars * 16).fill(" - "));
 
   for (const note of lick) {
     if (note.technique === "rest") continue;
@@ -508,9 +508,9 @@ function displayTab(lick, bars) {
   }
 
   let output = header + "\n";
-
-  for (let i = strings.length - 1; i >= 0; i--) {
-    const s = strings[i];
+  //hier ein fehler?
+  for (let i = stringNames.length - 1; i >= 0; i--) {
+    const s = stringNames[i];
     const barLines = [];
     for (let b = 0; b < bars; b++) {
       const chunk = lines[i].slice(b * 16, (b + 1) * 16).join("");
@@ -695,7 +695,7 @@ function randomNormal(mean, stdDev) {
 
 
 // ------------------------------------------------------------------------------------------------------------- Maps and Arrays-------------------------------------
-const strings = ["E", "A", "D", "G", "B", "e"];
+const stringNames = ["E", "A", "D", "G", "B", "e"];
 const semitoneStepsBetweenStrings = [5, 5, 5, 4, 5];
 const chromaticScale = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
