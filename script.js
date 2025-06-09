@@ -363,7 +363,9 @@ function generateLick() {
     i += duration;
   }
 
-  displayTab(lick, length);  
+  createTab(length);
+  displayTab(lick);  
+  addTabListeners();
   planLickPlayback(lick);
 }
 
@@ -494,7 +496,7 @@ function setTabSlot(stringIndex, step, value) {
 }
 
 //Display tab --------------------------------------------------------------------------------------------------------------------------------------------
-function displayTab(lick, bars) {
+function displayTab(lick) {
   for (const note of lick) {
     if (note.technique === "rest") continue;
     const sign = techniqueSignsMap[note.technique] || " ";
