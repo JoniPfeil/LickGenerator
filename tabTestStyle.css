@@ -1,0 +1,46 @@
+body {
+  font-family: monospace;
+  padding: 20px;
+}
+
+h2 {
+  margin-top: 40px;
+}
+
+.tab {
+  margin-bottom: 30px;
+}
+
+.string-row,
+.variant3 .string-row {
+  display: flex;
+  margin-bottom: 4px;
+}
+
+.tab-cell,
+.tab-input {
+  width: 2ch;
+  text-align: center;
+  border: 1px solid #ccc;
+  padding: 4px;
+  margin-right: 2px;
+  background-color: #f9f9f9;
+}
+
+.tab-cell:focus,
+.tab-input:focus,
+td:focus {
+  outline: 2px solid dodgerblue;
+  background-color: #eef;
+}
+
+.variant2 td {
+  width: 2ch;
+  text-align: center;
+  border: 1px solid #ccc;
+  padding: 4px;
+}
+
+.variant2 tr {
+  height: 28px;
+}
