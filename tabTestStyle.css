@@ -1,46 +1,45 @@
-body {
+/* Bereits bestehender Container */
+#tab-display {
+  border: 2px dashed #ccc;
+  padding: 1rem;
+  margin: 1rem 0;
+  background-color: #fafafa;
+  min-height: 150px;
+  white-space: pre;
+  font-size: 1rem;
   font-family: monospace;
-  padding: 20px;
-}
-
-h2 {
-  margin-top: 40px;
-}
-
-.tab {
-  margin-bottom: 30px;
-}
-
-.string-row,
-.variant3 .string-row {
-  display: flex;
-  margin-bottom: 4px;
-}
-
-.tab-cell,
-.tab-input {
-  width: 2ch;
+  overflow-x: auto;
   text-align: center;
-  border: 1px solid #ccc;
-  padding: 4px;
-  margin-right: 2px;
-  background-color: #f9f9f9;
 }
 
-.tab-cell:focus,
-.tab-input:focus,
-td:focus {
-  outline: 2px solid dodgerblue;
-  background-color: #eef;
-}
-
-.variant2 td {
-  width: 2ch;
+/* Einzelne Tab-Slots */
+.tab-slot {
+  display: inline-block;
+  width: 2ch;           /* zwei Zeichen Platz, z. B. für "05" oder "--" */
   text-align: center;
-  border: 1px solid #ccc;
-  padding: 4px;
+  cursor: pointer;
+  user-select: none;
+  padding: 0;
+  margin: 0;
 }
 
-.variant2 tr {
-  height: 28px;
+/* Eingabefeld im Tab */
+.tab-slot input.tab-input {
+  width: 2ch;             /* exakt gleiche Breite wie .tab-slot */
+  font-family: inherit;   /* gleiche Schrift wie sonst */
+  font-size: inherit;
+  text-align: center;
+  border: none;
+  padding: 0;
+  margin: 0;
+  outline: 1px solid #999;
+  background-color: #fff9db;
+  box-sizing: border-box;
+  height: 1em;            /* Höhe wie Text */
+  line-height: 1em;
+}
+
+/* Optional: Animation oder Effekt beim Editieren */
+.tab-slot input.tab-input:focus {
+  outline: 2px solid #333;
 }
