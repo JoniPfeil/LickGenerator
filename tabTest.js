@@ -39,39 +39,43 @@ function addTabListeners() {
     slot.addEventListener("click", () => {
       const string = slot.dataset.string;
       const step = slot.dataset.step;
-      const currentText = slot.textContent;
+      const currentText = slot.textContent.trim();
+
+      // Verhindern, dass mehrfach geklickt wird und mehrfach Inputs entstehen
+      if (slot.querySelector("input")) return;
 
       const input = document.createElement("input");
       input.type = "text";
       input.maxLength = 2;
-      input.value = currentText.trim() === "--" ? "" : currentText;
-      input.style.width = "24px";
+      input.value = currentText === "--" ? "" : currentText;
       input.className = "tab-input";
+      input.style.width = "24px";
 
-      // Replace slot with input
-      slot.replaceWith(input);
+      // Inhalt leeren und Input einfügen
+      slot.textContent = "";
+      slot.appendChild(input);
       input.focus();
 
-      // On blur or Enter, replace input with updated span
+      let finished = false;
+
       function finishEdit() {
-        const newSpan = document.createElement("span");
-        newSpan.className = "tab-slot";
-        newSpan.dataset.string = string;
-        newSpan.dataset.step = step;
+        if (finished) return;
+        finished = true;
+
         let value = input.value.trim();
         if (value === "") value = "--";
         if (value.length === 1) value = "0" + value;
-        newSpan.textContent = value;
-
-        // re-attach listener
-        newSpan.addEventListener("click", slot.click);
-        input.replaceWith(newSpan);
+        slot.textContent = value; // Inhalt des Span zurücksetzen
       }
 
       input.addEventListener("blur", finishEdit);
       input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") finishEdit();
+        if (e.key === "Enter") {
+          e.preventDefault();
+          finishEdit();
+        }
       });
     });
   });
 }
+
