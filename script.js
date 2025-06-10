@@ -511,6 +511,7 @@ function addTabListeners() {
         console.log("index:", index, "step:", step, "string:", string, "technique:", signToTechniqueMap[technique], "fret:", fret);
 
         planLickPlayback(lick);
+        //rateButton.disabled = false;
       }
 
       input.addEventListener("blur", finishEdit);
