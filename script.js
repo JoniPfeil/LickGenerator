@@ -483,22 +483,35 @@ function addTabListeners() {
       
         // Optional: Technik und Bund zwischenspeichern
         const technique = result.technique;
-        const fret = result.fret;
-      
-        // Darstellung aufbereiten
+        const fret = getValidFret (string, result.fret);
+
+        //update displayed tab
         let displayValue = "";
-        /*if (technique) {
+        if (technique===null && fret===null)
+        {
+          displayValue = " - ";
+        else
+        {
           displayValue = technique + (fret < 10 ? "0" + fret : fret.toString());
-        } else {*/
-          displayValue = technique + (fret < 10 ? "0" + fret : fret.toString());
-        //}
-      
+        }
         slot.textContent = displayValue;
 
-        // update im Modell
+        // update saved lick
         const index = lick.findIndex(n => n.stringIndex == string && n.step == step);
 
-        console.log("index:", index, "step:", step, "string:", string, "technique:", technique, "fret:", fret);
+        if (technique===null && fret===null)
+        {
+          if (index !== -1) lick.splice(index, 1);  //remove note from lick
+        } else {
+          const note = { step: step, stringIndex: string, fret, duration: null, technique: signToTechniqueMap[technique] };
+          if (index !== -1) {
+            lick[index] = note;
+          } else {
+            lick.push(note);
+          }
+        }
+
+        console.log("index:", index, "step:", step, "string:", string, "technique:", signToTechniqueMap[technique], "fret:", fret);
       }
 
       input.addEventListener("blur", finishEdit);
@@ -885,6 +898,20 @@ const techniqueSignsMap = {
   harmonic: "f",    // künstliches Flageolett
   tap: "t"          // Tapping
 };
+
+const signToTechniqueMap = {
+  "": "note",
+  "x": "mute",
+  "/": "slideUp",
+  "\\": "slideDown",
+  "b": "bend",
+  "r": "release",  // pbRelease wird ignoriert
+  "h": "hammerOn",
+  "p": "pullOff",
+  "~": "vibrato",
+  "f": "harmonic",
+  "t": "tap"
+}
 
 const techniques = [
   "note",
