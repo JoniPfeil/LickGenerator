@@ -206,7 +206,7 @@ soundSelect.addEventListener("change", (e) => setSound(e.target.value));
 generateButton.addEventListener("click", () => {
   // Audioausgabe aktivieren, damit Lick später abgespielt werden kann
   if (!audioStarted) {
-    await Tone.start();    //ohne await?
+    Tone.start();    //ohne await?
     audioStarted = true;
   }
   generateLick();
