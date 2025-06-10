@@ -487,13 +487,8 @@ function addTabListeners() {
 
         //update displayed tab
         let displayValue = "";
-        if (technique===null && fret===null)
-        {
-          displayValue = " - ";
-        else
-        {
-          displayValue = technique + (fret < 10 ? "0" + fret : fret.toString());
-        }
+        if (technique===null && fret===null) displayValue = " - ";
+        else displayValue = technique + (fret < 10 ? "0" + fret : fret.toString());
         slot.textContent = displayValue;
 
         // update saved lick
