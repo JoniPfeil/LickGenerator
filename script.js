@@ -203,7 +203,15 @@ document.getElementById("reverbWet").addEventListener("input", e => {
 });
 
 soundSelect.addEventListener("change", (e) => setSound(e.target.value));
-generateButton.addEventListener("click", () => generateLick());
+generateButton.addEventListener("click", () => {
+  // Audioausgabe aktivieren, damit Lick später abgespielt werden kann
+  if (!audioStarted) {
+    await Tone.start();    //ohne await?
+    audioStarted = true;
+  }
+  generateLick();
+});
+
 playButton.addEventListener("click", async () => {
   try {
     await playLick(lick);
@@ -269,12 +277,6 @@ function generateLick() {
   playButton.disabled = true;
   rateButton.disabled = true;
   ratingStars.forEach(ratingStars => ratingStars.checked = false);
-
-  // Audioausgabe aktivieren, damit Lick später abgespielt werden kann
-  if (!audioStarted) {
-    Tone.start();    //ohne await
-    audioStarted = true;
-  }
 
   //Generate one note at a time until tab is full
   for (let i = 0; i < totalSteps;) 
