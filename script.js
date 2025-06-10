@@ -485,16 +485,18 @@ function addTabListeners() {
         const technique = result.technique;
         const fret = getValidFret (string, result.fret);
 
+        console.log(result);
+        
         //update displayed tab
         let displayValue = "";
-        if (technique===null && fret===null) displayValue = " - ";
+        if (result.empty) displayValue = " - ";
         else displayValue = technique + (fret < 10 ? "0" + fret : fret.toString());
         slot.textContent = displayValue;
 
         // update saved lick
         const index = lick.findIndex(n => n.stringIndex == string && n.step == step);
 
-        if (technique===null && fret===null)
+        if (result.empty)
         {
           if (index !== -1) lick.splice(index, 1);  //remove note from lick
         } else {
@@ -522,7 +524,7 @@ function addTabListeners() {
 
 function checkInput(inputValue) {
   inputValue = inputValue.trim();
-  if (inputValue === "" || inputValue === "-") return { valid: true, technique:null, fret:null, reason: "delete" };
+  if (inputValue === "" || inputValue === "-") return { valid: true, technique:null, fret:null, empty: true };
 
   const firstChar = inputValue.charAt(0).toLowerCase();
   let inputTechnique = "";
