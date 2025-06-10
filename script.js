@@ -253,7 +253,7 @@ function generateLick() {
     0,                               //tap: 13
   ];
 
-  console.log(techniqueProbabilities);
+  //console.log(techniqueProbabilities);
 
   lickInfo.transpose = keySelect.value;
   lickInfo.key = chromaticScale[keySelect.value];
@@ -376,7 +376,7 @@ function chooseString (lastStringIndex) {
   let stringIndex;
   do {
     stringIndex = Math.round(randomNormal(lastStringIndex, sliderToStdD[parseInt(stringChange.value)]));
-    console.log("sliderToStdD", sliderToStdD[parseInt(stringChange.value)]);
+    //console.log("sliderToStdD", sliderToStdD[parseInt(stringChange.value)]);
   } while (stringIndex < 0 || stringIndex >= stringNames.length);
   return Math.abs(stringIndex);
 }
@@ -490,10 +490,15 @@ function addTabListeners() {
         /*if (technique) {
           displayValue = technique + (fret < 10 ? "0" + fret : fret.toString());
         } else {*/
-          displayValue = fret < 10 ? "0" + fret : fret.toString();
+          displayValue = technique + (fret < 10 ? "0" + fret : fret.toString());
         //}
       
         slot.textContent = displayValue;
+
+        // update im Modell
+        const index = lick.findIndex(n => n.stringIndex == string && n.step == step);
+
+        console.log("index:", index, "step:", step, "string:", string, "technique:", technique, "fret:", fret);
       }
 
       input.addEventListener("blur", finishEdit);
@@ -556,7 +561,7 @@ function displayTab(lick) {
     const sign = techniqueSignsMap[note.technique] || "";
     const fretStr = note.fret.toString().padStart(2, '0'); // z. B. "07"
     setTabSlot(note.stringIndex, note.step, sign + fretStr);   // z. B. "h07"
-    console.log(note.stringIndex, note.step, sign + fretStr);
+    //console.log(note.stringIndex, note.step, sign + fretStr);
   }
 }
 
