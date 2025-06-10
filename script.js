@@ -474,7 +474,8 @@ function addTabListeners() {
         const result = checkInput(input.value.trim());
       
         if (!result.valid) {
-          alert("Ungültige Eingabe: " + result.reason);
+          alert("" + result.reason);
+          input.value = currentText.trim() === "-" ? "" : currentText.trim();
           input.focus();
           finished = false; // zurücksetzen, damit erneutes Finish möglich ist
           return;
