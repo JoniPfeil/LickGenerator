@@ -26,7 +26,7 @@ const afterRatingMsg = document.getElementById("afterRatingMsg");
 
 let lick = []; // globale Variable for our lick
 let synth = null;
-let clickSynth = null;
+let clickSynth = null;  // // Cache für Click
 const loadedInstruments = {}; // Cache für geladene Instrumente
 let audioStarted = false;
 let scale;
@@ -138,6 +138,7 @@ async function setSound(selected) {
 
   if (!reverb.buffer) {
     await reverb.generate(); // Reverb laden
+    reverb.toDestination();             // oder bereits verbunden
   }
   
   if (selected === "synth") {
@@ -149,7 +150,7 @@ async function setSound(selected) {
 
       const sfGain = new Tone.Gain();     // Tone.Gain
       sfGain.connect(reverb);             // Reverb = Tone.Reverb
-      reverb.toDestination();             // oder bereits verbunden
+      
 
       //console.log("sfGain instanceof AudioNode:", sfGain instanceof AudioNode);
       //console.log("reverb.ready?", reverb && reverb.input);
@@ -203,10 +204,10 @@ document.getElementById("reverbWet").addEventListener("input", e => {
 });
 
 soundSelect.addEventListener("change", (e) => setSound(e.target.value));
-generateButton.addEventListener("click", () => {
+generateButton.addEventListener("click", async () => {
   // Audioausgabe aktivieren, damit Lick später abgespielt werden kann
   if (!audioStarted) {
-    Tone.start();    //ohne await?
+    await Tone.start();    //ohne await?
     audioStarted = true;
   }
   generateLick();
@@ -623,14 +624,17 @@ async function planLickPlayback(lick) {
   await setSound(soundSelect.value);
 
   // Metronom Sound ---------------------------
-  clickSynth = new Tone.NoiseSynth({
-    noise: { type: "white" },
-    envelope: {
-      attack: 0.001,
-      decay: 0.05,
-      sustain: 0
-    },
-  }).toDestination();  
+  if (clickSynth === null)
+  {
+    clickSynth = new Tone.NoiseSynth({
+      noise: { type: "white" },
+      envelope: {
+        attack: 0.001,
+        decay: 0.05,
+        sustain: 0
+      },
+    }).toDestination();  
+  }
   clickSynth.volume.value = clickVolMap[clickVolSelect.value]; // Optional: parseInt
   console.log(clickVolMap[clickVolSelect.value]);
 
