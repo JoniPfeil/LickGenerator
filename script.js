@@ -516,7 +516,7 @@ function checkInput(inputValue) {
   inputValue = inputValue.trim();
   if (inputValue === "" || inputValue === "-") return { valid: false, reason: "empty" };
 
-  const firstChar = inputValue.charAt(0);
+  const firstChar = inputValue.charAt(0).toLowerCase();
   let inputTechnique = "";
   let inputFret = "";
 
