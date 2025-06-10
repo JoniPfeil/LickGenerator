@@ -514,7 +514,7 @@ function addTabListeners() {
 
 function checkInput(inputValue) {
   inputValue = inputValue.trim();
-  if (inputValue === "" || inputValue === "-") return { valid: false, reason: "empty" };
+  if (inputValue === "" || inputValue === "-") return { valid: true, technique:null, fret:null, reason: "delete" };
 
   const firstChar = inputValue.charAt(0).toLowerCase();
   let inputTechnique = "";
@@ -872,7 +872,7 @@ const techniqueMap = {
 const techniqueSignsMap = {
   note: "",        // normale Note
   rest: "",        // Pause
-  mute: "X",        // Muted Note
+  mute: "x",        // Muted Note
   slideUp: "/",     // Slide zur höheren Note (z.B. 5/7)
   slideDown: "\\",  // Slide zur tieferen Note (z.B. 7\5)
   bend: "b",        // Bend (z.B. 7b)
