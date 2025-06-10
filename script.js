@@ -470,11 +470,29 @@ function addTabListeners() {
       function finishEdit() {
         if (finished) return;
         finished = true;
-
-        let value = input.value.trim();
-        if (value === "") value = " - ";
-        else if (value.length === 1) value = "0" + value;
-        slot.textContent = value; // Inhalt des Span zurücksetzen
+      
+        const result = checkInput(input.value.trim());
+      
+        if (!result.valid) {
+          alert("Ungültige Eingabe: " + result.reason);
+          input.focus();
+          finished = false; // zurücksetzen, damit erneutes Finish möglich ist
+          return;
+        }
+      
+        // Optional: Technik und Bund zwischenspeichern
+        const technique = result.technique;
+        const fret = result.fret;
+      
+        // Darstellung aufbereiten
+        let displayValue = "";
+        /*if (technique) {
+          displayValue = technique + (fret < 10 ? "0" + fret : fret.toString());
+        } else {*/
+          displayValue = fret < 10 ? "0" + fret : fret.toString();
+        //}
+      
+        slot.textContent = displayValue;
       }
 
       input.addEventListener("blur", finishEdit);
@@ -486,6 +504,41 @@ function addTabListeners() {
       });
     });
   });
+}
+
+function checkInput(inputValue) {
+  inputValue = inputValue.trim();
+  if (inputValue === "" || inputValue === "-") return { valid: false, reason: "empty" };
+
+  const firstChar = inputValue.charAt(0);
+  let inputTechnique = "";
+  let inputFret = "";
+
+  // Ist das erste Zeichen keine Zahl?
+  if (isNaN(parseInt(firstChar))) {
+    // Technik-Zeichen prüfen
+    if (Object.values(techniqueSignsMap).includes(firstChar)) {
+      inputTechnique = firstChar;
+      inputFret = inputValue.slice(1);
+    } else {
+      return { valid: false, reason: "Invalid first character (technique)" };
+    }
+  } else {
+    inputTechnique = "";
+    inputFret = inputValue;
+  }
+
+  // Prüfen, ob inputFret eine gültige Zahl ist
+  const fretNumber = parseInt(inputFret);
+  if (isNaN(fretNumber) || fretNumber < 0 || fretNumber >= 19) {
+    return { valid: false, reason: "Invalid fret" };
+  }
+
+  return {
+    valid: true,
+    technique: inputTechnique,
+    fret: fretNumber
+  };
 }
 
 function setTabSlot(stringIndex, step, value) {
