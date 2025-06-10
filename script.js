@@ -509,6 +509,8 @@ function addTabListeners() {
         }
 
         console.log("index:", index, "step:", step, "string:", string, "technique:", signToTechniqueMap[technique], "fret:", fret);
+
+        planLickPlayback(lick);
       }
 
       input.addEventListener("blur", finishEdit);
