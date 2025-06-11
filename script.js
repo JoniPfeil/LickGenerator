@@ -30,6 +30,8 @@ let clickSynth = null;  // // Cache für Click
 const loadedInstruments = {}; // Cache für geladene Instrumente
 let audioStarted = false;
 let scale;
+let lickPart=null;
+let clickLoop=null;
 
 const lickInfo = {
   key: null,
@@ -632,13 +634,13 @@ async function planLickPlayback(lick) {
 
   await setSound(soundSelect.value);
 
-  console.log("Tone Parameter:", Tone.getContext().updateInterval, Tone.Transport.lookAhead);
-  Tone.getContext().updateInterval = parseFloat(document.getElementById("updateIntervall").value);
-  Tone.Transport.lookAhead = parseFloat(document.getElementById("lookahead").value);
+  //console.log("Tone Parameter:", Tone.getContext().updateInterval, Tone.Transport.lookAhead);
+  //Tone.getContext().updateInterval = parseFloat(document.getElementById("updateIntervall").value);
+  //Tone.Transport.lookAhead = parseFloat(document.getElementById("lookahead").value);
 
   // Metronom Sound ---------------------------
   if (clickSynth === null)
-  {
+  {   
     clickSynth = new Tone.NoiseSynth({
       noise: { type: "white" },
       envelope: {
@@ -648,7 +650,7 @@ async function planLickPlayback(lick) {
       },
     }).toDestination();  
   }
-  //clickSynth.volume.value = clickVolMap[clickVolSelect.value]; // Optional: parseInt
+  clickSynth.volume.value = clickVolMap[clickVolSelect.value]; // Optional: parseInt
   //console.log(clickVolMap[clickVolSelect.value]);
 
  // Ereignisliste für das Lick ------------------
@@ -668,8 +670,12 @@ async function planLickPlayback(lick) {
     }
   });
 
+  if (lickPart) {
+    lickPart.dispose();
+  }
+
   // Tone.Part für das Lick ---------------------
-  const lickPart = new Tone.Part((time, value) => {
+  lickPart = new Tone.Part((time, value) => {
     if (value) {
       //highlightStep(value.step);
       synth.triggerAttackRelease(value.pitch, value.duration, time);
@@ -679,7 +685,10 @@ async function planLickPlayback(lick) {
   lickPart.loop = false;
 
   // Metronom Loop -----------------------------
-  const clickLoop = new Tone.Loop((time) => {
+  if (clickLoop) {
+    clickLoop.dispose();
+  }
+  clickLoop = new Tone.Loop((time) => {
     clickSynth.triggerAttackRelease("8n", time);
   }, "8n");
   clickLoop.start(0);
