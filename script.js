@@ -210,7 +210,7 @@ rateButton.addEventListener("click", async () => {
   fadeOutDiv(afterRatingMsg);
 });
 
-document.getElementById("reverbWet").addEventListener("change", e => {
+document.getElementById("reverb").addEventListener("change", e => {
   const reverbDecay = 3*parseFloat(e.target.value);
   console.log("Reverb:", reverbDecay);
   
