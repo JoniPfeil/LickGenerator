@@ -24,7 +24,7 @@ startAudioBtn.addEventListener("click", async () => {
     })
 
     await reverb.generate();
-    //reverb.toDestination(); 
+    reverb.toDestination(); 
 
     // Synth erstellen
     synth = new Tone.Synth();  //.toDestination();
@@ -47,6 +47,7 @@ startAudioBtn.addEventListener("click", async () => {
 });
 
 checkboxReverb.addEventListener("change", () => {
+  synth.disconnect();
   if (checkboxReverb.checked) {
     synth.connect(reverb);
   }
