@@ -148,7 +148,7 @@ function loadTone() {
 async function setSound(selected) {
   
   if (selected === "synth") {
-    synth = new Tone.Synth().toDestination(); //connect(reverb);
+    synth = new Tone.Synth().toDestination();
   } 
   else {
     if (!loadedInstruments[selected]) {
@@ -217,7 +217,7 @@ document.getElementById("reverb").addEventListener("change", e => {
   if (isMobileDevice() && reverbDecay > 0) {
     alert("Warning: Enabeling reverb on smartphones can lead to audio errors.");
   }
-  console.log("Reverb:", reverbDecay);
+  console.log("Reverb:", reverbDecay, reverb);
   
   if (reverb) sfGain.disconnect(reverb);
   
