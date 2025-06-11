@@ -216,16 +216,23 @@ rateButton.addEventListener("click", async () => {
 });
 
 document.getElementById("reverbWet").addEventListener("change", e => {
-  const reverbAmount = parseFloat(e.target.value);
-  console.log("Reverb:", reverbAmount);
+  const reverbDecay = parseFloat(e.target.value);
+  console.log("Reverb:", reverbDecay);
   
   sfGain.disconnect(reverb);
   
   if (reverbAmount > 0)
   {
+    if (reverb) reverb.disconnect();
+    
+    //Reverb erstellen
+    reverb = new Tone.Reverb({
+      decay: reverbDecay,
+      preDelay: 0.05,
+      wet: 1
+    });
     sfGain.connect(reverb);
     //reverb.wet.value = parseFloat(e.target.value);
-    reverb.decay.value = 3*parseFloat(e.target.value);
   }
 });
 
@@ -237,13 +244,6 @@ generateButton.addEventListener("click", async () => {
   }
   if (!audioStarted) {
     await Tone.start();
-
-    //Reverb erstellen
-    reverb = new Tone.Reverb({
-      decay: 1,
-      preDelay: 0.05,
-      wet: 1
-    });
 
     sfGain = new Tone.Gain();     // Tone.Gain
     sfGain.toDestination();  //connect(reverb);  
