@@ -43,11 +43,11 @@ const lickInfo = {
 
 
 //Reverb erstellen
-/*let reverb = new Tone.Reverb({
+let reverb = new Tone.Reverb({
   decay: 2.5,
   preDelay: 0.05,
   wet: 0.5
-}).toDestination();*/
+});
 
 //--------------------------------------------------------------------------------------------- Supabase ----------------------------------------
 const supabaseClient = supabase.createClient(
@@ -139,10 +139,10 @@ function getNoteDurationProbabilities(difficulty) {
 // Function for setting the Sound (with Reverb) ------------------------------------------------------------------------------------------------------------------
 async function setSound(selected) {
 
-  /*if (!reverb.buffer) {
+  if (!reverb.buffer) {
     await reverb.generate(); // Reverb laden
     reverb.toDestination();             // oder bereits verbunden
-  }*/
+  }
   
   //if (selected === "synth") {
     synth = new Tone.Synth().toDestination();//.connect(reverb);
@@ -211,7 +211,7 @@ rateButton.addEventListener("click", async () => {
 });
 
 document.getElementById("reverbWet").addEventListener("input", e => {
-  //reverb.wet.value = parseFloat(e.target.value);
+  reverb.wet.value = parseFloat(e.target.value);
   //console.log(clickVolMap[e.target.value]);
 });
 
