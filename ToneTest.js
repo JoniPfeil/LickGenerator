@@ -12,7 +12,25 @@ const planClickBtn = document.getElementById("planClick");
 const playBtn = document.getElementById("play");
 const checkboxReverb = document.getElementById("checkboxReverb");
 
+let Tone = null;
+
+function loadTone() {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/tone@14.8.39/build/Tone.min.js";
+    script.onload = () => {
+      Tone = window.Tone;
+      resolve();
+    };
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
 startAudioBtn.addEventListener("click", async () => {
+  if (!Tone) {
+    await loadTone();
+  }
   if (!audioStarted) {
     await Tone.start();
     console.log("AudioContext gestartet.");
