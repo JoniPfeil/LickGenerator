@@ -24,7 +24,7 @@ startAudioBtn.addEventListener("click", async () => {
     })
 
     await reverb.generate();
-    reverb.toDestination(); 
+    //reverb.toDestination(); 
 
     // Synth erstellen
     synth = new Tone.Synth();  //.toDestination();
@@ -121,11 +121,11 @@ playBtn.addEventListener("click", () => {
   }
 
   // Reverb
-  console.log("Reverb input node:", reverb.input);
-  console.log("Reverb output node:", reverb.output);
+  //console.log("Reverb input node:", reverb.input);
+  //console.log("Reverb output node:", reverb.output);
   
   // Synth
-  console.log("Synth output node:", synth.output);
+  //console.log("Synth output node:", synth.output);
 
   Tone.Transport.stop();
   Tone.Transport.position = 0;
