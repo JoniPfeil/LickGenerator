@@ -148,11 +148,6 @@ function loadTone() {
 
 // Function for setting the Sound (with Reverb) ------------------------------------------------------------------------------------------------------------------
 async function setSound(selected) {
-
-  if (!reverb.buffer) {
-    await reverb.generate(); // Reverb laden
-    reverb.toDestination();             // oder bereits verbunden
-  }
   
   if (selected === "synth") {
     synth = new Tone.Synth().toDestination(); //connect(reverb);
@@ -216,7 +211,7 @@ rateButton.addEventListener("click", async () => {
 });
 
 document.getElementById("reverbWet").addEventListener("change", e => {
-  const reverbDecay = parseFloat(e.target.value);
+  const reverbDecay = 3*parseFloat(e.target.value);
   console.log("Reverb:", reverbDecay);
   
   sfGain.disconnect(reverb);
@@ -231,6 +226,10 @@ document.getElementById("reverbWet").addEventListener("change", e => {
       preDelay: 0.05,
       wet: 1
     });
+
+    await reverb.generate(); // Reverb laden
+    reverb.toDestination();             
+    
     sfGain.connect(reverb);
     //reverb.wet.value = parseFloat(e.target.value);
   }
