@@ -155,7 +155,6 @@ async function setSound(selected) {
       //Erzeuge einmalig GainNode für Soundfont
 
       console.log("sfGain instanceof AudioNode:", sfGain instanceof AudioNode);
-      console.log("reverb.ready?", reverb && reverb.input);
 
       const instrument = await Soundfont.instrument(
         Tone.context.rawContext,
@@ -217,7 +216,7 @@ document.getElementById("reverb").addEventListener("change", e => {
   if (isMobileDevice() && reverbDecay > 0) {
     alert("Warning: Enabeling reverb on smartphones can lead to audio errors.");
   }
-  console.log("Reverb:", reverbDecay, reverb);
+  console.log("Decay:", reverbDecay, "Reverb was:", reverb && reverb.input);
   
   if (reverb) sfGain.disconnect(reverb);
   
@@ -238,6 +237,8 @@ document.getElementById("reverb").addEventListener("change", e => {
     sfGain.connect(reverb);
     //reverb.wet.value = parseFloat(e.target.value);
   }
+
+  console.log("Reverb is now:", reverb && reverb.input);
 });
 
 soundSelect.addEventListener("change", (e) => setSound(e.target.value));
