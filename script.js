@@ -144,7 +144,7 @@ async function setSound(selected) {
   }*/
   
   //if (selected === "synth") {
-    synth = new Tone.Synth();//.connect(reverb);
+    synth = new Tone.Synth().toDestination();//.connect(reverb);
   //} 
   /*else {
     if (!loadedInstruments[selected]) {
