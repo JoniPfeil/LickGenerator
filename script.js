@@ -1,5 +1,5 @@
 // script.js
-document.getElementById("versionInfoJS").textContent = "0611_1215";
+document.getElementById("versionInfoJS").textContent = "0611_1222";
 
 // html elements
 const keySelect = document.getElementById("key");
@@ -144,16 +144,16 @@ async function setSound(selected) {
     reverb.toDestination();             // oder bereits verbunden
   }
   
-  //if (selected === "synth") {
-    synth = new Tone.Synth().connect(reverb); //toDestination();
-  //} 
-  /*else {
+  if (selected === "synth") {
+    synth = new Tone.Synth().toDestination(); //connect(reverb);
+  } 
+  else {
     if (!loadedInstruments[selected]) {
-      // Erzeuge einmalig GainNode für Soundfont
-      //const sfGain = Tone.context.createGain();
+      Erzeuge einmalig GainNode für Soundfont
+      const sfGain = Tone.context.createGain();
 
       const sfGain = new Tone.Gain();     // Tone.Gain
-      sfGain.connect(reverb);             // Reverb = Tone.Reverb
+      sfGain.toDestination();  //connect(reverb);             // Reverb = Tone.Reverb
       
 
       //console.log("sfGain instanceof AudioNode:", sfGain instanceof AudioNode);
@@ -176,7 +176,7 @@ async function setSound(selected) {
         });
       }
     };
-  }*/
+  }
 }
 
 // Event-Listener definieren ------------------------------------------------------------------------------------------------------------------------------------
