@@ -219,8 +219,8 @@ document.getElementById("reverb").addEventListener("change", e => {
   console.log("Decay:", reverbDecay, "Reverb was:", reverb && reverb.input);
   
   if (reverb) {
-    sfGain.disconnect(reverb);
     reverb.disconnect();
+    reverb.dispose();
   }
   
   if (reverbDecay > 0)
