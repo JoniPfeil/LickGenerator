@@ -120,6 +120,13 @@ playBtn.addEventListener("click", () => {
     return;
   }
 
+  // Reverb
+  console.log("Reverb input node:", reverb.input);
+  console.log("Reverb output node:", reverb.output);
+  
+  // Synth
+  console.log("Synth output node:", synth.output);
+
   Tone.Transport.stop();
   Tone.Transport.position = 0;
   Tone.Transport.bpm.value = 100;
