@@ -150,7 +150,7 @@ async function setSound(selected) {
   else {
     if (!loadedInstruments[selected]) {
       //Erzeuge einmalig GainNode für Soundfont
-      const sfGain = Tone.context.createGain();
+      //const sfGain = Tone.context.createGain();
 
       const sfGain = new Tone.Gain();     // Tone.Gain
       sfGain.toDestination();  //connect(reverb);             // Reverb = Tone.Reverb
