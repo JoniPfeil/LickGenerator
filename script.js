@@ -221,6 +221,7 @@ document.getElementById("reverb").addEventListener("change", e => {
   if (reverb) {
     reverb.disconnect();
     reverb.dispose();
+    reverb = null;
   }
   
   if (reverbDecay > 0)
