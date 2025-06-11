@@ -218,12 +218,13 @@ document.getElementById("reverb").addEventListener("change", e => {
   }
   console.log("Decay:", reverbDecay, "Reverb was:", reverb && reverb.input);
   
-  if (reverb) sfGain.disconnect(reverb);
+  if (reverb) {
+    sfGain.disconnect(reverb);
+    reverb.disconnect();
+  }
   
   if (reverbDecay > 0)
-  {
-    if (reverb) reverb.disconnect();
-    
+  {  
     //Reverb erstellen
     reverb = new Tone.Reverb({
       decay: reverbDecay,
@@ -235,7 +236,6 @@ document.getElementById("reverb").addEventListener("change", e => {
     reverb.toDestination();             
     
     sfGain.connect(reverb);
-    //reverb.wet.value = parseFloat(e.target.value);
   }
 
   console.log("Reverb is now:", reverb && reverb.input);
