@@ -648,14 +648,17 @@ async function planLickPlayback(lick) {
       },
     }).toDestination();  
   }
-  clickSynth.volume.value = clickVolMap[clickVolSelect.value]; // Optional: parseInt
-  console.log(clickVolMap[clickVolSelect.value]);
+  //clickSynth.volume.value = clickVolMap[clickVolSelect.value]; // Optional: parseInt
+  //console.log(clickVolMap[clickVolSelect.value]);
 
  // Ereignisliste für das Lick ------------------
   const events = lick.map(note => {
+
+    const time = sixteenthsToBBS(note.step);   
+    const duration = durationMap[note.duration];
     
-    const time = Tone.Time(sixteenthsToBBS(note.step));   
-    const duration = Tone.Time(durationMap[note.duration]);
+    //const time = Tone.Time(sixteenthsToBBS(note.step));   
+    //const duration = Tone.Time(durationMap[note.duration]);
 
     if (note.technique === "rest") {
       return [time, null]; // Pause
@@ -668,7 +671,7 @@ async function planLickPlayback(lick) {
   // Tone.Part für das Lick ---------------------
   const lickPart = new Tone.Part((time, value) => {
     if (value) {
-      highlightStep(value.step);
+      //highlightStep(value.step);
       synth.triggerAttackRelease(value.pitch, value.duration, time);
     }
   }, events);
