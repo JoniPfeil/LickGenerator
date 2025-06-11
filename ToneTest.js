@@ -19,7 +19,7 @@ startAudioBtn.addEventListener("click", async () => {
 
     // Reverb erstellen
     reverb = new Tone.Reverb({
-      decay: 1.5,
+      decay: 1,
       preDelay: 0.05,
       wet: 0.5
     })
@@ -27,7 +27,7 @@ startAudioBtn.addEventListener("click", async () => {
     reverb.toDestination(); 
 
     // Reverb Small erstellen: Kurzer Impuls als IR erzeugen
-    const irBuffer = Tone.context.createBuffer(1, 4800, 48000); // 100 ms bei 44.1 kHz
+    const irBuffer = Tone.context.createBuffer(1, 48000, 48000); // 100 ms bei 48 kHz
     const data = irBuffer.getChannelData(0);
     data[0] = 1.0; // kurzer Impuls
     for (let i = 1; i < data.length; i++) {
