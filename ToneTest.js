@@ -18,7 +18,7 @@ startAudioBtn.addEventListener("click", async () => {
 
     // Reverb erstellen
     reverb = new Tone.Reverb({
-      decay: 2.5,
+      decay: 2,
       preDelay: 0.05,
       wet: 0.5
     })
@@ -52,7 +52,7 @@ checkboxReverb.addEventListener("change", () => {
   }
   else
   {
-    synth.toDestionation();
+    synth.toDestination();
   }
 });
 
