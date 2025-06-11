@@ -1,5 +1,5 @@
 // script.js
-document.getElementById("versionInfoJS").textContent = "0611_1205";
+document.getElementById("versionInfoJS").textContent = "0611_1212";
 
 // html elements
 const keySelect = document.getElementById("key");
