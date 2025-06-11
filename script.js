@@ -141,9 +141,10 @@ async function setSound(selected) {
     reverb.toDestination();             // oder bereits verbunden
   }
   
-  if (selected === "synth") {
+  //if (selected === "synth") {
     synth = new Tone.Synth().connect(reverb);
-  } else {
+  //} 
+  /*else {
     if (!loadedInstruments[selected]) {
       // Erzeuge einmalig GainNode für Soundfont
       //const sfGain = Tone.context.createGain();
@@ -172,7 +173,7 @@ async function setSound(selected) {
         });
       }
     };
-  }
+  }*/
 }
 
 // Event-Listener definieren ------------------------------------------------------------------------------------------------------------------------------------
