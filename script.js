@@ -26,6 +26,7 @@ const ratingStars = document.querySelectorAll('input[name="rating"]');
 const afterRatingMsg = document.getElementById("afterRatingMsg");
 
 let lick = []; // globale Variable for the lick 
+let Tone = null;
 let audioStarted = false;
 let reverb = null;
 let sfGain = null;
@@ -130,6 +131,21 @@ function getNoteDurationProbabilities(difficulty) {
   }
 }
 
+
+
+function loadTone() {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/tone@14.8.39/build/Tone.min.js";
+    script.onload = () => {
+      Tone = window.Tone;
+      resolve();
+    };
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
 // Function for setting the Sound (with Reverb) ------------------------------------------------------------------------------------------------------------------
 async function setSound(selected) {
 
@@ -218,8 +234,11 @@ document.getElementById("reverbWet").addEventListener("change", e => {
 soundSelect.addEventListener("change", (e) => setSound(e.target.value));
 generateButton.addEventListener("click", async () => {
   // Audioausgabe aktivieren, damit Lick später abgespielt werden kann
+  if (!Tone) {
+    await loadTone();
+  }
   if (!audioStarted) {
-    await Tone.start();    //ohne await?
+    await Tone.start();
 
     //Reverb erstellen
     reverb = new Tone.Reverb({
