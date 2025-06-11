@@ -131,8 +131,6 @@ function getNoteDurationProbabilities(difficulty) {
   }
 }
 
-
-
 function loadTone() {
   return new Promise((resolve, reject) => {
     const script = document.createElement("script");
@@ -179,6 +177,10 @@ async function setSound(selected) {
   }
 }
 
+function isMobileDevice() {
+  return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);
+}
+
 // Event-Listener definieren ------------------------------------------------------------------------------------------------------------------------------------
 /*document.getElementById("updateIntervall").addEventListener("change", (e) => {
   Tone.getContext().updateInterval = parseFloat(e.target.value);
@@ -212,11 +214,14 @@ rateButton.addEventListener("click", async () => {
 
 document.getElementById("reverb").addEventListener("change", e => {
   const reverbDecay = 3*parseFloat(e.target.value);
+  if (isMobileDevice() && reverbDecay > 0) {
+    alert("Warning: Enabeling reverb on smartphones can lead to audio errors.");
+  }
   console.log("Reverb:", reverbDecay);
   
   sfGain.disconnect(reverb);
   
-  if (reverbAmount > 0)
+  if (reverbDecay > 0)
   {
     if (reverb) reverb.disconnect();
     
