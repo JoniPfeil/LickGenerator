@@ -176,6 +176,14 @@ async function setSound(selected) {
 }
 
 // Event-Listener definieren ------------------------------------------------------------------------------------------------------------------------------------
+/*document.getElementById("updateIntervall").addEventListener("change", (e) => {
+  Tone.getContext().updateInterval = parseFloat(e.target.value);
+});
+
+document.getElementById("lookahead").addEventListener("change", (e) => {
+  Tone.Transport.lookAhead = parseFloat(e.target.value);
+});*/
+
 document.getElementById("help").addEventListener("click", () => {
   document.getElementById("popUp-Help").classList.remove("hidden");
 });
@@ -622,6 +630,10 @@ async function planLickPlayback(lick) {
   Tone.Transport.position = 0;
 
   await setSound(soundSelect.value);
+
+  console.log("Tone Parameter:", Tone.getContext().updateInterval, Tone.Transport.lookAhead);
+  Tone.getContext().updateInterval = parseFloat(document.getElementById("updateIntervall").value);
+  Tone.Transport.lookAhead = parseFloat(document.getElementById("lookahead").value);
 
   // Metronom Sound ---------------------------
   if (clickSynth === null)
