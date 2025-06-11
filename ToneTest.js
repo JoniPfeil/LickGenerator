@@ -16,6 +16,16 @@ startAudioBtn.addEventListener("click", async () => {
     await Tone.start();
     console.log("AudioContext gestartet.");
 
+    // Reverb erstellen
+    reverb = new Tone.Reverb({
+      decay: 2.5,
+      preDelay: 0.05,
+      wet: 0.5
+    })
+
+    await reverb.generate();
+    reverb.toDestination(); 
+
     // Synth erstellen
     synth = new Tone.Synth();  //.toDestination();
     synth.connect(reverb);
@@ -28,18 +38,10 @@ startAudioBtn.addEventListener("click", async () => {
         decay: 0.05,
         sustain: 0
       }
-    }).toDestination();
+    });
 
-    // Reverb erstellen
-    reverb = new Tone.Reverb({
-      decay: 2.5,
-      preDelay: 0.05,
-      wet: 0.5
-    })
-
-    await reverb.generate();
-    reverb.toDestination(); 
-
+    clickSynth.toDestination();
+    
     audioStarted = true;
   }
 });
