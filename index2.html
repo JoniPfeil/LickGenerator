@@ -16,6 +16,38 @@
   <script src="ml5_rating.js" defer></script>
 </head>
 <body>
+
+  <div id="popUp-Help" class="popUp hidden">
+    <div class="popUp-content">
+      <h3>How to use</h3>
+      <p>
+        The slider <strong>String Changes</strong> determines whether the melody mostly stays on one string or jumps between strings frequently.<br>
+        The same goes for the <strong>Fret Changes</strong> slider.
+      </p>
+      <p>
+        The technique sliders control how likely each playing technique is to appear in the lick.<br>
+        For example, if you increase the slider <strong>Double stops</strong> and turn all others down, you'll get a lick made up mostly of double stops.
+      </p>
+      <p>
+        With the <strong>playback options</strong>, you can control how the lick is played back.<br>
+        Note that some techniques can't currently be played back accurately — including <em>bends</em>, <em>slides</em>, <em>vibrato</em>, and <em>dead notes</em>.
+      </p>
+      <br>
+      <h3>How it works</h3>
+      <p>First, the algorithm uses the selected <strong>key</strong> and <strong>scale</strong> to determine which notes are valid.</p>
+      <p>Then it generates the lick one note at a time, as follows:</p>
+      <ul>
+        <li>Randomly choose the duration of the note or rest, based on the <strong>Note length</strong> setting.</li>
+        <li>Randomly choose the technique for the note. The probability for each technique is based on the sliders (bends, slides, ...).</li>
+        <li>Some techniques determine fret and string based on the previous note (e.g. a full-tone bend up).</li>
+        <li>For all other notes, the algorithm uses a normal distribution centered around the previous fret and string.<br>
+            The standard deviation is set by the <strong>Fret changes</strong> and <strong>String changes</strong> sliders.</li>
+      </ul>
+      <p>More information on guitar tabs can be found here: <a href="https://yousician.com/blog/how-to-read-guitar-tabs">yousician.com/blog/how-to-read-guitar-tabs</a></p>
+      <button id="close-help">Back</button>
+    </div>
+  </div>
+  
   <div class="container">
     <h1>🎸 Guitar Lick Generator 🎸</h1>
   
@@ -79,26 +111,47 @@
 
     <div class="lick-options2">
       <div class="option-group">
-        <label for="slides">Slides</label>
-        <input type="range" id="slides" min="0" max="1" step=".25" value=".25">
+        <label for="pNormal">Normal notes</label>
+        <input type="range" id="pNormal" min="0" max="1" step="0.2" value="1">
       </div>
 
       <div class="option-group">
-        <label for="bends">Bends</label>
-        <input type="range" id="bends" min="0" max="1" step=".25" value=".25">
+        <label for="pRest">Rests</label>
+        <input type="range" id="pRest" min="0" max="0.5" step="0.1" value="0.1">
       </div>
 
       <div class="option-group">
-        <label for="doubles">Double stops</label>
-        <input type="range" id="doubles" min="0" max="1" step=".25" value=".25">
+        <label for="pDead">Dead notes</label>
+        <input type="range" id="pDead" min="0" max="1" step="0.2" value="0.2">
+      </div>
+      
+      <div class="option-group">
+        <label for="pSlides">Slides</label>
+        <input type="range" id="pSlides" min="0" max="1" step="0.2" value="0.2">
+      </div>
+
+      <div class="option-group">
+        <label for="pBends">Bends</label>
+        <input type="range" id="pBends" min="0" max="1" step="0.2" value="0.2">
+      </div>
+
+      <div class="option-group">
+        <label for="pHammerPull">HammerOn+PullOff</label>
+        <input type="range" id="pHammerPull" min="0" max="1" step="0.2" value="0.2">
+      </div>
+
+      <div class="option-group">
+        <label for="pDoubles">Double stops</label>
+        <input type="range" id="pDoubles" min="0" max="1" step="0.2" value="0.2">
       </div>
     </div>
       
 
     <div class="generate-control">
       <button id="generate-button">Generate New Lick</button>
+      <button id="help">Help</button>
     </div>
-  
+
     <div id="tab-display" class="tab-display">
       <!-- Generated tabs will appear here -->
     </div>
@@ -145,10 +198,10 @@
         <input type="range" id="clickVol" min="0" max="4" step="1" value="2" list="volumeLabels">
       </div>
 
-      <div class="option-group">
-        <label for="padVol">Click Volume</label>
-        <input type="range" id="padVol" min="0" max="4" step="1" value="2" list="volumeLabels">
-      </div>
+      <!--<div class="option-group">
+        <label for="padVol">Pad Volume</label>
+        <input type="range" id="padVol" min="0" max="4" step="1" value="0" list="volumeLabels" disabled>
+      </div> -->
 
       <div class="option-group">
         <label for="reverbWet">Reverb</label>
@@ -182,6 +235,12 @@
     </div>
     <div id="afterRatingMsg">Thank you for rating! <br>
       ml5 gave it <span id="ml5Rating"> </span> stars.</div>
+    
+    <label for="lookahead">lookahead (0.01 - 0.5)</label>
+    <input type="number" id="lookahead" name="lookahead" min="0.01" max="0.5" />
+
+    <label for="updateIntervall">updateIntervall (0.03 - 0.1)</label>
+    <input type="number" id="updateIntervall" name="updateIntervall" min="0.03" max="0.1" />
   </div>
 </body>
 </html>
