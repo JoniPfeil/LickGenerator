@@ -227,7 +227,7 @@ document.getElementById("reverbWet").addEventListener("change", e => {
       wet: 1
     });
 
-    await reverb.generate(); // Reverb laden
+    reverb.generate(); // Reverb laden
     reverb.toDestination();             
     
     sfGain.connect(reverb);
