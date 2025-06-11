@@ -1,5 +1,5 @@
 // script.js
-document.getElementById("versionInfoJS").textContent = "0611_1212";
+document.getElementById("versionInfoJS").textContent = "0611_1215";
 
 // html elements
 const keySelect = document.getElementById("key");
@@ -145,7 +145,7 @@ async function setSound(selected) {
   }
   
   //if (selected === "synth") {
-    synth = new Tone.Synth().toDestination();//.connect(reverb);
+    synth = new Tone.Synth().connect(reverb); //toDestination();
   //} 
   /*else {
     if (!loadedInstruments[selected]) {
