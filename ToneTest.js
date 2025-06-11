@@ -3,11 +3,13 @@ let synth = null;
 let clickSynth = null;
 let tonePart = null;
 let clickLoop = null;
+let reverb = null;
 
 const startAudioBtn = document.getElementById("startAudio");
 const planToneBtn = document.getElementById("planTone");
 const planClickBtn = document.getElementById("planClick");
 const playBtn = document.getElementById("play");
+const checkboxReverb = document.getElementById("checkboxReverb");
 
 startAudioBtn.addEventListener("click", async () => {
   if (!audioStarted) {
@@ -15,7 +17,8 @@ startAudioBtn.addEventListener("click", async () => {
     console.log("AudioContext gestartet.");
 
     // Synth erstellen
-    synth = new Tone.Synth().toDestination();
+    synth = new Tone.Synth();  //.toDestination();
+    synth.connect(reverb);
 
     // ClickSynth erstellen (white noise, kurzer Click)
     clickSynth = new Tone.NoiseSynth({
@@ -27,7 +30,27 @@ startAudioBtn.addEventListener("click", async () => {
       }
     }).toDestination();
 
+    // Reverb erstellen
+    reverb = new Tone.Reverb({
+      decay: 2.5,
+      preDelay: 0.05,
+      wet: 0.5
+    })
+
+    await reverb.generate();
+    reverb.toDestination(); 
+
     audioStarted = true;
+  }
+});
+
+checkboxReverb.addEventListener("change", () => {
+  if (checkboxReverb.checked) {
+    synth.connect(reverb);
+  }
+  else
+  {
+    synth.toDestionation();
   }
 });
 
