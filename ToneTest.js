@@ -4,6 +4,7 @@ let clickSynth = null;
 let tonePart = null;
 let clickLoop = null;
 let reverb = null;
+let reverbSmall = null;
 
 const startAudioBtn = document.getElementById("startAudio");
 const planToneBtn = document.getElementById("planTone");
@@ -18,13 +19,23 @@ startAudioBtn.addEventListener("click", async () => {
 
     // Reverb erstellen
     reverb = new Tone.Reverb({
-      decay: 2,
+      decay: 1.5,
       preDelay: 0.05,
       wet: 0.5
     })
-
     await reverb.generate();
     reverb.toDestination(); 
+
+    // Reverb Small erstellen: Kurzer Impuls als IR erzeugen
+    const irBuffer = Tone.context.createBuffer(1, 4410, 44100); // 100 ms bei 44.1 kHz
+    const data = irBuffer.getChannelData(0);
+    data[0] = 1.0; // kurzer Impuls
+    for (let i = 1; i < data.length; i++) {
+      data[i] = Math.random() * 0.1 * (1 - i / data.length); // leichtes Rauschen, abklingend
+    }
+    reverbSmall = new Tone.Convolver(irBuffer);
+    reverbSmall.toDestination();
+
 
     // Synth erstellen
     synth = new Tone.Synth();  //.toDestination();
@@ -53,7 +64,7 @@ checkboxReverb.addEventListener("change", () => {
   }
   else
   {
-    synth.toDestination();
+    synth.connect(reverbSmall)();
   }
 });
 
