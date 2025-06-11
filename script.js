@@ -1,5 +1,5 @@
 // script.js
-document.getElementById("versionInfoJS").textContent = "0611_1222";
+document.getElementById("versionInfoJS").textContent = "0611_2115";
 
 // html elements
 const keySelect = document.getElementById("key");
@@ -25,11 +25,13 @@ const tabDisplay = document.getElementById("tab-display");
 const ratingStars = document.querySelectorAll('input[name="rating"]');
 const afterRatingMsg = document.getElementById("afterRatingMsg");
 
-let lick = []; // globale Variable for our lick
+let lick = []; // globale Variable for the lick 
+let audioStarted = false;
+let reverb = null;
+let sfGain = null;
 let synth = null;
 let clickSynth = null;  // // Cache für Click
 const loadedInstruments = {}; // Cache für geladene Instrumente
-let audioStarted = false;
 let scale;
 let lickPart=null;
 let clickLoop=null;
@@ -40,14 +42,6 @@ const lickInfo = {
   length: null,
   difficulty: null
 };
-
-
-//Reverb erstellen
-let reverb = new Tone.Reverb({
-  decay: 2.5,
-  preDelay: 0.05,
-  wet: 0.5
-});
 
 //--------------------------------------------------------------------------------------------- Supabase ----------------------------------------
 const supabaseClient = supabase.createClient(
@@ -150,14 +144,9 @@ async function setSound(selected) {
   else {
     if (!loadedInstruments[selected]) {
       //Erzeuge einmalig GainNode für Soundfont
-      //const sfGain = Tone.context.createGain();
 
-      const sfGain = new Tone.Gain();     // Tone.Gain
-      sfGain.toDestination();  //connect(reverb);             // Reverb = Tone.Reverb
-      
-
-      //console.log("sfGain instanceof AudioNode:", sfGain instanceof AudioNode);
-      //console.log("reverb.ready?", reverb && reverb.input);
+      console.log("sfGain instanceof AudioNode:", sfGain instanceof AudioNode);
+      console.log("reverb.ready?", reverb && reverb.input);
 
       const instrument = await Soundfont.instrument(
         Tone.context.rawContext,
@@ -210,9 +199,20 @@ rateButton.addEventListener("click", async () => {
   fadeOutDiv(afterRatingMsg);
 });
 
-document.getElementById("reverbWet").addEventListener("input", e => {
-  reverb.wet.value = parseFloat(e.target.value);
-  //console.log(clickVolMap[e.target.value]);
+document.getElementById("reverbWet").addEventListener("change", e => {
+  const reverbAmount = parseFloat(e.target.value);
+  console.log("Reverb:", reverbAmount);
+  sfGain.disconnect();
+  if (reverbAmount === 0)
+  {
+    sfGain.toDestination();
+  }
+  else
+  {
+    sfGain.connect(reverb);
+    reverb.wet.value = parseFloat(e.target.value);
+    reverb.decay.value = 2*parseFloat(e.target.value)+1;
+  }
 });
 
 soundSelect.addEventListener("change", (e) => setSound(e.target.value));
@@ -220,6 +220,27 @@ generateButton.addEventListener("click", async () => {
   // Audioausgabe aktivieren, damit Lick später abgespielt werden kann
   if (!audioStarted) {
     await Tone.start();    //ohne await?
+
+    //Reverb erstellen
+    reverb = new Tone.Reverb({
+      decay: 1,
+      preDelay: 0.05,
+      wet: 0
+    });
+
+    sfGain = new Tone.Gain();     // Tone.Gain
+    sfGain.toDestination();  //connect(reverb);  
+
+    clickSynth = new Tone.NoiseSynth({
+      noise: { type: "white" },
+      envelope: {
+        attack: 0.001,
+        decay: 0.05,
+        sustain: 0
+      },
+    });
+    clickSynth.toDestination(); 
+
     audioStarted = true;
   }
   generateLick();
@@ -649,10 +670,11 @@ async function planLickPlayback(lick) {
         decay: 0.05,
         sustain: 0
       },
-    }).toDestination();  
+    });
+    clickSynth.toDestination();  
+    console.log("lalala");
   }
   clickSynth.volume.value = clickVolMap[clickVolSelect.value]; // Optional: parseInt
-  //console.log(clickVolMap[clickVolSelect.value]);
 
  // Ereignisliste für das Lick ------------------
   const events = lick.map(note => {
@@ -676,6 +698,9 @@ async function planLickPlayback(lick) {
   }
 
   // Tone.Part für das Lick ---------------------
+  if (lickPart) {
+    lickPart.dispose();
+  }
   lickPart = new Tone.Part((time, value) => {
     if (value) {
       //highlightStep(value.step);
